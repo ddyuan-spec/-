@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>售后流程优化需求文档 - v1.1 退款功能版</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f5f5; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        
+        /* 导航页样式 */
+        .mindmap-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 30px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
+        .mindmap-section h2 { font-size: 20px; margin-bottom: 15px; }
+        .mindmap-link { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 500; transition: all 0.2s; }
+        .mindmap-link:hover { background: rgba(255,255,255,0.3); }
+        
+        .header { background: #fff; padding: 30px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+        .header h1 { font-size: 28px; color: #333; margin-bottom: 10px; }
+        .header p { color: #666; font-size: 14px; }
+        .version-info { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: left; }
+        .version-info h3 { font-size: 16px; margin-bottom: 15px; color: #333; }
+        .version-info ul { list-style: none; padding: 0; }
+        .version-info li { padding: 8px 0; color: #666; font-size: 14px; border-bottom: 1px solid #eee; }
+        .version-info li:last-child { border-bottom: none; }
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 8px; }
+        .tag-new { background: #e6f7ff; color: #1890ff; }
+        .tag-update { background: #fff7e6; color: #fa8c16; }
+        
+        .section { background: #fff; padding: 30px; border-radius: 8px; margin-bottom: 20px; }
+        .section-title { font-size: 22px; color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #6B46C1; }
+        .section-subtitle { font-size: 16px; color: #333; margin: 20px 0 12px; font-weight: 600; }
+        .desc-text { color: #666; font-size: 14px; margin-bottom: 15px; }
+        ul { margin-left: 20px; color: #666; font-size: 14px; }
+        ul li { margin: 8px 0; }
+        
+        /* 表格样式 */
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th { background: #f8f9fa; padding: 12px 15px; text-align: left; font-weight: 600; color: #333; border-bottom: 2px solid #e8e8e8; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; color: #666; vertical-align: top; }
+        tr:hover td { background: #fafafa; }
+        
+        /* 原型链接样式 */
+        .prototype-box { background: #f8f9fa; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; }
+        .prototype-box h4 { font-size: 14px; color: #666; margin-bottom: 10px; }
+        .prototype-links { display: flex; gap: 10px; flex-wrap: wrap; }
+        .prototype-link { display: inline-block; padding: 8px 16px; background: #6B46C1; color: #fff; text-decoration: none; border-radius: 6px; font-size: 14px; transition: all 0.2s; }
+        .prototype-link:hover { background: #553C9A; }
+        .prd-link { display: inline-block; padding: 8px 16px; background: #fff; color: #6B46C1; text-decoration: none; border-radius: 6px; font-size: 14px; border: 1px solid #6B46C1; }
+        
+        /* 消息模板样式 */
+        .message-template { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .message-template h4 { font-size: 15px; color: #333; margin-bottom: 12px; }
+        .message-content { background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e8e8e8; }
+        .message-content p { font-size: 14px; color: #333; margin: 5px 0; }
+        .message-content strong { font-weight: 600; }
+        
+        /* 备注框 */
+        .note-box { background: #fffbe6; border: 1px solid #ffe58f; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .note-box h4 { font-size: 14px; color: #d48806; margin-bottom: 8px; }
+        .note-box p { font-size: 13px; color: #666; }
+        .note-box a { color: #1890ff; text-decoration: none; }
+        
+        /* 影响端口表格 */
+        .impact-table td:first-child { width: 100px; font-weight: 600; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航页 -->
+        <div class="mindmap-section">
+            <h2>售后状态思维导图</h2>
+            <a href="https://ddyuan-spec.github.io/-/prototype/售后状态思维导图_最终版.html" class="mindmap-link" target="_blank">查看售后状态思维导图</a>
+        </div>
+        
+        <!-- 头部 -->
+        <div class="header">
+            <h1>售后流程优化需求文档</h1>
+            <p>v1.1 退款功能版</p>
+            <p style="font-size: 12px; color: #999; margin-top: 5px;">更新日期：2026年5月14日</p>
+            
+            <div class="version-info">
+                <h3>版本包含需求（4个）</h3>
+                <ul>
+                    <li>需求2：申请限制 <span class="tag tag-update">现有功能改动</span></li>
+                    <li>需求9：部分退款（含组合支付）<span class="tag tag-new">新功能</span></li>
+                    <li>需求10：商家退款展示 <span class="tag tag-update">现有功能改动</span></li>
+                    <li>需求12：客户端退款详情页 <span class="tag tag-new">新功能</span></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 需求2：申请限制 -->
+        <div class="section">
+            <div class="section-title">一、申请限制</div>
+            <div class="prototype-box">
+                <h4>原型链接</h4>
+                <div class="prototype-links">
+                    <a href="https://ddyuan-spec.github.io/-/prototype/req2_apply_limit.html" class="prototype-link" target="_blank">客户端原型</a>
+                </div>
+            </div>
+            <div class="section-subtitle">1.1 需求背景</div>
+            <p class="desc-text">当前系统对售后申请次数没有限制，可能导致恶意退款。用户申请售后时需要校验申请次数，超过限制后不允许申请。</p>
+            
+            <div class="section-subtitle">1.2 需求目标</div>
+            <ul>
+                <li>订单维度：同一订单累计申请售后次数 ≤ 3次</li>
+                <li>商品维度：同一订单同一商品累计申请售后次数 ≤ 3次</li>
+                <li>超过限制后，提示用户不可再申请</li>
+            </ul>
+            
+            <div class="section-subtitle">1.3 功能内容</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>订单维度限制</td><td>同一订单累计申请售后次数限制</td><td>同一订单累计申请售后次数 ≤ 3次；超过3次后不允许发起新的售后申请</td></tr>
+                <tr><td>商品维度限制</td><td>同一订单同一商品累计申请售后次数限制</td><td>同一订单同一商品累计申请售后次数 ≤ 3次；超过3次后不允许对该商品发起售后申请</td></tr>
+                <tr><td>次数统计</td><td>统计用户已申请的售后次数</td><td>统计维度：用户ID + 订单ID + 商品SKU；统计范围：所有售后单（含已完成、已拒绝、已关闭）</td></tr>
+                <tr><td>限制提示</td><td>超过限制时的提示文案</td><td>显示："该订单/商品已超过最大售后申请次数（3次），无法再申请售后"</td></tr>
+                <tr><td>申请入口</td><td>超过限制时的申请入口状态</td><td>超过限制时，申请入口按钮置灰或隐藏，不允许点击</td></tr>
+            </table>
+            
+            <div class="section-subtitle">1.4 影响端口</div>
+            <table class="impact-table">
+                <tr><th>端口</th><th>功能范围</th></tr>
+                <tr><td>客户端</td><td>售后申请入口校验</td></tr>
+                <tr><td>系统</td><td>售后申请次数统计与校验</td></tr>
+            </table>
+        </div>
+        
+        <!-- 需求9：部分退款 -->
+        <div class="section">
+            <div class="section-title">二、部分退款（含组合支付）</div>
+            <div class="prototype-box">
+                <h4>原型链接</h4>
+                <div class="prototype-links">
+                    <a href="https://ddyuan-spec.github.io/-/prototype/req9_partial_refund.html" class="prototype-link" target="_blank">商家端原型</a>
+                </div>
+            </div>
+            <div class="section-subtitle">2.1 需求背景</div>
+            <p class="desc-text">用户可能需要对订单中的部分商品申请退款。当前系统支持整单退款，不支持部分退款。需要支持按商品维度进行部分退款，并处理组合支付情况下的退款金额分配。</p>
+            
+            <div class="section-subtitle">2.2 需求目标</div>
+            <ul>
+                <li>支持按商品维度选择退款商品</li>
+                <li>支持输入退款金额</li>
+                <li>支持组合支付（现金+余额）的退款金额分配</li>
+                <li>退款金额不能超过商品实付金额</li>
+            </ul>
+            
+            <div class="section-subtitle">2.3 功能内容</div>
+            <div class="section-subtitle">2.3.1 退款商品选择</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>商品列表</td><td>展示订单中可退款的商品</td><td>展示订单所有商品，支持多选；已退款的商品显示已退数量，不可再次退款</td></tr>
+                <tr><td>商品选择</td><td>用户选择要退款的商品</td><td>勾选框选择；可选择单个或多个商品；已退完的商品不可选</td></tr>
+                <tr><td>退款数量</td><td>选择每个商品的退款数量</td><td>默认1；可手动输入；不超过该商品购买数量-已退款数量</td></tr>
+                <tr><td>已退标识</td><td>显示商品已退款信息</td><td>已退款商品显示"已退款X件"；不可再选</td></tr>
+            </table>
+            
+            <div class="section-subtitle">2.3.2 退款金额计算</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>商品实付金额</td><td>该商品的实际支付金额</td><td>商品支付金额 = 商品总价 - 使用的优惠券分摊 - 积分抵扣分摊</td></tr>
+                <tr><td>退款上限</td><td>可退金额上限</td><td>不能超过商品实付金额；不能超过该商品购买数量 × 单价</td></tr>
+                <tr><td>退款金额输入</td><td>用户输入退款金额</td><td>手动输入；范围：0.01元 ~ 退款上限；保留2位小数</td></tr>
+                <tr><td>退款金额校验</td><td>校验输入金额是否合法</td><td>不能为空；不能为0；不能超过退款上限；不能低于0.01元</td></tr>
+            </table>
+            
+            <div class="section-subtitle">2.3.3 组合支付退款分配</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>支付方式</td><td>订单的支付方式</td><td>支持：仅现金、仅余额、现金+余额组合</td></tr>
+                <tr><td>退款分配逻辑</td><td>多支付方式时的退款分配</td><td>优先退余额，余额不足则退现金；分配比例 = 支付比例</td></tr>
+                <tr><td>退款计算公式</td><td>计算各支付方式的退款金额</td><td>余额退款 = 退款金额 × (余额支付金额 ÷ 实付总金额)；现金退款 = 退款金额 - 余额退款</td></tr>
+                <tr><td>最小退款单位</td><td>退款金额最小单位</td><td>以分为单位，0.01元；各渠道退款金额四舍五入</td></tr>
+            </table>
+            
+            <div class="section-subtitle">2.3.4 退款原因</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>退款原因</td><td>用户选择退款原因</td><td>下拉选择：商品损坏/错漏发/商品与描述不符/其他</td></tr>
+                <tr><td>退款说明</td><td>用户填写退款说明</td><td>可选填；最多200字</td></tr>
+                <tr><td>图片上传</td><td>用户上传凭证图片</td><td>可选；最多上传3张；支持jpg、png格式</td></tr>
+            </table>
+            
+            <div class="section-subtitle">2.4 影响端口</div>
+            <table class="impact-table">
+                <tr><th>端口</th><th>功能范围</th></tr>
+                <tr><td>客户端</td><td>部分退款申请入口、退款商品选择、退款金额输入</td></tr>
+                <tr><td>商家端</td><td>退款审核、退款金额确认</td></tr>
+                <tr><td>系统</td><td>退款金额计算、退款分配、资金退回</td></tr>
+            </table>
+        </div>
+        
+        <!-- 需求10：商家退款展示 -->
+        <div class="section">
+            <div class="section-title">三、商家退款展示</div>
+            <div class="prototype-box">
+                <h4>原型链接</h4>
+                <div class="prototype-links">
+                    <a href="https://ddyuan-spec.github.io/-/prototype/req10_merchant_refund_display.html" class="prototype-link" target="_blank">商家端原型</a>
+                </div>
+            </div>
+            <div class="section-subtitle">3.1 需求背景</div>
+            <p class="desc-text">商家端订单详情页缺少退款信息展示，运营无法查看退款明细。需要增加退款信息模块，展示退款单号、退款金额、退款方式等详细信息。</p>
+            
+            <div class="section-subtitle">3.2 需求目标</div>
+            <ul>
+                <li>商家端订单详情页展示退款信息模块</li>
+                <li>展示退款单号、退款金额、退款方式、退款时间等</li>
+                <li>支持组合支付的退款明细展示</li>
+            </ul>
+            
+            <div class="section-subtitle">3.3 功能内容</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>退款单号</td><td>退款记录的唯一标识</td><td>格式：TK + 年月日 + 序号</td></tr>
+                <tr><td>退款金额</td><td>本次退款的金额</td><td>显示退款总金额，单位：元</td></tr>
+                <tr><td>退款方式</td><td>退款原路返回的支付方式</td><td>显示：余额退回、现金退回（微信/支付宝/银行卡）</td></tr>
+                <tr><td>退款时间</td><td>退款操作的时间</td><td>格式：YYYY-MM-DD HH:mm:ss</td></tr>
+                <tr><td>退款状态</td><td>退款的状态</td><td>退款中、已退款、退款失败</td></tr>
+                <tr><td>退款类型</td><td>退款的类型</td><td>整单退款、部分退款</td></tr>
+            </table>
+            
+            <div class="section-subtitle">3.3.1 组合支付退款明细</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>余额退款</td><td>余额支付的退款金额</td><td>显示余额退款金额；若未使用余额支付则显示"-";</td></tr>
+                <tr><td>现金退款</td><td>现金支付的退款金额</td><td>显示现金退款金额；若未使用现金支付则显示"-";</td></tr>
+                <tr><td>退款明细</td><td>展示退款明细列表</td><td>一条退款记录可能包含多个退款明细（余额+现金）</td></tr>
+            </table>
+            
+            <div class="section-subtitle">3.4 影响端口</div>
+            <table class="impact-table">
+                <tr><th>端口</th><th>功能范围</th></tr>
+                <tr><td>商家端</td><td>订单详情页退款信息展示</td></tr>
+                <tr><td>系统</td><td>退款记录生成、退款状态更新</td></tr>
+            </table>
+        </div>
+        
+        <!-- 需求12：客户端退款详情页 -->
+        <div class="section">
+            <div class="section-title">四、客户端退款详情页</div>
+            <div class="prototype-box">
+                <h4>原型链接</h4>
+                <div class="prototype-links">
+                    <a href="https://ddyuan-spec.github.io/-/prototype/req12_refund_detail.html" class="prototype-link" target="_blank">客户端原型</a>
+                </div>
+            </div>
+            <div class="section-subtitle">4.1 需求背景</div>
+            <p class="desc-text">客户端缺少退款详情页，用户无法查看退款进度、退款金额、退款方式等详细信息。需要新增退款详情页，提供完整的退款信息展示。</p>
+            
+            <div class="section-subtitle">4.2 需求目标</div>
+            <ul>
+                <li>新增客户端退款详情页</li>
+                <li>展示退款状态、退款金额、退款方式、退款进度</li>
+                <li>支持退款中、退款成功、退款失败三种状态</li>
+            </ul>
+            
+            <div class="section-subtitle">4.3 功能内容</div>
+            <div class="section-subtitle">4.3.1 退款状态卡片</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>状态图标</td><td>展示退款状态的图标</td><td>退款中：时钟图标；退款成功：勾选图标；退款失败：叉号图标</td></tr>
+                <tr><td>状态标签</td><td>展示退款状态文字</td><td>退款中/退款成功/退款失败</td></tr>
+                <tr><td>状态描述</td><td>展示退款状态的补充说明</td><td>退款中："预计1-3个工作日到账"；退款成功："YYYY-MM-DD HH:mm到账"；退款失败："退款失败，已恢复订单"</td></tr>
+            </table>
+            
+            <div class="section-subtitle">4.3.2 退款信息展示</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>退款单号</td><td>退款记录的唯一标识</td><td>格式：TK + 年月日 + 序号</td></tr>
+                <tr><td>退款金额</td><td>本次退款的金额</td><td>大字号展示；单位：元</td></tr>
+                <tr><td>退款方式</td><td>退款原路返回的支付方式</td><td>显示：退回原支付方式/退回余额</td></tr>
+                <tr><td>申请时间</td><td>用户提交退款申请的时间</td><td>格式：YYYY-MM-DD HH:mm:ss</td></tr>
+                <tr><td>退款原因</td><td>用户申请的退款原因</td><td>显示用户选择的退款原因</td></tr>
+            </table>
+            
+            <div class="section-subtitle">4.3.3 退款进度</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>时间轴</td><td>展示退款进度时间轴</td><td>按时间倒序展示；已完成节点显示绿色；当前进行中节点高亮</td></tr>
+                <tr><td>进度节点</td><td>每个进度节点的信息</td><td>包含：时间戳、状态、操作说明</td></tr>
+                <tr><td>失败原因</td><td>退款失败时的原因说明</td><td>仅退款失败状态显示；红色高亮展示</td></tr>
+            </table>
+            
+            <div class="section-subtitle">4.3.4 页面操作</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>完成按钮</td><td>退款成功后的确认按钮</td><td>文案："完成"；点击返回上一页</td></tr>
+                <tr><td>查看订单</td><td>退款失败后的跳转按钮</td><td>文案："查看订单"；点击跳转至订单详情页</td></tr>
+                <tr><td>联系客服</td><td>用户联系客服的入口</td><td>文案："如有疑问，联系客服"；点击跳转至客服页面</td></tr>
+            </table>
+            
+            <div class="section-subtitle">4.4 影响端口</div>
+            <table class="impact-table">
+                <tr><th>端口</th><th>功能范围</th></tr>
+                <tr><td>客户端</td><td>退款详情页展示、退款进度</td></tr>
+                <tr><td>系统</td><td>退款状态同步、退款详情查询</td></tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户端退款详情页原型</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .prototype-title { text-align: center; margin-bottom: 20px; font-size: 18px; font-weight: 600; color: #333; }
+        
+        /* ========== 场景切换 ========== */
+        .scene-switcher { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .scene-btn { padding: 8px 20px; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .scene-btn.active { background: #07c160; color: #fff; border-color: #07c160; }
+        
+        /* ========== 手机框架 ========== */
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: #f5f5f5;
+            margin: 0 auto;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+        .page { display: none; height: 100%; overflow-y: auto; }
+        .page.active { display: block; }
+        
+        /* ========== 状态栏 ========== */
+        .status-bar { height: 44px; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; font-size: 14px; font-weight: 600; }
+        .nav-bar { height: 44px; background: #fff; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid #eee; }
+        .nav-title { font-size: 17px; font-weight: 600; }
+        .nav-back { position: absolute; left: 16px; font-size: 14px; color: #07c160; }
+        
+        /* ========== 内容区域 ========== */
+        .content { background: #f5f5f5; min-height: calc(100% - 88px); padding: 12px; }
+        
+        /* ========== 退款状态卡片 ========== */
+        .status-card { background: linear-gradient(135deg, #07c160 0%, #06ad56 100%); color: #fff; padding: 20px; border-radius: 12px 12px 0 0; }
+        .status-icon { font-size: 40px; margin-bottom: 8px; }
+        .status-label { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+        .status-desc { font-size: 13px; opacity: 0.9; }
+        
+        /* ========== 退款信息卡片 ========== */
+        .info-card { background: #fff; margin: 12px; border-radius: 12px; padding: 16px; }
+        .info-title { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 12px; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-size: 14px; color: #999; }
+        .info-value { font-size: 14px; color: #333; }
+        .refund-amount { font-size: 20px; color: #ff4d4f; font-weight: 600; }
+        
+        /* ========== 退款进度卡片 ========== */
+        .progress-card { background: #fff; margin: 12px; border-radius: 12px; padding: 16px; }
+        .timeline { padding-left: 20px; border-left: 2px solid #ddd; }
+        .timeline-item { position: relative; padding: 0 0 20px 16px; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-dot { position: absolute; left: -22px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: #ddd; }
+        .timeline-item.done .timeline-dot { background: #07c160; }
+        .timeline-item.current .timeline-dot { background: #07c160; width: 12px; height: 12px; left: -23px; top: 1px; }
+        .timeline-time { font-size: 12px; color: #999; margin-bottom: 4px; }
+        .timeline-title { font-size: 14px; color: #333; font-weight: 500; }
+        .timeline-desc { font-size: 12px; color: #999; margin-top: 2px; }
+        
+        /* ========== 按钮 ========== */
+        .action-btn { width: calc(100% - 24px); margin: 16px 12px; padding: 14px; background: #07c160; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; }
+        .action-btn:disabled { background: #ccc; cursor: not-allowed; }
+        
+        /* ========== 联系客服 ========== */
+        .contact-service { text-align: center; padding: 12px; }
+        .contact-service a { color: #07c160; font-size: 14px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="prototype-title">客户端退款详情页原型</div>
+    
+    <!-- 场景切换 -->
+    <div class="scene-switcher">
+        <button class="scene-btn active" onclick="switchScene('pending')">场景1：退款中</button>
+        <button class="scene-btn" onclick="switchScene('success')">场景2：退款成功</button>
+        <button class="scene-btn" onclick="switchScene('failed')">场景3：退款失败</button>
+    </div>
+    
+    <!-- 手机框架 -->
+    <div class="phone-frame">
+        <!-- 场景1：退款中 -->
+        <div id="page-pending" class="page active">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>📶 📡 🔋</span>
+            </div>
+            <div class="nav-bar">
+                <span class="nav-back">‹</span>
+                <span class="nav-title">退款详情</span>
+            </div>
+            <div class="content">
+                <div class="status-card">
+                    <div class="status-icon">⏳</div>
+                    <div class="status-label">退款中</div>
+                    <div class="status-desc">预计1-3个工作日到账</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-title">退款信息</div>
+                    <div class="info-row">
+                        <span class="info-label">退款单号</span>
+                        <span class="info-value">TK202405110001</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">退款金额</span>
+                        <span class="info-value refund-amount">¥299.00</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">退款方式</span>
+                        <span class="info-value">退回原支付方式</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">申请时间</span>
+                        <span class="info-value">2024-05-11 14:30:22</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">退款原因</span>
+                        <span class="info-value">商品损坏</span>
+                    </div>
+                </div>
+                
+                <div class="progress-card">
+                    <div class="info-title">退款进度</div>
+                    <div class="timeline">
+                        <div class="timeline-item current">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">处理中</div>
+                            <div class="timeline-title">商家审核通过</div>
+                            <div class="timeline-desc">2024-05-11 15:30:00</div>
+                        </div>
+                        <div class="timeline-item done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">完成</div>
+                            <div class="timeline-title">用户申请退款</div>
+                            <div class="timeline-desc">2024-05-11 14:30:22</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="action-btn" disabled>退款处理中</button>
+                <div class="contact-service">
+                    <a href="#">如有疑问，联系客服</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 场景2：退款成功 -->
+        <div id="page-success" class="page">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>📶 📡 🔋</span>
+            </div>
+            <div class="nav-bar">
+                <span class="nav-back">‹</span>
+                <span class="nav-title">退款详情</span>
+            </div>
+            <div class="content">
+                <div class="status-card" style="background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);">
+                    <div class="status-icon">✓</div>
+                    <div class="status-label">退款成功</div>
+                    <div class="status-desc">2024-05-12 10:30:00 到账</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-title">退款信息</div>
+                    <div class="info-row">
+                        <span class="info-label">退款单号</span>
+                        <span class="info-value">TK202405110001</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">退款金额</span>
+                        <span class="info-value refund-amount">¥299.00</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">退款方式</span>
+                        <span class="info-value">退回原支付方式</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">申请时间</span>
+                        <span class="info-value">2024-05-11 14:30:22</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">退款原因</span>
+                        <span class="info-value">商品损坏</span>
+                    </div>
+                </div>
+                
+                <div class="progress-card">
+                    <div class="info-title">退款进度</div>
+                    <div class="timeline">
+                        <div class="timeline-item done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">完成</div>
+                            <div class="timeline-title">退款到账</div>
+                            <div class="timeline-desc">2024-05-12 10:30:00</div>
+                        </div>
+                        <div class="timeline-item done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">完成</div>
+                            <div class="timeline-title">商家审核通过</div>
+                            <div class="timeline-desc">2024-05-11 15:30:00</div>
+                        </div>
+                        <div class="timeline-item done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">完成</div>
+                            <div class="timeline-title">用户申请退款</div>
+                            <div class="timeline-desc">2024-05-11 14:30:22</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="action-btn">完成</button>
+                <div class="contact-service">
+                    <a href="#">如有疑问，联系客服</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 场景3：退款失败 -->
+        <div id="page-failed" class="page">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>📶 📡 🔋</span>
+            </div>
+            <div class="nav-bar">
+                <span class="nav-back">‹</span>
+                <span class="nav-title">退款详情</span>
+            </div>
+            <div class="content">
+                <div class="status-card" style="background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%);">
+                    <div class="status-icon">✕</div>
+                    <div class="status-label">退款失败</div>
+                    <div class="status-desc">退款失败，已恢复订单</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-title">退款信息</div>
+                    <div class="info-row">
+                        <span class="info-label">退款单号</span>
+                        <span class="info-value">TK202405110001</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">退款金额</span>
+                        <span class="info-value refund-amount">¥299.00</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">失败原因</span>
+                        <span class="info-value" style="color: #ff4d4f;">原支付账户已注销</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">申请时间</span>
+                        <span class="info-value">2024-05-11 14:30:22</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">退款原因</span>
+                        <span class="info-value">商品损坏</span>
+                    </div>
+                </div>
+                
+                <div class="progress-card">
+                    <div class="info-title">退款进度</div>
+                    <div class="timeline">
+                        <div class="timeline-item" style="border-left-color: #ff4d4f;">
+                            <div class="timeline-dot" style="background: #ff4d4f;"></div>
+                            <div class="timeline-time">失败</div>
+                            <div class="timeline-title">退款失败</div>
+                            <div class="timeline-desc" style="color: #ff4d4f;">退款失败，已恢复订单</div>
+                        </div>
+                        <div class="timeline-item done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">完成</div>
+                            <div class="timeline-title">商家审核通过</div>
+                            <div class="timeline-desc">2024-05-11 15:30:00</div>
+                        </div>
+                        <div class="timeline-item done">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">完成</div>
+                            <div class="timeline-title">用户申请退款</div>
+                            <div class="timeline-desc">2024-05-11 14:30:22</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="action-btn">查看订单</button>
+                <div class="contact-service">
+                    <a href="#">如有疑问，联系客服</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchScene(scene) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.scene-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('page-' + scene).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
