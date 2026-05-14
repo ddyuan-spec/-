@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>需求3原型 - 入库信息展示（商家端PC后台）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f7f8fa;
+            color: #2d3748;
+            font-size: 14px;
+        }
+        .prototype-title {
+            text-align: center;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 53px);
+        }
+        /* 左侧导航 */
+        .sidebar {
+            width: 220px;
+            background: #f7f8fa;
+            border-right: 1px solid #e2e8f0;
+            padding: 12px 0;
+            flex-shrink: 0;
+        }
+        .menu-group { margin-bottom: 4px; }
+        .menu-parent {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #2d3748;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .menu-parent .arrow { margin-left: auto; font-size: 12px; color: #a0aec0; }
+        .menu-parent .icon { margin-right: 8px; font-size: 16px; }
+        .menu-children { display: none; }
+        .menu-children.open { display: block; }
+        .menu-child {
+            display: flex;
+            align-items: center;
+            padding: 9px 20px 9px 48px;
+            font-size: 13px;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .menu-child:hover { color: #6b46c1; background: #f0ebff; }
+        .menu-child.active {
+            color: #6b46c1;
+            background: #f0ebff;
+            border-left: 3px solid #6b46c1;
+            font-weight: 500;
+        }
+        /* 主内容区 */
+        .main { flex: 1; padding: 20px 24px; overflow-y: auto; }
+        .breadcrumb {
+            font-size: 13px;
+            color: #a0aec0;
+            margin-bottom: 16px;
+        }
+        .breadcrumb span { color: #2d3748; }
+        /* 标签页 */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 24px;
+            font-size: 14px;
+            color: #718096;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+        .tab.active {
+            color: #6b46c1;
+            border-bottom-color: #6b46c1;
+            font-weight: 500;
+        }
+        /* 场景切换 */
+        .scenario-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .scenario-btn {
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            color: #718096;
+        }
+        .scenario-btn.active {
+            background: #6b46c1;
+            color: #fff;
+            border-color: #6b46c1;
+        }
+        /* 状态卡片 */
+        .status-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .status-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a202c;
+        }
+        .status-countdown {
+            color: #ed8936;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .status-hint {
+            font-size: 12px;
+            color: #a0aec0;
+            margin-bottom: 16px;
+        }
+        .status-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-primary {
+            padding: 8px 24px;
+            background: #6b46c1;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-outline {
+            padding: 8px 24px;
+            background: #fff;
+            color: #6b46c1;
+            border: 1px solid #6b46c1;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn-default {
+            padding: 8px 24px;
+            background: #fff;
+            color: #718096;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        /* 信息区块 */
+        .info-section {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        .info-section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .info-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-label {
+            font-size: 12px;
+            color: #a0aec0;
+            margin-bottom: 4px;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #2d3748;
+            font-weight: 500;
+        }
+        .info-value.danger { color: #e53e3e; }
+        .info-value.success { color: #38a169; }
+        .info-value.warning { color: #ed8936; }
+        /* 表格 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th {
+            background: #f8f9fa;
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 13px;
+            color: #718096;
+            font-weight: 500;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+            color: #2d3748;
+            vertical-align: middle;
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .product-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .product-thumb {
+            width: 50px;
+            height: 50px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #999;
+            flex-shrink: 0;
+        }
+        .product-name { font-size: 13px; color: #2d3748; line-height: 1.4; }
+        .product-spec { font-size: 12px; color: #a0aec0; margin-top: 2px; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        /* 入库信息表格 */
+        .warehouse-table-wrap {
+            overflow-x: auto;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .tag-success { background: #e6f7ed; color: #38a169; }
+        .tag-warning { background: #fff7e6; color: #ed8936; }
+        .tag-danger { background: #fff2f0; color: #e53e3e; }
+        .tag-info { background: #e6f7ff; color: #1890ff; }
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #a0aec0;
+        }
+        .empty-icon { font-size: 40px; margin-bottom: 12px; }
+        .empty-text { font-size: 14px; }
+        .empty-hint { font-size: 12px; color: #cbd5e0; margin-top: 6px; }
+        /* 警告条 */
+        .alert-bar {
+            display: flex;
+            align-items: center;
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 4px;
+            padding: 10px 16px;
+            margin-top: 12px;
+        }
+        .alert-icon {
+            color: #ed8936;
+            font-size: 16px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .alert-text { font-size: 13px; color: #d46b08; }
+        /* 场景内容 */
+        .scenario-content { display: none; }
+        .scenario-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="prototype-title">需求3原型 - 入库信息展示（商家端PC后台管理系统）</div>
+    
+    <div class="layout">
+        <!-- 左侧导航 -->
+        <div class="sidebar">
+            <div class="menu-group">
+                <div class="menu-parent"><span class="icon">📦</span>商品管理<span class="arrow">▼</span></div>
+            </div>
+            <div class="menu-group">
+                <div class="menu-parent"><span class="icon">📢</span>营销应用<span class="arrow">▶</span></div>
+            </div>
+            <div class="menu-group">
+                <div class="menu-parent" onclick="this.nextElementSibling.classList.toggle('open')"><span class="icon">📋</span>订单管理<span class="arrow">▼</span></div>
+                <div class="menu-children open">
+                    <div class="menu-child">订单中心</div>
+                    <div class="menu-child">批量发货</div>
+                    <div class="menu-child active">售后工单</div>
+                    <div class="menu-child">评价管理</div>
+                    <div class="menu-child">合并发货</div>
+                    <div class="menu-child">发货记录</div>
+                </div>
+            </div>
+            <div class="menu-group">
+                <div class="menu-parent"><span class="icon">🏭</span>库存管理<span class="arrow">▶</span></div>
+            </div>
+            <div class="menu-group">
+                <div class="menu-parent"><span class="icon">🚚</span>配送管理<span class="arrow">▶</span></div>
+            </div>
+        </div>
+        
+        <!-- 主内容区 -->
+        <div class="main">
+            <div class="breadcrumb">订单管理 / 售后工单 / <span>售后工单详情</span></div>
+            
+            <div class="tabs">
+                <div class="tab active">售后信息</div>
+                <div class="tab">订单信息</div>
+                <div class="tab">物流信息</div>
+            </div>
+            
+            <div class="scenario-bar">
+                <div class="scenario-btn active" onclick="switchScenario(0)">场景1：待退货（无入库信息）</div>
+                <div class="scenario-btn" onclick="switchScenario(1)">场景2：已入库（正常）</div>
+                <div class="scenario-btn" onclick="switchScenario(2)">场景3：已入库（少件）</div>
+            </div>
+            
+            <!-- 场景1：待退货 -->
+            <div class="scenario-content active" id="scenario-0">
+                <div class="status-card">
+                    <div class="status-header">
+                        <div class="status-title">订单状态：退货退款 <span style="color:#718096;font-weight:400;">（退货未入库）</span></div>
+                        <div class="status-countdown">剩余6天23时39分15秒</div>
+                    </div>
+                    <div class="status-hint">如您逾期未响应申请，视作同意买家申请，系统会自动退款给买家</div>
+                    <div class="status-actions">
+                        <button class="btn-primary">确认收货并同意退款</button>
+                        <button class="btn-outline">拒绝退货退款</button>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-section-title">买家信息</div>
+                    <div class="info-grid">
+                        <div class="info-item"><span class="info-label">用户昵称</span><span class="info-value">U140416</span></div>
+                        <div class="info-item"><span class="info-label">手机号</span><span class="info-value">189****4444</span></div>
+                        <div class="info-item"><span class="info-label">订单号</span><span class="info-value">SS2015753312909766656-TH01</span></div>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-section-title">售后商品信息</div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%;">商品</th>
+                                <th class="text-right" style="width:15%;">单价</th>
+                                <th class="text-right" style="width:15%;">数量</th>
+                                <th class="text-right" style="width:15%;">小计金额</th>
+                                <th class="text-center" style="width:15%;">售后类型</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="product-cell">
+                                        <div class="product-thumb">商品图</div>
+                                        <div>
+                                            <div class="product-name">智能蓝牙耳机 无线降噪</div>
+                                            <div class="product-spec">颜色：白色 | 规格：标准版</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-right">¥299.00</td>
+                                <td class="text-right">×1</td>
+                                <td class="text-right" style="font-weight:600;">¥299.00</td>
+                                <td class="text-center"><span class="tag tag-info">退货退款</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-section-title">售后入库信息 <span class="tag tag-warning" style="margin-left:8px;">待入库</span></div>
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <div class="empty-text">等待用户退货</div>
+                        <div class="empty-hint">用户填写退货快递单号后，此处将展示入库信息</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 场景2：已入库（正常） -->
+            <div class="scenario-content" id="scenario-1">
+                <div class="status-card">
+                    <div class="status-header">
+                        <div class="status-title">订单状态：仅换货 <span style="color:#38a169;font-weight:400;">（退货已入库）</span></div>
+                    </div>
+                    <div class="status-actions">
+                        <button class="btn-primary">确认换货并发货</button>
+                        <button class="btn-outline">拒绝换货</button>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-section-title">买家信息</div>
+                    <div class="info-grid">
+                        <div class="info-item"><span class="info-label">用户昵称</span><span class="info-value">U140416</span></div>
+                        <div class="info-item"><span class="info-label">手机号</span><span class="info-value">189****4444</span></div>
+                        <div class="info-item"><span class="info-label">订单号</span><span class="info-value">SS2015753312909766657-TH01</span></div>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-section-title">售后商品信息</div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width:30%;">商品</th>
+                                <th class="text-right" style="width:12%;">单价</th>
+                                <th class="text-right" style="width:10%;">数量</th>
+                                <th class="text-right" style="width:12%;">小计金额</th>
+                                <th class="text-center" style="width:12%;">售后类型</th>
+                                <th class="text-center" style="width:12%;">退货单号</th>
+                                <th class="text-center" style="width:12%;">入库状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="product-cell">
+                                        <div class="product-thumb">商品图</div>
+                                        <div>
+                                            <div class="product-name">机械键盘 青轴 RGB背光</div>
+                                            <div class="product-spec">颜色：白色 | 规格：87键</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-right">¥399.00</td>
+                                <td class="text-right">×1</td>
+                                <td class="text-right" style="font-weight:600;">¥399.00</td>
+                                <td class="text-center"><span class="tag tag-info">仅换货</span></td>
+                                <td class="text-center" style="font-size:12px;color:#6b46c1;">RT202405110001</td>
+                                <td class="text-center"><span class="tag tag-success">已入库</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-section-title">售后入库信息 <span class="tag tag-success" style="margin-left:8px;">已入库</span></div>
+                    <div class="warehouse-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:22%;">商品名称</th>
+                                    <th style="width:15%;">SKU规格</th>
+                                    <th class="text-center" style="width:10%;">退货单号</th>
+                                    <th class="text-center" style="width:10%;">应入数量</th>
+                                    <th class="text-center" style="width:10%;">实入数量</th>
+                                    <th class="text-center" style="width:10%;">良品数量</th>
+                                    <th class="text-center" style="width:10%;">破损数量</th>
+                                    <th class="text-center" style="width:13%;">入库状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="product-thumb">商品图</div>
+                                            <div>
+                                                <div class="product-name">机械键盘 青轴 RGB背光</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>白色 / 87键</td>
+                                    <td class="text-center" style="font-size:12px;color:#6b46c1;">RT202405110001</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center"><span class="tag tag-success">已入库</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="product-thumb">商品图</div>
+                                            <div>
+                                                <div class="product-name">机械键盘 红轴 RGB背光</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>黑色 / 104键</td>
+                                    <td class="text-center" style="font-size:12px;color:#6b46c1;">RT202405110002</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center"><span class="tag tag-success">已入库</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="product-thumb">商品图</div>
+                                            <div>
+                                                <div class="product-name">键盘手托 记忆棉</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>灰色 / 标准版</td>
+                                    <td class="text-center" style="font-size:12px;color:#6b46c1;">RT202405110003</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center"><span class="tag tag-success">已入库</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 场景3：已入库（少件） -->
+            <div class="scenario-content" id="scenario-2">
+                <div class="status-card">
+                    <div class="status-header">
+                        <div class="status-title">订单状态：退货退款 <span style="color:#e53e3e;font-weight:400;">（入库异常）</span></div>
+                        <div class="status-countdown" style="color:#e53e3e;">⚠ 入库数量与订单数量不一致</div>
+                    </div>
+                    <div class="status-actions">
+                        <button class="btn-primary">确认入库</button>
+                        <button class="btn-outline">拒绝退货退款</button>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-section-title">买家信息</div>
+                    <div class="info-grid">
+                        <div class="info-item"><span class="info-label">用户昵称</span><span class="info-value">U140416</span></div>
+                        <div class="info-item"><span class="info-label">手机号</span><span class="info-value">189****4444</span></div>
+                        <div class="info-item"><span class="info-label">订单号</span><span class="info-value">SS2015753312909766658-TH01</span></div>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-section-title">售后商品信息</div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width:30%;">商品</th>
+                                <th class="text-right" style="width:12%;">单价</th>
+                                <th class="text-right" style="width:10%;">数量</th>
+                                <th class="text-right" style="width:12%;">小计金额</th>
+                                <th class="text-center" style="width:12%;">售后类型</th>
+                                <th class="text-center" style="width:12%;">退货单号</th>
+                                <th class="text-center" style="width:12%;">入库状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="product-cell">
+                                        <div class="product-thumb">商品图</div>
+                                        <div>
+                                            <div class="product-name">无线蓝牙音箱</div>
+                                            <div class="product-spec">颜色：黑色 | 规格：旗舰版</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-right">¥599.00</td>
+                                <td class="text-right">×2</td>
+                                <td class="text-right" style="font-weight:600;">¥1,198.00</td>
+                                <td class="text-center"><span class="tag tag-info">退货退款</span></td>
+                                <td class="text-center" style="font-size:12px;color:#6b46c1;">RT202405100002</td>
+                                <td class="text-center"><span class="tag tag-danger">少件</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="info-section">
+                    <div class="info-section-title">售后入库信息 <span class="tag tag-danger" style="margin-left:8px;">入库异常</span></div>
+                    <div class="warehouse-table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:22%;">商品名称</th>
+                                    <th style="width:15%;">SKU规格</th>
+                                    <th class="text-center" style="width:12%;">退货单号</th>
+                                    <th class="text-center" style="width:10%;">应入数量</th>
+                                    <th class="text-center" style="width:10%;">实入数量</th>
+                                    <th class="text-center" style="width:10%;">良品数量</th>
+                                    <th class="text-center" style="width:10%;">破损数量</th>
+                                    <th class="text-center" style="width:11%;">入库状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="product-thumb">商品图</div>
+                                            <div>
+                                                <div class="product-name">无线蓝牙音箱</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>黑色 / 旗舰版</td>
+                                    <td class="text-center" style="font-size:12px;color:#6b46c1;">RT202405100002</td>
+                                    <td class="text-center">2</td>
+                                    <td class="text-center" style="color:#e53e3e;font-weight:600;">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center"><span class="tag tag-danger">少件</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <div class="product-thumb">商品图</div>
+                                            <div>
+                                                <div class="product-name">无线蓝牙音箱</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>白色 / 旗舰版</td>
+                                    <td class="text-center" style="font-size:12px;color:#6b46c1;">RT202405100003</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center"><span class="tag tag-success">已入库</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchScenario(index) {
+            document.querySelectorAll('.scenario-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.scenario-content').forEach((content, i) => {
+                content.classList.toggle('active', i === index);
+            });
+        }
+    </script>
+</body>
+</html>

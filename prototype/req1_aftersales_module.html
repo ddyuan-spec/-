@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>需求1原型 - 售后模块数据来源</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: #f5f5f5;
+            margin: 0 auto;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+        .page {
+            display: none;
+            height: 100%;
+            overflow: hidden;
+        }
+        .page.active { display: block; }
+        .status-bar {
+            height: 44px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        /* 个人中心样式 */
+        .profile-header {
+            background: linear-gradient(135deg, #07c160 0%, #05a854 100%);
+            padding: 30px 20px;
+            color: #fff;
+        }
+        .profile-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .profile-edit {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        .order-section {
+            background: #fff;
+            margin: 12px;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        .section-more {
+            font-size: 13px;
+            color: #999;
+        }
+        .order-types {
+            display: flex;
+            justify-content: space-around;
+        }
+        .order-type {
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .type-icon {
+            width: 48px;
+            height: 48px;
+            background: #f0f9f4;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .type-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ff4d4f;
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+        }
+        .type-name {
+            font-size: 12px;
+            color: #666;
+        }
+        .menu-list {
+            background: #fff;
+            margin: 0 12px 12px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+        }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            font-size: 20px;
+        }
+        .menu-text {
+            flex: 1;
+            font-size: 14px;
+            color: #333;
+        }
+        .menu-arrow {
+            color: #ccc;
+            font-size: 14px;
+        }
+        .menu-badge {
+            background: #ff4d4f;
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-right: 8px;
+        }
+        /* 底部导航 */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 83px;
+            background: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+        }
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        .nav-text {
+            font-size: 11px;
+            color: #999;
+        }
+        .nav-item.active .nav-text {
+            color: #07c160;
+        }
+        .nav-item.active .nav-icon {
+            color: #07c160;
+        }
+        /* 售后中心页面 */
+        .nav-bar {
+            height: 44px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+        .nav-title { font-size: 17px; font-weight: 600; }
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+        .tab-bar {
+            display: flex;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+            color: #666;
+            position: relative;
+            cursor: pointer;
+        }
+        .tab.active {
+            color: #07c160;
+            font-weight: 600;
+        }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: #07c160;
+            border-radius: 2px;
+        }
+        .content {
+            height: calc(100% - 44px - 44px - 44px - 83px);
+            overflow-y: auto;
+            padding: 12px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .order-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #999;
+        }
+        .order-status {
+            color: #07c160;
+            font-weight: 500;
+        }
+        .product-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .product-item:last-child { border-bottom: none; }
+        .product-img {
+            width: 80px;
+            height: 80px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #999;
+        }
+        .product-info {
+            flex: 1;
+        }
+        .product-name {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        .product-spec {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .product-price {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+        .action-bar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f5f5f5;
+        }
+        .btn {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-outline {
+            background: #fff;
+            border: 1px solid #ddd;
+            color: #666;
+        }
+        .btn-primary {
+            background: #07c160;
+            color: #fff;
+        }
+        .btn-gray {
+            background: #f5f5f5;
+            color: #999;
+            cursor: pointer;
+        }
+        .expired-tag {
+            display: inline-block;
+            background: #fff2f0;
+            color: #ff4d4f;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: #fff;
+            border-radius: 16px;
+            width: 300px;
+            padding: 24px;
+            text-align: center;
+        }
+        .modal-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .modal-content {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+        .modal-btn-secondary {
+            background: #fff;
+            border: 1px solid #07c160;
+            color: #07c160;
+        }
+        .modal-btn-primary {
+            background: #07c160;
+            color: #fff;
+        }
+        .type-option {
+            padding: 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .type-option:hover {
+            border-color: #07c160;
+            background: #f0f9f4;
+        }
+        .type-option.selected {
+            border-color: #07c160;
+            background: #f0f9f4;
+        }
+        .type-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .type-desc {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .prototype-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        .prototype-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="prototype-title">需求1原型 - 售后模块数据来源（用户端）</div>
+    
+    <div class="phone-frame">
+        <!-- 个人中心页面 -->
+        <div class="page active" id="profile-page">
+            <div class="profile-header">
+                <div class="profile-top">
+                    <div class="avatar">👤</div>
+                    <div class="profile-info">
+                        <div class="profile-name">U140416</div>
+                        <div class="profile-edit">编辑资料 ›</div>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">558.9万</div>
+                        <div class="stat-label">储值(元)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">余额(元)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">积分</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="order-section">
+                <div class="section-header">
+                    <div class="section-title">我的订单</div>
+                    <div class="section-more">全部订单 ›</div>
+                </div>
+                <div class="order-types">
+                    <div class="order-type">
+                        <div class="type-icon">💰</div>
+                        <div class="type-name">待付款</div>
+                    </div>
+                    <div class="order-type">
+                        <div class="type-icon">📦<span class="type-badge">1</span></div>
+                        <div class="type-name">待发货</div>
+                    </div>
+                    <div class="order-type">
+                        <div class="type-icon">🚚</div>
+                        <div class="type-name">待收货</div>
+                    </div>
+                    <div class="order-type">
+                        <div class="type-icon">💬</div>
+                        <div class="type-name">待评价</div>
+                    </div>
+                    <div class="order-type" onclick="showAftersales()">
+                        <div class="type-icon">↩️</div>
+                        <div class="type-name">售后</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-list">
+                <div class="menu-item">
+                    <div class="menu-icon">🛒</div>
+                    <div class="menu-text">购物车</div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📍</div>
+                    <div class="menu-text">地址管理</div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">🎫</div>
+                    <div class="menu-text">我的优惠券</div>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">💬</div>
+                    <div class="menu-text">消息中心</div>
+                    <span class="menu-badge">11</span>
+                    <div class="menu-arrow">›</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">💳</div>
+                    <div class="menu-text">银行卡管理</div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+            
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-text">首页</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">📺</div>
+                    <div class="nav-text">视界</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🤖</div>
+                    <div class="nav-text">泰小虎</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">📰</div>
+                    <div class="nav-text">智讯</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-text">我的</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 售后中心页面 -->
+        <div class="page" id="aftersales-page">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>售后中心</span>
+                <span>100%</span>
+            </div>
+            <div class="nav-bar">
+                <span class="back-btn" onclick="showProfile()">‹</span>
+                <span class="nav-title">售后中心</span>
+            </div>
+            <div class="tab-bar">
+                <div class="tab active" onclick="switchTab(0)">售后申请</div>
+                <div class="tab" onclick="switchTab(1)">处理中</div>
+                <div class="tab" onclick="switchTab(2)">历史售后</div>
+            </div>
+            <div class="content" id="content">
+                <!-- 售后申请 Tab -->
+                <div class="tab-content" id="tab-0">
+                    <div id="apply-list">
+                        <!-- 待发货订单 - 可申请售后 -->
+                        <div class="order-card" data-order-id="202405110001">
+                            <div class="order-header">
+                                <span>订单号：202405110001</span>
+                                <span class="order-status">待发货</span>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="product-info">
+                                    <div class="product-name">智能蓝牙耳机 无线降噪 超长续航</div>
+                                    <div class="product-spec">颜色：白色 | 规格：标准版</div>
+                                    <div class="product-price">¥299.00</div>
+                                </div>
+                            </div>
+                            <div class="action-bar">
+                                <button class="btn btn-primary" onclick="showTypeModal('202405110001', '智能蓝牙耳机')">退款/售后</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 已完成未超期订单 - 可申请售后 -->
+                        <div class="order-card" data-order-id="202405100002">
+                            <div class="order-header">
+                                <span>订单号：202405100002</span>
+                                <span class="order-status">已完成</span>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="product-info">
+                                    <div class="product-name">便携式充电宝 20000mAh</div>
+                                    <div class="product-spec">颜色：黑色</div>
+                                    <div class="product-price">¥129.00</div>
+                                </div>
+                            </div>
+                            <div class="action-bar">
+                                <button class="btn btn-primary" onclick="showTypeModal('202405100002', '便携式充电宝')">退款/售后</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 已完成已超期订单 - 按钮置灰但可点击 -->
+                        <div class="order-card" data-order-id="202405090003">
+                            <div class="order-header">
+                                <span>订单号：202405090003</span>
+                                <span class="order-status">已完成</span>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="product-info">
+                                    <div class="product-name">机械键盘 青轴 RGB背光</div>
+                                    <div class="product-spec">颜色：白色 <span class="expired-tag">已超期</span></div>
+                                    <div class="product-price">¥399.00</div>
+                                </div>
+                            </div>
+                            <div class="action-bar">
+                                <button class="btn btn-gray" onclick="showExpiredModal()">退款/售后</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 待发货订单 - 可申请售后 -->
+                        <div class="order-card" data-order-id="202405080004">
+                            <div class="order-header">
+                                <span>订单号：202405080004</span>
+                                <span class="order-status">待发货</span>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="product-info">
+                                    <div class="product-name">USB扩展坞 Type-C转多口</div>
+                                    <div class="product-spec">颜色：银色 | 规格：7合1</div>
+                                    <div class="product-price">¥159.00</div>
+                                </div>
+                            </div>
+                            <div class="action-bar">
+                                <button class="btn btn-primary" onclick="showTypeModal('202405080004', 'USB扩展坞')">退款/售后</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 已完成未超期订单 - 可申请售后 -->
+                        <div class="order-card" data-order-id="202405070005">
+                            <div class="order-header">
+                                <span>订单号：202405070005</span>
+                                <span class="order-status">已完成</span>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="product-info">
+                                    <div class="product-name">桌面手机支架 铝合金</div>
+                                    <div class="product-spec">颜色：深空灰</div>
+                                    <div class="product-price">¥89.00</div>
+                                </div>
+                            </div>
+                            <div class="action-bar">
+                                <button class="btn btn-primary" onclick="showTypeModal('202405070005', '桌面手机支架')">退款/售后</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 已完成已超期订单 - 按钮置灰但可点击 -->
+                        <div class="order-card" data-order-id="202405060006">
+                            <div class="order-header">
+                                <span>订单号：202405060006</span>
+                                <span class="order-status">已完成</span>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="product-info">
+                                    <div class="product-name">无线充电器 15W快充</div>
+                                    <div class="product-spec">颜色：白色 <span class="expired-tag">已超期</span></div>
+                                    <div class="product-price">¥79.00</div>
+                                </div>
+                            </div>
+                            <div class="action-bar">
+                                <button class="btn btn-gray" onclick="showExpiredModal()">退款/售后</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 处理中 Tab -->
+                <div class="tab-content" id="tab-1" style="display:none;">
+                    <div id="processing-list">
+                        <div class="order-card">
+                            <div class="order-header">
+                                <span>售后单号：SH202405100001</span>
+                                <span class="order-status">待商家审核</span>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="product-info">
+                                    <div class="product-name">无线鼠标 静音办公</div>
+                                    <div class="product-spec">售后类型：仅退款</div>
+                                    <div class="product-price">退款金额：¥59.00</div>
+                                </div>
+                            </div>
+                            <div class="action-bar">
+                                <button class="btn btn-outline">查看详情</button>
+                            </div>
+                        </div>
+                        
+                        <div class="order-card">
+                            <div class="order-header">
+                                <span>售后单号：SH202405090002</span>
+                                <span class="order-status">待退货</span>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="product-info">
+                                    <div class="product-name">手机支架 桌面懒人支架</div>
+                                    <div class="product-spec">售后类型：退货退款</div>
+                                    <div class="product-price">退款金额：¥29.00</div>
+                                </div>
+                            </div>
+                            <div class="action-bar">
+                                <button class="btn btn-primary">填写物流</button>
+                                <button class="btn btn-outline">查看详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 历史售后 Tab -->
+                <div class="tab-content" id="tab-2" style="display:none;">
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span>售后单号：SH202405010001</span>
+                            <span style="color:#07c160;font-weight:500;">退款成功</span>
+                        </div>
+                        <div class="product-item">
+                            <div class="product-img">商品图</div>
+                            <div class="product-info">
+                                <div class="product-name">数据线 Type-C 快充</div>
+                                <div class="product-spec">售后类型：仅退款</div>
+                                <div class="product-price">退款金额：¥19.00</div>
+                            </div>
+                        </div>
+                        <div class="action-bar">
+                            <button class="btn btn-outline">查看详情</button>
+                        </div>
+                    </div>
+                    
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span>售后单号：SH202404200002</span>
+                            <span style="color:#999;font-weight:500;">退款关闭</span>
+                        </div>
+                        <div class="product-item">
+                            <div class="product-img">商品图</div>
+                            <div class="product-info">
+                                <div class="product-name">耳机收纳盒</div>
+                                <div class="product-spec">售后类型：退货退款</div>
+                                <div class="product-price">退款金额：¥0.00</div>
+                            </div>
+                        </div>
+                        <div class="action-bar">
+                            <button class="btn btn-outline">查看详情</button>
+                            <button class="btn btn-primary">重新申请</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-text">首页</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">📺</div>
+                    <div class="nav-text">视界</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🤖</div>
+                    <div class="nav-text">泰小虎</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">📰</div>
+                    <div class="nav-text">智讯</div>
+                </div>
+                <div class="nav-item active" onclick="showProfile()">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-text">我的</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 超期弹窗 -->
+    <div class="modal-overlay" id="expiredModal">
+        <div class="modal">
+            <div class="modal-title">售后申请</div>
+            <div class="modal-content">抱歉，您的商品已于2024-05-16超过售后申请时效</div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-secondary" onclick="hideModal()">我知道了</button>
+                <button class="modal-btn modal-btn-primary" onclick="contactService()">联系客服</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 选择售后类型弹窗 -->
+    <div class="modal-overlay" id="typeModal">
+        <div class="modal" style="width:320px;">
+            <div class="modal-title">选择售后类型</div>
+            <div style="text-align:left;margin-bottom:16px;">
+                <div style="font-size:13px;color:#999;margin-bottom:12px;">商品： <span id="selectedProduct">--</span></div>
+                <div class="type-option" onclick="selectType(this, 'refund_only')">
+                    <div class="type-title">仅退款</div>
+                    <div class="type-desc">未收到货/与商家协商一致</div>
+                </div>
+                <div class="type-option" onclick="selectType(this, 'return_refund')">
+                    <div class="type-title">退货退款</div>
+                    <div class="type-desc">已收到货，需要退货</div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-secondary" onclick="hideModal()">取消</button>
+                <button class="modal-btn modal-btn-primary" onclick="confirmApply()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="prototype-note">点击"我的"页面的"售后"图标进入售后中心，仅支持仅退款和退货退款</div>
+    
+    <script>
+        let currentOrderId = null;
+        let selectedType = null;
+        
+        function showProfile() {
+            document.getElementById('profile-page').classList.add('active');
+            document.getElementById('aftersales-page').classList.remove('active');
+        }
+        
+        function showAftersales() {
+            document.getElementById('profile-page').classList.remove('active');
+            document.getElementById('aftersales-page').classList.add('active');
+        }
+        
+        function switchTab(index) {
+            document.querySelectorAll('.tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.tab-content').forEach((content, i) => {
+                content.style.display = i === index ? 'block' : 'none';
+            });
+        }
+        
+        function showExpiredModal() {
+            document.getElementById('expiredModal').classList.add('show');
+        }
+        
+        function showTypeModal(orderId, productName) {
+            currentOrderId = orderId;
+            document.getElementById('selectedProduct').textContent = productName;
+            document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('selected'));
+            selectedType = null;
+            document.getElementById('typeModal').classList.add('show');
+        }
+        
+        function selectType(element, type) {
+            document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedType = type;
+        }
+        
+        function confirmApply() {
+            if (!selectedType) {
+                alert('请选择售后类型');
+                return;
+            }
+            
+            // 从售后申请中移除该订单
+            const orderCard = document.querySelector(`[data-order-id="${currentOrderId}"]`);
+            if (orderCard) {
+                orderCard.remove();
+            }
+            
+            // 添加到处理中列表
+            const processingList = document.getElementById('processing-list');
+            const typeNames = {
+                'refund_only': '仅退款',
+                'return_refund': '退货退款'
+            };
+            
+            const newCard = document.createElement('div');
+            newCard.className = 'order-card';
+            newCard.innerHTML = `
+                <div class="order-header">
+                    <span>售后单号：SH${currentOrderId}</span>
+                    <span class="order-status">待商家审核</span>
+                </div>
+                <div class="product-item">
+                    <div class="product-img">商品图</div>
+                    <div class="product-info">
+                        <div class="product-name">${document.getElementById('selectedProduct').textContent}</div>
+                        <div class="product-spec">售后类型：${typeNames[selectedType]}</div>
+                        <div class="product-price">退款金额：¥299.00</div>
+                    </div>
+                </div>
+                <div class="action-bar">
+                    <button class="btn btn-outline">查看详情</button>
+                </div>
+            `;
+            processingList.insertBefore(newCard, processingList.firstChild);
+            
+            hideModal();
+            
+            // 自动切换到处理中Tab
+            setTimeout(() => {
+                switchTab(1);
+                alert('售后申请已提交，请在"处理中"查看');
+            }, 300);
+        }
+        
+        function hideModal() {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
+        }
+        
+        function contactService() {
+            // 隐藏超期弹窗
+            hideModal();
+            
+            // 显示提示 toast
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0,0,0,0.8);
+                color: #fff;
+                padding: 16px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                z-index: 2000;
+                text-align: center;
+                max-width: 280px;
+                line-height: 1.5;
+            `;
+            toast.textContent = '跳转至客服对话并发送订单信息';
+            document.body.appendChild(toast);
+            
+            // 5秒后自动消失
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
