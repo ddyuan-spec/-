@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小程序订阅授权弹窗原型</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #f5f5f5; line-height: 1.6; color: #333; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .container { padding: 20px; }
+        .page-title { text-align: center; font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px; }
+        .tip-text { text-align: center; font-size: 14px; color: #666; margin-bottom: 20px; }
+        /* 手机模拟器样式 */
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+        .status-bar {
+            height: 44px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .nav-bar {
+            height: 44px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .nav-back { position: absolute; left: 16px; font-size: 20px; color: #333; cursor: pointer; }
+        .nav-title { font-size: 17px; font-weight: 600; color: #333; }
+        .page-content {
+            height: calc(100% - 88px);
+            overflow-y: auto;
+            background: #f5f5f5;
+            padding: 16px;
+        }
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .shop-name { font-size: 14px; color: #333; margin-bottom: 12px; }
+        .product-info { display: flex; gap: 12px; }
+        .product-img {
+            width: 80px; height: 80px; background: #f5f5f5;
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-size: 12px; color: #999;
+        }
+        .product-detail { flex: 1; }
+        .product-name { font-size: 14px; color: #333; margin-bottom: 4px; }
+        .product-spec { font-size: 12px; color: #999; margin-bottom: 8px; }
+        .product-price { font-size: 14px; color: #ff4d4f; font-weight: 600; }
+        .section-card {
+            background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;
+        }
+        .card-title { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 16px; }
+        .radio-group { display: flex; flex-direction: column; gap: 12px; }
+        .radio-item {
+            display: flex; align-items: center; padding: 12px;
+            border: 1px solid #e8e8e8; border-radius: 8px;
+        }
+        .radio-item.active { border-color: #7c3aed; background: #f0f5ff; }
+        .radio-circle {
+            width: 20px; height: 20px; border: 2px solid #d9d9d9;
+            border-radius: 50%; margin-right: 12px;
+        }
+        .radio-item.active .radio-circle { border-color: #7c3aed; }
+        .radio-text { font-size: 14px; color: #333; }
+        .amount-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid #f0f0f0;
+        }
+        .amount-row:last-child { border-bottom: none; }
+        .amount-label { font-size: 14px; color: #666; }
+        .amount-total { font-size: 16px; color: #ff4d4f; font-weight: 600; }
+        .submit-btn-container {
+            position: absolute; bottom: 80px; left: 16px; right: 16px;
+            background: #fff; padding-top: 10px;
+        }
+        .submit-btn {
+            width: 100%; height: 44px;
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: #fff; border: none; border-radius: 22px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+        }
+        /* 订阅授权弹窗 */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6); z-index: 1000;
+            align-items: center; justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .subscribe-modal {
+            background: #fff; border-radius: 16px; width: 320px; overflow: hidden;
+        }
+        .modal-header {
+            padding: 20px 20px 16px; display: flex; align-items: center; gap: 12px;
+        }
+        .app-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 14px; font-weight: 600;
+        }
+        .modal-title { font-size: 16px; color: #333; font-weight: 500; }
+        .modal-subtitle { padding: 0 20px 16px; font-size: 14px; color: #666; }
+        .message-list { padding: 0 20px; }
+        .message-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 0; border-bottom: 1px solid #f0f0f0;
+        }
+        .message-name { font-size: 15px; color: #333; }
+        .toggle-switch {
+            width: 48px; height: 28px; background: #e8e8e8;
+            border-radius: 14px; position: relative; cursor: pointer;
+        }
+        .toggle-switch.active { background: #7c3aed; }
+        .toggle-switch::after {
+            content: ''; position: absolute; width: 24px; height: 24px;
+            background: #fff; border-radius: 50%; top: 2px; left: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .toggle-switch.active::after { left: 22px; }
+        .remember-choice {
+            padding: 12px 20px; display: flex; align-items: center; gap: 8px;
+        }
+        .check-icon {
+            width: 16px; height: 16px; background: #52c41a;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 10px;
+        }
+        .remember-text { font-size: 13px; color: #999; }
+        .modal-footer {
+            padding: 16px 20px 20px; display: flex; gap: 12px;
+        }
+        .btn-cancel, .btn-allow {
+            flex: 1; height: 40px; background: #f5f5f5;
+            border: none; border-radius: 6px; font-size: 15px; color: #333; cursor: pointer;
+        }
+        .tip-text-bottom { font-size: 12px; color: #999; padding: 12px 16px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">小程序订阅授权弹窗原型</h1>
+        <p class="tip-text">点击"提交"按钮触发授权弹窗</p>
+        
+        <div class="phone-frame">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <span>9:41</span>
+                <div>
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <!-- 导航栏 -->
+            <div class="nav-bar">
+                <span class="nav-back">‹</span>
+                <span class="nav-title">申请售后</span>
+            </div>
+            
+            <!-- 页面内容 -->
+            <div class="page-content">
+                <div class="product-card">
+                    <div class="shop-name">🏪 泰尔超优会</div>
+                    <div class="product-info">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div class="product-name">美容养颜丸C</div>
+                            <div class="product-spec">规格: ["A","T"]</div>
+                            <div class="product-price">¥19950.00 x 100</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-card">
+                    <div class="card-title">售后类型</div>
+                    <div class="radio-group">
+                        <div class="radio-item active">
+                            <div class="radio-circle"></div>
+                            <span class="radio-text">退货退款</span>
+                        </div>
+                        <div class="radio-item">
+                            <div class="radio-circle"></div>
+                            <span class="radio-text">仅退款</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-card">
+                    <div class="card-title">退款金额</div>
+                    <div class="amount-row">
+                        <span class="amount-label">商品总价</span>
+                        <span>¥1995000.00</span>
+                    </div>
+                    <div class="amount-row">
+                        <span class="amount-label">退款金额</span>
+                        <span class="amount-total">¥1995000.00</span>
+                    </div>
+                </div>
+                
+                <div class="tip-text-bottom">提交申请后，商家将在48小时内处理。审核通过后请尽快填写退货物流信息。</div>
+            </div>
+            
+            <!-- 提交按钮 -->
+            <div class="submit-btn-container">
+                <button class="submit-btn" onclick="showSubscribeModal()">提交</button>
+            </div>
+            
+            <!-- 订阅授权弹窗 -->
+            <div class="modal-overlay" id="subscribeModal">
+                <div class="subscribe-modal">
+                    <div class="modal-header">
+                        <div class="app-icon">泰尔</div>
+                        <div class="modal-title">泰尔超优会商城 申请</div>
+                    </div>
+                    <div class="modal-subtitle">发送以下消息</div>
+                    <div class="message-list">
+                        <div class="message-item">
+                            <span class="message-name">申请通过提醒</span>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                        </div>
+                        <div class="message-item">
+                            <span class="message-name">物流填写提醒</span>
+                            <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                        </div>
+                    </div>
+                    <div class="remember-choice">
+                        <div class="check-icon">✓</div>
+                        <span class="remember-text">总是保持以上选择</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-cancel" onclick="hideSubscribeModal()">拒绝</button>
+                        <button class="btn-allow" onclick="confirmSubscribe()">允许</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showSubscribeModal() {
+            document.getElementById('subscribeModal').classList.add('active');
+        }
+        function hideSubscribeModal() {
+            document.getElementById('subscribeModal').classList.remove('active');
+            alert('已拒绝订阅，继续提交售后申请');
+        }
+        function confirmSubscribe() {
+            document.getElementById('subscribeModal').classList.remove('active');
+            alert('订阅成功，继续提交售后申请');
+        }
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+        }
+        document.getElementById('subscribeModal').addEventListener('click', function(e) {
+            if (e.target === this) hideSubscribeModal();
+        });
+    </script>
+</body>
+</html>
