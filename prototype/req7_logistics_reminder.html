@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五、物流填写提醒</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #f5f5f5; line-height: 1.6; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .section { background: white; border-radius: 12px; padding: 30px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .section-title { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #667eea; }
+        .section-subtitle { font-size: 18px; font-weight: bold; color: #555; margin: 25px 0 15px; }
+        .desc-text { color: #666; margin: 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; vertical-align: top; }
+        th { background: #f5f5f5; font-weight: bold; color: #555; }
+        tr:nth-child(even) { background: #fafafa; }
+        .message-template { background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .message-template h4 { margin-bottom: 10px; color: #333; }
+        .message-template .template-content { background: #fff; padding: 12px; border-radius: 4px; border: 1px solid #e0e0e0; }
+        ul { margin-left: 20px; color: #666; }
+        li { margin-bottom: 5px; }
+        .prototype-box { background: #f8f9fa; border-left: 4px solid #28a745; padding: 15px 20px; margin: 15px 0; border-radius: 0 8px 8px 0; }
+        .prototype-box h4 { color: #28a745; margin-bottom: 10px; }
+        .prototype-links { display: flex; flex-wrap: wrap; gap: 10px; }
+        .prototype-link { display: inline-flex; align-items: center; background: #e8f5e9; color: #2e7d32; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; transition: all 0.2s; }
+        .prototype-link:hover { background: #c8e6c9; transform: translateY(-1px); }
+        .prototype-link::before { content: "\1F517"; margin-right: 6px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <div class="section-title">五、物流填写提醒</div>
+            
+            <div class="section-subtitle">5.1 需求背景</div>
+            <p class="desc-text">用户退货申请审核通过后，需要在规定时间内填写退货物流信息。部分用户忘记填写导致售后超时关闭。</p>
+            
+            <div class="section-subtitle">5.2 需求目标</div>
+            <ul>
+                <li>客户端：提醒用户及时填写退货物流</li>
+                <li>商家端：提醒运营及时填写发货单号完成售后</li>
+            </ul>
+            
+            <div class="section-subtitle">5.3 功能内容</div>
+            
+            <div class="section-subtitle">5.3.1 客户端提醒</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>提醒渠道</td><td>多渠道提醒用户</td><td>微信小程序订阅消息 + 短信通知</td></tr>
+                <tr><td>首次提醒</td><td>审核通过后提醒</td><td>审核通过后24小时内发送</td></tr>
+                <tr><td>二次提醒</td><td>首次提醒后未填写</td><td>审核通过后3天发送</td></tr>
+            </table>
+            
+            <div class="section-subtitle">5.3.2 客户端消息模板</div>
+            <p class="desc-text">一次提醒和二次提醒共用以下模板。</p>
+            <div class="message-template">
+                <h4>模板：物流填写提醒</h4>
+                <div class="template-content">
+                    <p><strong>售后申请审核通过</strong></p>
+                    <p>您的退货退款申请已通过审核，请尽快填写退货物流信息。</p>
+                    <p>售后单号：SH202405110001</p>
+                </div>
+            </div>
+            
+            <div class="section-subtitle">5.3.3 商家端提醒</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>提醒场景</td><td>用户二次提醒后仍未填写物流</td><td>二次提醒（审核通过后3天）后用户仍未填写物流信息时推送</td></tr>
+                <tr><td>提醒方式</td><td>钉钉消息推送</td><td>推送待处理提醒至运营钉钉群</td></tr>
+                <tr><td>提醒内容</td><td>售后单号、用户信息、待处理事项</td><td>见下方商家端消息模板</td></tr>
+            </table>
+            
+            <div class="section-subtitle">5.3.4 商家端消息模板</div>
+            <div class="message-template">
+                <h4>模板：待发货提醒</h4>
+                <div class="template-content">
+                    <p><strong>待发货提醒</strong></p>
+                    <p>您有1笔售后单待处理，请及时填写发货单号完成售后。</p>
+                    <p>售后单号：SH202405110001</p>
+                    <p>用户：U140416</p>
+                    <p>售后类型：退货退款</p>
+                </div>
+            </div>
+            
+            <div class="section-subtitle">5.4 小程序消息订阅授权</div>
+            
+            <div class="section-subtitle">5.4.1 授权触发节点</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>触发场景</td><td>用户发起售后申请</td><td>用户在售后申请页面点击"提交"按钮时触发</td></tr>
+                <tr><td>触发节点</td><td>提交按钮点击后、数据提交前</td><td>点击"提交"→ 弹出订阅授权弹窗 → 用户选择允许/拒绝 → 继续提交售后申请数据</td></tr>
+                <tr><td>触发频率</td><td>每次提交售后申请时</td><td>若用户勾选"总是保持以上选择"，则后续不再弹出授权弹窗</td></tr>
+            </table>
+            
+            <div class="section-subtitle">5.4.2 授权弹窗内容</div>
+            <table>
+                <tr><th>字段名称</th><th>字段说明</th><th>业务规则</th></tr>
+                <tr><td>弹窗标题</td><td>授权弹窗标题</td><td>固定显示"泰尔超优会商城 申请"</td></tr>
+                <tr><td>消息类型1</td><td>申请通过提醒</td><td>默认开启，用户可关闭</td></tr>
+                <tr><td>消息类型2</td><td>物流填写提醒</td><td>默认开启，用户可关闭</td></tr>
+                <tr><td>总是保持以上选择</td><td>记住用户选择</td><td>勾选后，后续不再弹出授权弹窗</td></tr>
+                <tr><td>允许按钮</td><td>用户同意授权</td><td>点击后完成授权，继续提交售后申请</td></tr>
+                <tr><td>拒绝按钮</td><td>用户拒绝授权</td><td>点击后关闭弹窗，继续提交售后申请（不影响售后流程）</td></tr>
+            </table>
+            
+            <div class="prototype-box">
+                <h4>原型链接</h4>
+                <div class="prototype-links">
+                    <a href="req7_subscribe_auth_prototype.html" class="prototype-link" target="_blank">查看小程序订阅授权弹窗原型</a>
+                </div>
+            </div>
+            
+            <div class="section-subtitle">5.5 影响端口</div>
+            <table>
+                <tr><th>端口</th><th>功能范围</th></tr>
+                <tr><td>客户端</td><td>消息中心提醒、填写入口、订阅授权弹窗</td></tr>
+                <tr><td>商家端</td><td>钉钉消息推送提醒</td></tr>
+                <tr><td>系统</td><td>定时任务、消息推送、钉钉机器人对接</td></tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
