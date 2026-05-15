@@ -45,13 +45,18 @@
         .card-red { background: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 10px; }
         .card-red .card-icon { font-size: 20px; }
         .card-red .card-msg { color: #666; font-size: 13px; }
+        .message-template { background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .message-template h4 { margin-bottom: 10px; color: #333; }
+        .message-template .template-content { background: #fff; padding: 12px; border-radius: 4px; border: 1px solid #e0e0e0; }
+        .message-template .template-btn { background: #6B46C1; color: #fff; padding: 8px 16px; border-radius: 4px; display: inline-block; margin-top: 8px; }
+        .message-template .template-note { margin-top: 10px; font-size: 12px; color: #666; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 style="text-align:center;font-size:28px;margin-bottom:10px;">售后流程优化需求文档</h1>
         <div style="text-align:center;font-size:16px;color:#666;margin-bottom:10px;">v1.0 基础能力版</div>
-        <div style="text-align:center;font-size:14px;color:#999;margin-bottom:30px;">更新日期：2026年5月13日</div>
+        <div style="text-align:center;font-size:14px;color:#999;margin-bottom:30px;">更新日期：2026年5月15日</div>
 
         <h2 style="font-size:20px;font-weight:bold;margin:30px 0 15px;border-bottom:2px solid #333;padding-bottom:8px;">售后状态思维导图</h2>
         <a href="售后状态思维导图_最终版.html" style="display:block;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:15px 20px;border-radius:8px;text-decoration:none;margin:20px 0;text-align:center;font-size:16px;font-weight:bold;" target="_blank">查看售后状态思维导图</a>
@@ -195,7 +200,7 @@
             <div class="card-preview">
                 <div class="card-green">
                     <div class="card-header">
-                        <span>\26A0\FE0F</span>
+                        <span>⚠️</span>
                         <span>您有正在进行的售后申请</span>
                     </div>
                     <div class="card-info">
@@ -206,7 +211,7 @@
                     <div class="card-btn">查看售后详情</div>
                 </div>
                 <div class="card-red">
-                    <div class="card-icon">\2139\FE0F</div>
+                    <div class="card-icon">ℹ️</div>
                     <div class="card-msg">您有正在进行的售后申请，需先处理售后才能确认收货</div>
                 </div>
             </div>
@@ -287,69 +292,89 @@
             <p class="desc-text">用户退货申请审核通过后，需要在规定时间内填写退货物流信息。部分用户忘记填写导致售后超时关闭。</p>
             <div class="section-subtitle">5.2 需求目标</div>
             <ul style="margin-left: 20px; color: #666;">
-                <li>客户端：提醒用户及时填写退货物流，超时自动关闭</li>
+                <li>客户端：提醒用户及时填写退货物流</li>
                 <li>商家端：提醒运营及时填写发货单号完成售后</li>
             </ul>
-            <div class="section-subtitle">5.3 功能内容</div>
-            <div class="section-subtitle">5.3.1 客户端提醒</div>
+            <div class="section-subtitle">5.3 提醒次数与时间</div>
             <table>
-                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
-                <tr><td>倒计时卡片</td><td>显示售后关闭倒计时</td><td>显示"距离售后关闭还剩 X天 X小时"</td></tr>
-                <tr><td>提醒渠道</td><td>多渠道提醒用户</td><td>微信小程序订阅消息 + 短信通知</td></tr>
-                <tr><td>首次提醒</td><td>审核通过后提醒</td><td>审核通过后24小时内发送</td></tr>
-                <tr><td>超时提醒</td><td>临近超时前提醒</td><td>临近超时前1天发送</td></tr>
-                <tr><td>超时处理</td><td>超时未填写处理</td><td>超时未填写自动关闭售后申请</td></tr>
-                <tr><td>超时时间计算</td><td>计算剩余时间</td><td>审核通过时间 + 7天 = 超时关闭时间；剩余时间 = 超时关闭时间 - 当前时间</td></tr>
+                <tr><th>提醒次数</th><th>触发条件</th><th>提醒时间</th><th>提醒渠道</th></tr>
+                <tr><td>一次提醒</td><td>退货退款申请审核通过</td><td>审核通过后立即发送</td><td>小程序订阅消息 + 短信</td></tr>
+                <tr><td>二次提醒</td><td>一次提醒后用户仍未填写物流</td><td>审核通过后3天发送</td><td>小程序订阅消息 + 短信</td></tr>
+                <tr><td>商家提醒</td><td>二次提醒后用户仍未填写物流</td><td>二次提醒后立即推送</td><td>钉钉消息推送</td></tr>
             </table>
-            <div class="section-subtitle">5.3.2 客户端消息模板</div>
-            <div class="message-template" style="background:#f5f5f5;padding:15px;border-radius:8px;margin:15px 0;">
-                <h4>模板一：审核通过提醒</h4>
-                <div style="background:#fff;padding:12px;border-radius:4px;border:1px solid #e0e0e0;">
+            <div class="section-subtitle">5.4 小程序订阅消息模板</div>
+            <p class="desc-text">一次提醒和二次提醒共用以下模板。</p>
+            <div class="message-template">
+                <h4>模板：物流填写提醒</h4>
+                <div class="template-content">
                     <p><strong>售后申请审核通过</strong></p>
-                    <p>您的退货退款申请已通过审核，请在7天内填写退货物流信息。</p>
+                    <p>您的退货退款申请已通过审核，请尽快填写退货物流信息。</p>
                     <p>售后单号：SH202405110001</p>
-                    <p>剩余时间：6天23小时</p>
-                    <div style="background:#6B46C1;color:#fff;padding:8px 16px;border-radius:4px;display:inline-block;margin-top:8px;">立即填写物流</div>
                 </div>
-                <p style="margin-top:10px;font-size:12px;color:#666;"><strong>按钮逻辑：</strong>点击"立即填写物流"跳转至客户端-我的-售后服务-处理中-该售后单详情页的"填写物流"页面</p>
             </div>
-            <div class="message-template" style="background:#f5f5f5;padding:15px;border-radius:8px;margin:15px 0;">
-                <h4>模板二：超时前提醒</h4>
-                <div style="background:#fff;padding:12px;border-radius:4px;border:1px solid #e0e0e0;">
-                    <p><strong>售后即将超时关闭</strong></p>
-                    <p>您的退货退款申请将在1天后超时关闭，请尽快填写退货物流信息。</p>
-                    <p>售后单号：SH202405110001</p>
-                    <p>剩余时间：23小时59分</p>
-                    <div style="background:#6B46C1;color:#fff;padding:8px 16px;border-radius:4px;display:inline-block;margin-top:8px;">立即填写物流</div>
+            <div class="section-subtitle">5.5 短信提醒模板</div>
+            <div class="message-template">
+                <h4>短信模板</h4>
+                <div class="template-content">
+                    <p>【泰尔超优会】您的退货退款申请已通过审核，请尽快填写退货物流信息。点击 {短链接} 立即填写。</p>
                 </div>
-                <p style="margin-top:10px;font-size:12px;color:#666;"><strong>按钮逻辑：</strong>点击"立即填写物流"跳转至客户端-我的-售后服务-处理中-该售后单详情页的"填写物流"页面</p>
+                <p class="template-note"><strong>短链接跳转逻辑：</strong>点击短链接后，打开微信小程序并跳转至该售后单详情页的"填写物流"页面</p>
             </div>
-            <div class="section-subtitle">5.3.3 商家端提醒</div>
+            <div class="section-subtitle">5.6 小程序消息订阅授权</div>
+            <div class="section-subtitle">5.6.1 授权触发节点</div>
             <table>
                 <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
-                <tr><td>提醒场景</td><td>售后单需要运营填写发货单号时</td><td>商家端消息中心</td></tr>
-                <tr><td>提醒方式</td><td>商家端消息中心</td><td>推送待处理提醒</td></tr>
-                <tr><td>提醒内容</td><td>售后单号、用户信息、待处理事项</td><td>保留当前功能，无改动</td></tr>
+                <tr><td>触发场景</td><td>用户发起售后申请</td><td>用户在售后申请页面点击"提交"按钮时触发</td></tr>
+                <tr><td>触发节点</td><td>提交按钮点击后、数据提交前</td><td>点击"提交"→ 弹出订阅授权弹窗 → 用户选择允许/拒绝 → 继续提交售后申请数据</td></tr>
+                <tr><td>触发频率</td><td>每次提交售后申请时</td><td>若用户勾选"总是保持以上选择"，则后续不再弹出授权弹窗</td></tr>
             </table>
-            <div class="section-subtitle">5.3.4 商家端消息模板</div>
-            <div class="message-template" style="background:#f5f5f5;padding:15px;border-radius:8px;margin:15px 0;">
+            <div class="section-subtitle">5.6.2 授权弹窗内容</div>
+            <table>
+                <tr><th>字段名称</th><th>字段说明</th><th>业务规则</th></tr>
+                <tr><td>弹窗标题</td><td>授权弹窗标题</td><td>固定显示"泰尔超优会商城 申请"</td></tr>
+                <tr><td>消息类型1</td><td>申请通过提醒</td><td>默认开启，用户可关闭</td></tr>
+                <tr><td>消息类型2</td><td>物流填写提醒</td><td>默认开启，用户可关闭</td></tr>
+                <tr><td>总是保持以上选择</td><td>记住用户选择</td><td>勾选后，后续不再弹出授权弹窗</td></tr>
+                <tr><td>允许按钮</td><td>用户同意授权</td><td>点击后完成授权，继续提交售后申请</td></tr>
+                <tr><td>拒绝按钮</td><td>用户拒绝授权</td><td>点击后关闭弹窗，继续提交售后申请（不影响售后流程）</td></tr>
+            </table>
+            <div class="prototype-box">
+                <h4>原型链接</h4>
+                <div class="prototype-links">
+                    <a href="req7_logistics_reminder.html" class="prototype-link" target="_blank">客户端原型</a>
+                </div>
+            </div>
+            <div class="section-subtitle">5.7 商家端提醒</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>提醒场景</td><td>用户二次提醒后仍未填写物流</td><td>二次提醒（审核通过后3天）后用户仍未填写物流信息时推送</td></tr>
+                <tr><td>提醒方式</td><td>钉钉消息推送</td><td>推送待处理提醒至运营钉钉群</td></tr>
+                <tr><td>提醒内容</td><td>售后单号、用户信息、待处理事项</td><td>见下方钉钉消息模板</td></tr>
+            </table>
+            <div class="section-subtitle">5.7.1 钉钉推送配置</div>
+            <table>
+                <tr><th>配置项</th><th>配置说明</th><th>业务规则</th></tr>
+                <tr><td>推送方式</td><td>钉钉群机器人Webhook</td><td>配置售后运营群的钉钉机器人Webhook地址</td></tr>
+                <tr><td>推送频率</td><td>二次提醒后推送</td><td>二次提醒发送后，用户仍未填写物流时立即推送</td></tr>
+                <tr><td>推送对象</td><td>售后运营群</td><td>群内所有运营人员可见</td></tr>
+            </table>
+            <div class="section-subtitle">5.7.2 钉钉消息模板</div>
+            <div class="message-template">
                 <h4>模板：待发货提醒</h4>
-                <div style="background:#fff;padding:12px;border-radius:4px;border:1px solid #e0e0e0;">
+                <div class="template-content">
                     <p><strong>待发货提醒</strong></p>
                     <p>您有1笔售后单待处理，请及时填写发货单号完成售后。</p>
                     <p>售后单号：SH202405110001</p>
                     <p>用户：U140416</p>
-                    <p>售后类型：仅换货</p>
-                    <div style="background:#6B46C1;color:#fff;padding:8px 16px;border-radius:4px;display:inline-block;margin-top:8px;">去处理</div>
+                    <p>售后类型：退货退款</p>
                 </div>
-                <p style="margin-top:10px;font-size:12px;color:#666;"><strong>按钮逻辑：</strong>点击"去处理"跳转至商家端-售后管理-售后工单-该售后单详情页</p>
             </div>
-            <div class="section-subtitle">5.4 影响端口</div>
+            <div class="section-subtitle">5.8 影响端口</div>
             <table>
                 <tr><th>端口</th><th>功能范围</th></tr>
-                <tr><td>客户端</td><td>消息中心提醒、倒计时展示、填写入口</td></tr>
-                <tr><td>商家端</td><td>消息中心提醒、待处理列表</td></tr>
-                <tr><td>系统</td><td>定时任务、消息推送</td></tr>
+                <tr><td>客户端</td><td>消息中心提醒、填写入口、订阅授权弹窗</td></tr>
+                <tr><td>商家端</td><td>钉钉消息推送提醒</td></tr>
+                <tr><td>系统</td><td>定时任务、消息推送、钉钉机器人对接</td></tr>
             </table>
         </div>
 
@@ -373,32 +398,36 @@
             <div class="section-subtitle">6.3 售后超期逻辑</div>
             <table>
                 <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
-                <tr><td>售后期计算</td><td>计算订单售后期限</td><td>订单完成时间 + 7天 = 售后期截止时间</td></tr>
-                <tr><td>超期判断</td><td>判断订单是否已过售后时效</td><td>当前时间 > 售后期截止时间 → 已超期；当前时间 ≤ 售后期截止时间 → 未超期</td></tr>
+                <tr><td>售后期计算</td><td>计算订单售后期限</td><td>当前版本：售后超期日期 = 订单完成日期；后续版本：售后超期日期 = 订单完成日期 + 7天</td></tr>
+                <tr><td>超期判断</td><td>判断订单是否已过售后时效</td><td>当前时间 > 售后超期日期 → 已超期；当前时间 ≤ 售后超期日期 → 未超期</td></tr>
             </table>
-            <div class="section-subtitle">6.4 功能内容</div>
-            <div class="section-subtitle">6.4.1 重置售后期按钮</div>
+            <div class="section-subtitle">6.4 售后超期开放逻辑</div>
             <table>
                 <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
-                <tr><td>按钮名称</td><td>操作按钮显示文字</td><td>固定显示"重置售后期"</td></tr>
-                <tr><td>显示位置</td><td>按钮展示位置</td><td>商家端订单列表/订单详情页操作列</td></tr>
-                <tr><td>显示条件</td><td>按钮显示逻辑</td><td>同时满足：①订单状态 = 已完成；②当前时间 > 售后期截止时间（已超期）</td></tr>
-                <tr><td>隐藏条件</td><td>按钮隐藏逻辑</td><td>①订单状态 ≠ 已完成；②当前时间 ≤ 售后期截止时间（未超期）；③已点击重置售后期且新的售后期未过期</td></tr>
+                <tr><td>适用对象</td><td>已完成且已超期的订单</td><td>订单状态 = 已完成，且当前时间 > 售后超期日期</td></tr>
+                <tr><td>开放操作</td><td>运营手动重置售后期</td><td>点击后以当前时间为起点，重新恢复7天售后期</td></tr>
+                <tr><td>倒计时</td><td>重置后开始倒计时</td><td>重置时间 + 7天 = 新的售后超期日期，7天后自动关闭客户端售后申请功能</td></tr>
+                <tr><td>记录日志</td><td>操作记录</td><td>记录操作人、操作时间、原售后超期日期、新售后超期日期</td></tr>
             </table>
-            <div class="section-subtitle">6.4.2 重置售后期业务逻辑</div>
+            <div class="section-subtitle">6.5 售后开放与权益关系</div>
             <table>
                 <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
-                <tr><td>点击操作</td><td>点击按钮后的处理</td><td>弹出二次确认弹窗，文案："确定重置该订单的售后期吗？重置后用户将可在7天内申请售后"</td></tr>
-                <tr><td>确认重置</td><td>确认后的业务逻辑</td><td>以当前时间为起点，重新计算售后期：当前时间 + 7天 = 新的售后期截止时间；订单状态保持"已完成"不变</td></tr>
-                <tr><td>重置后效果</td><td>重置售后期后的变化</td><td>①客户端：该订单重新显示售后申请入口；②商家端："重置售后期"按钮隐藏</td></tr>
-                <tr><td>记录日志</td><td>操作记录</td><td>记录操作人、操作时间、原售后期截止时间、新售后期截止时间</td></tr>
+                <tr><td>权益不受影响</td><td>售后开放不影响已发放权益</td><td>售后开放操作不影响当前订单已发放的权益信息</td></tr>
             </table>
-            <div class="section-subtitle">6.5 影响端口</div>
+            <div class="section-subtitle">6.6 售后与收益关系</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>售后申请通过</td><td>扣除对应订单收益</td><td>用户售后申请通过后，扣除对应订单收益，将收益收入放入待发放中</td></tr>
+                <tr><td>售后单完成</td><td>收益完全扣除</td><td>售后单完成时，对应收益完全扣除（后续部分退款为扣除对应部分）</td></tr>
+                <tr><td>售后单关闭（可售后期内）</td><td>收益暂放待发放</td><td>售后单关闭后，在可售后期内，收益一直放在待发放收益中</td></tr>
+                <tr><td>售后单关闭（超过售后期）</td><td>收益重新发放</td><td>售后期过后，待发放收益重新发放给用户</td></tr>
+            </table>
+            <div class="section-subtitle">6.7 影响端口</div>
             <table>
                 <tr><th>端口</th><th>功能范围</th></tr>
-                <tr><td>商家端</td><td>订单列表重置售后期按钮</td></tr>
+                <tr><td>商家端</td><td>订单列表重置售后期操作</td></tr>
                 <tr><td>客户端</td><td>重置售后期后显示售后入口</td></tr>
-                <tr><td>系统</td><td>售后期计算、记录操作日志</td></tr>
+                <tr><td>系统</td><td>售后期计算、记录操作日志、收益待发放管理</td></tr>
             </table>
         </div>
     </div>
