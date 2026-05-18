@@ -341,7 +341,7 @@
             <div class="prototype-box">
                 <h4>原型链接</h4>
                 <div class="prototype-links">
-                    <a href="req7_logistics_reminder.html" class="prototype-link" target="_blank">客户端原型</a>
+                    <a href="req7_subscribe_auth_prototype.html" class="prototype-link" target="_blank">查看小程序订阅授权弹窗原型</a>
                 </div>
             </div>
             <div class="section-subtitle">5.7 商家端提醒</div>
@@ -381,19 +381,12 @@
         <!-- 需求11 -->
         <div class="section">
             <div class="section-title">六、重置售后期</div>
-            <div class="prototype-box">
-                <h4>原型链接</h4>
-                <div class="prototype-links">
-                    <a href="req11_reset_aftersales_period.html" class="prototype-link" target="_blank">商家端原型</a>
-                </div>
-            </div>
             <div class="section-subtitle">6.1 需求背景</div>
-            <p class="desc-text">部分订单已过售后申请时效，但用户有合理售后需求，需要运营手动重置售后期。</p>
+            <p class="desc-text">为部分极端用户预留的技术手段，用于处理已完成订单的售后逻辑。</p>
+            
             <div class="section-subtitle">6.2 需求目标</div>
             <ul style="margin-left: 20px; color: #666;">
-                <li>运营可对已过期订单重置售后期</li>
-                <li>重置后用户可在新的售后期内申请售后</li>
-                <li>记录操作人和操作时间</li>
+                <li>预留技术兜底端口，处理已完成订单的售后逻辑</li>
             </ul>
             <div class="section-subtitle">6.3 售后超期逻辑</div>
             <table>
@@ -405,7 +398,7 @@
             <table>
                 <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
                 <tr><td>适用对象</td><td>已完成且已超期的订单</td><td>订单状态 = 已完成，且当前时间 > 售后超期日期</td></tr>
-                <tr><td>开放操作</td><td>运营手动重置售后期</td><td>点击后以当前时间为起点，重新恢复7天售后期</td></tr>
+                <tr><td>开放操作</td><td>技术手动重置售后期</td><td>点击后以当前时间为起点，重新恢复7天售后期</td></tr>
                 <tr><td>倒计时</td><td>重置后开始倒计时</td><td>重置时间 + 7天 = 新的售后超期日期，7天后自动关闭客户端售后申请功能</td></tr>
                 <tr><td>记录日志</td><td>操作记录</td><td>记录操作人、操作时间、原售后超期日期、新售后超期日期</td></tr>
             </table>
