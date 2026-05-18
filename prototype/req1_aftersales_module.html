@@ -452,11 +452,149 @@
             font-size: 14px;
             color: #666;
         }
+
+        /* 订单详情页样式 */
+        .detail-content {
+            height: calc(100% - 44px - 83px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .detail-section {
+            background: #fff;
+            margin: 12px;
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .detail-section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        .logistics-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f0f9f4;
+            border-radius: 8px;
+        }
+        .logistics-icon {
+            font-size: 28px;
+        }
+        .logistics-text {
+            flex: 1;
+        }
+        .logistics-status {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .logistics-desc {
+            font-size: 12px;
+            color: #999;
+        }
+        .detail-product-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+            align-items: flex-start;
+        }
+        .detail-product-item:last-child {
+            border-bottom: none;
+        }
+        .detail-product-info {
+            flex: 1;
+        }
+        .detail-product-name {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+        .detail-product-spec {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 6px;
+        }
+        .detail-product-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .detail-product-price {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+        .detail-product-qty {
+            font-size: 12px;
+            color: #999;
+        }
+        .detail-product-action {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+        .price-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #666;
+        }
+        .price-summary:last-child {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        .price-summary .label {
+            color: #666;
+        }
+        .price-summary .value {
+            color: #333;
+        }
+        .price-summary.total .value {
+            color: #ff4d4f;
+        }
+        .order-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+        .order-info-label {
+            color: #999;
+        }
+        .order-info-value {
+            color: #333;
+            text-align: right;
+            max-width: 200px;
+        }
+        .order-card-clickable {
+            cursor: pointer;
+            position: relative;
+        }
+        .order-card-clickable::after {
+            content: '›';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #ccc;
+        }
+        .order-card-clickable .action-bar {
+            padding-right: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="prototype-title">需求1原型 - 售后模块数据来源（用户端）</div>
-    
+
     <div class="phone-frame">
         <!-- 个人中心页面 -->
         <div class="page active" id="profile-page">
@@ -483,7 +621,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="order-section">
                 <div class="section-header">
                     <div class="section-title">我的订单</div>
@@ -512,7 +650,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="menu-list">
                 <div class="menu-item">
                     <div class="menu-icon">🛒</div>
@@ -541,7 +679,7 @@
                     <div class="menu-arrow">›</div>
                 </div>
             </div>
-            
+
             <div class="bottom-nav">
                 <div class="nav-item">
                     <div class="nav-icon">🏠</div>
@@ -565,7 +703,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- 售后中心页面 -->
         <div class="page" id="aftersales-page">
             <div class="status-bar">
@@ -586,8 +724,8 @@
                 <!-- 售后申请 Tab -->
                 <div class="tab-content" id="tab-0">
                     <div id="apply-list">
-                        <!-- 待发货订单 - 可申请售后 -->
-                        <div class="order-card" data-order-id="202405110001">
+                        <!-- 待发货订单 - 可申请售后（点击进入详情） -->
+                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405110001')">
                             <div class="order-header">
                                 <span>订单号：202405110001</span>
                                 <span class="order-status">待发货</span>
@@ -601,15 +739,15 @@
                                 </div>
                             </div>
                             <div class="action-bar">
-                                <button class="btn btn-primary" onclick="showTypeModal('202405110001', '智能蓝牙耳机')">退款/售后</button>
+                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405110001', '智能蓝牙耳机')">退款/售后</button>
                             </div>
                         </div>
-                        
-                        <!-- 已完成未超期订单 - 可申请售后 -->
-                        <div class="order-card" data-order-id="202405100002">
+
+                        <!-- 待收货订单 - 可申请售后（点击进入详情） -->
+                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405100002')">
                             <div class="order-header">
                                 <span>订单号：202405100002</span>
-                                <span class="order-status">已完成</span>
+                                <span class="order-status">待收货</span>
                             </div>
                             <div class="product-item">
                                 <div class="product-img">商品图</div>
@@ -620,31 +758,31 @@
                                 </div>
                             </div>
                             <div class="action-bar">
-                                <button class="btn btn-primary" onclick="showTypeModal('202405100002', '便携式充电宝')">退款/售后</button>
+                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405100002', '便携式充电宝')">退款/售后</button>
                             </div>
                         </div>
-                        
-                        <!-- 已完成已超期订单 - 按钮置灰但可点击 -->
-                        <div class="order-card" data-order-id="202405090003">
+
+                        <!-- 待评价订单 - 可申请售后（点击进入详情） -->
+                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405090003')">
                             <div class="order-header">
                                 <span>订单号：202405090003</span>
-                                <span class="order-status">已完成</span>
+                                <span class="order-status">待评价</span>
                             </div>
                             <div class="product-item">
                                 <div class="product-img">商品图</div>
                                 <div class="product-info">
                                     <div class="product-name">机械键盘 青轴 RGB背光</div>
-                                    <div class="product-spec">颜色：白色 <span class="expired-tag">已超期</span></div>
+                                    <div class="product-spec">颜色：白色</div>
                                     <div class="product-price">¥399.00</div>
                                 </div>
                             </div>
                             <div class="action-bar">
-                                <button class="btn btn-gray" onclick="showExpiredModal()">退款/售后</button>
+                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405090003', '机械键盘')">退款/售后</button>
                             </div>
                         </div>
-                        
-                        <!-- 待发货订单 - 可申请售后 -->
-                        <div class="order-card" data-order-id="202405080004">
+
+                        <!-- 待发货订单 - 可申请售后（点击进入详情） -->
+                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405080004')">
                             <div class="order-header">
                                 <span>订单号：202405080004</span>
                                 <span class="order-status">待发货</span>
@@ -658,15 +796,15 @@
                                 </div>
                             </div>
                             <div class="action-bar">
-                                <button class="btn btn-primary" onclick="showTypeModal('202405080004', 'USB扩展坞')">退款/售后</button>
+                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405080004', 'USB扩展坞')">退款/售后</button>
                             </div>
                         </div>
-                        
-                        <!-- 已完成未超期订单 - 可申请售后 -->
-                        <div class="order-card" data-order-id="202405070005">
+
+                        <!-- 待收货订单 - 可申请售后（点击进入详情） -->
+                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405070005')">
                             <div class="order-header">
                                 <span>订单号：202405070005</span>
-                                <span class="order-status">已完成</span>
+                                <span class="order-status">待收货</span>
                             </div>
                             <div class="product-item">
                                 <div class="product-img">商品图</div>
@@ -677,31 +815,31 @@
                                 </div>
                             </div>
                             <div class="action-bar">
-                                <button class="btn btn-primary" onclick="showTypeModal('202405070005', '桌面手机支架')">退款/售后</button>
+                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405070005', '桌面手机支架')">退款/售后</button>
                             </div>
                         </div>
-                        
-                        <!-- 已完成已超期订单 - 按钮置灰但可点击 -->
-                        <div class="order-card" data-order-id="202405060006">
+
+                        <!-- 待评价订单 - 可申请售后（点击进入详情） -->
+                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405060006')">
                             <div class="order-header">
                                 <span>订单号：202405060006</span>
-                                <span class="order-status">已完成</span>
+                                <span class="order-status">待评价</span>
                             </div>
                             <div class="product-item">
                                 <div class="product-img">商品图</div>
                                 <div class="product-info">
                                     <div class="product-name">无线充电器 15W快充</div>
-                                    <div class="product-spec">颜色：白色 <span class="expired-tag">已超期</span></div>
+                                    <div class="product-spec">颜色：白色</div>
                                     <div class="product-price">¥79.00</div>
                                 </div>
                             </div>
                             <div class="action-bar">
-                                <button class="btn btn-gray" onclick="showExpiredModal()">退款/售后</button>
+                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405060006', '无线充电器')">退款/售后</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 处理中 Tab -->
                 <div class="tab-content" id="tab-1" style="display:none;">
                     <div id="processing-list">
@@ -722,7 +860,7 @@
                                 <button class="btn btn-outline">查看详情</button>
                             </div>
                         </div>
-                        
+
                         <div class="order-card">
                             <div class="order-header">
                                 <span>售后单号：SH202405090002</span>
@@ -743,7 +881,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 历史售后 Tab -->
                 <div class="tab-content" id="tab-2" style="display:none;">
                     <div class="order-card">
@@ -763,7 +901,7 @@
                             <button class="btn btn-outline">查看详情</button>
                         </div>
                     </div>
-                    
+
                     <div class="order-card">
                         <div class="order-header">
                             <span>售后单号：SH202404200002</span>
@@ -784,7 +922,80 @@
                     </div>
                 </div>
             </div>
-            
+
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-text">首页</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">📺</div>
+                    <div class="nav-text">视界</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🤖</div>
+                    <div class="nav-text">泰小虎</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">📰</div>
+                    <div class="nav-text">智讯</div>
+                </div>
+                <div class="nav-item active" onclick="showProfile()">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-text">我的</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 订单详情页 -->
+        <div class="page" id="order-detail-page">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>订单详情</span>
+                <span>100%</span>
+            </div>
+            <div class="nav-bar">
+                <span class="back-btn" onclick="showAftersales()">‹</span>
+                <span class="nav-title">订单详情</span>
+            </div>
+            <div class="detail-content" id="detail-content">
+                <!-- 物流信息 -->
+                <div class="detail-section" id="detail-logistics">
+                    <div class="detail-section-title">物流信息</div>
+                    <div class="logistics-info">
+                        <div class="logistics-icon">📦</div>
+                        <div class="logistics-text">
+                            <div class="logistics-status" id="detail-logistics-status">待发货</div>
+                            <div class="logistics-desc" id="detail-logistics-desc">商家正在处理，请耐心等待</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品信息 -->
+                <div class="detail-section">
+                    <div class="detail-section-title">商品信息</div>
+                    <div id="detail-products">
+                        <!-- 动态填充 -->
+                    </div>
+                </div>
+
+                <!-- 价格信息 -->
+                <div class="detail-section">
+                    <div class="detail-section-title">价格信息</div>
+                    <div id="detail-prices">
+                        <!-- 动态填充 -->
+                    </div>
+                </div>
+
+                <!-- 订单信息 -->
+                <div class="detail-section">
+                    <div class="detail-section-title">订单信息</div>
+                    <div id="detail-order-info">
+                        <!-- 动态填充 -->
+                    </div>
+                </div>
+            </div>
+
             <div class="bottom-nav">
                 <div class="nav-item">
                     <div class="nav-icon">🏠</div>
@@ -809,7 +1020,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 超期弹窗 -->
     <div class="modal-overlay" id="expiredModal">
         <div class="modal">
@@ -821,7 +1032,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 选择售后类型弹窗 -->
     <div class="modal-overlay" id="typeModal">
         <div class="modal" style="width:320px;">
@@ -843,23 +1054,182 @@
             </div>
         </div>
     </div>
-    
-    <div class="prototype-note">点击"我的"页面的"售后"图标进入售后中心，仅支持仅退款和退货退款</div>
-    
+
+    <div class="prototype-note">点击"我的"页面的"售后"图标进入售后中心，仅支持仅退款和退货退款。点击订单卡片可进入订单详情页。</div>
+
     <script>
         let currentOrderId = null;
         let selectedType = null;
-        
+
+        // 订单详情数据
+        const orderDetails = {
+            '202405110001': {
+                status: '待发货',
+                logisticsStatus: '待发货',
+                logisticsDesc: '商家正在处理，请耐心等待',
+                products: [
+                    { name: '智能蓝牙耳机 无线降噪 超长续航', spec: '颜色：白色 | 规格：标准版', price: 299.00, qty: 1, canApply: true },
+                    { name: '蓝牙音箱 便携式户外防水', spec: '颜色：黑色 | 规格：迷你版', price: 159.00, qty: 1, canApply: true },
+                    { name: 'Type-C数据线 快充编织线 1.5m', spec: '颜色：灰色', price: 29.00, qty: 2, canApply: true }
+                ],
+                prices: { subtotal: 516.00, shipping: 0, discount: 0, total: 516.00 },
+                orderInfo: { orderNo: '202405110001', createTime: '2024-05-11 14:30:00', payTime: '2024-05-11 14:31:05', payMethod: '储值支付' }
+            },
+            '202405100002': {
+                status: '待收货',
+                logisticsStatus: '运输中',
+                logisticsDesc: '2024-05-12 08:00 包裹已到达本市分拨中心',
+                products: [
+                    { name: '便携式充电宝 20000mAh', spec: '颜色：黑色', price: 129.00, qty: 1, canApply: true },
+                    { name: '充电线三合1 快充数据线', spec: '颜色：白色 | 长度：1m', price: 39.00, qty: 1, canApply: true },
+                    { name: '手机保护壳 透明防摔', spec: '适配：iPhone 15', price: 19.00, qty: 1, canApply: true }
+                ],
+                prices: { subtotal: 187.00, shipping: 0, discount: 10.00, total: 177.00 },
+                orderInfo: { orderNo: '202405100002', createTime: '2024-05-10 09:15:00', payTime: '2024-05-10 09:16:22', payMethod: '储值支付' }
+            },
+            '202405090003': {
+                status: '待评价',
+                logisticsStatus: '已签收',
+                logisticsDesc: '2024-05-10 16:45 快递柜签收',
+                products: [
+                    { name: '机械键盘 青轴 RGB背光', spec: '颜色：白色', price: 399.00, qty: 1, canApply: true },
+                    { name: '键帽套装 PBT热升华', spec: '配色：复古色', price: 89.00, qty: 1, canApply: true },
+                    { name: '键盘清洁套装', spec: '标准版', price: 15.00, qty: 1, canApply: true }
+                ],
+                prices: { subtotal: 503.00, shipping: 0, discount: 0, total: 503.00 },
+                orderInfo: { orderNo: '202405090003', createTime: '2024-05-09 20:00:00', payTime: '2024-05-09 20:01:33', payMethod: '储值支付' }
+            },
+            '202405080004': {
+                status: '待发货',
+                logisticsStatus: '待发货',
+                logisticsDesc: '商家正在处理，请耐心等待',
+                products: [
+                    { name: 'USB扩展坞 Type-C转多口', spec: '颜色：银色 | 规格：7合1', price: 159.00, qty: 1, canApply: true },
+                    { name: 'HDMI高清线 2.0版 2m', spec: '镀金接口', price: 35.00, qty: 1, canApply: true },
+                    { name: '鼠标垫 超大号 桌面垫', spec: '尺寸：900x400mm | 颜色：黑色', price: 49.00, qty: 1, canApply: true }
+                ],
+                prices: { subtotal: 243.00, shipping: 0, discount: 0, total: 243.00 },
+                orderInfo: { orderNo: '202405080004', createTime: '2024-05-08 11:20:00', payTime: '2024-05-08 11:21:10', payMethod: '储值支付' }
+            },
+            '202405070005': {
+                status: '待收货',
+                logisticsStatus: '派送中',
+                logisticsDesc: '2024-05-08 12:30 快递员正在派送中',
+                products: [
+                    { name: '桌面手机支架 铝合金', spec: '颜色：深空灰', price: 89.00, qty: 1, canApply: true },
+                    { name: '无线鼠标 静音办公', spec: '颜色：白色', price: 59.00, qty: 1, canApply: true },
+                    { name: '鼠标垫 简约办公', spec: '尺寸：300x250mm', price: 19.00, qty: 1, canApply: true }
+                ],
+                prices: { subtotal: 167.00, shipping: 0, discount: 0, total: 167.00 },
+                orderInfo: { orderNo: '202405070005', createTime: '2024-05-07 16:45:00', payTime: '2024-05-07 16:46:18', payMethod: '储值支付' }
+            },
+            '202405060006': {
+                status: '待评价',
+                logisticsStatus: '已签收',
+                logisticsDesc: '2024-05-07 09:30 本人签收',
+                products: [
+                    { name: '无线充电器 15W快充', spec: '颜色：白色', price: 79.00, qty: 1, canApply: true },
+                    { name: '充电头 20W PD快充', spec: '颜色：白色', price: 45.00, qty: 1, canApply: true },
+                    { name: '手机指环支架 磁吸', spec: '颜色：银色', price: 12.00, qty: 2, canApply: true }
+                ],
+                prices: { subtotal: 148.00, shipping: 0, discount: 0, total: 148.00 },
+                orderInfo: { orderNo: '202405060006', createTime: '2024-05-06 08:30:00', payTime: '2024-05-06 08:31:45', payMethod: '储值支付' }
+            }
+        };
+
         function showProfile() {
             document.getElementById('profile-page').classList.add('active');
             document.getElementById('aftersales-page').classList.remove('active');
+            document.getElementById('order-detail-page').classList.remove('active');
         }
-        
+
         function showAftersales() {
             document.getElementById('profile-page').classList.remove('active');
             document.getElementById('aftersales-page').classList.add('active');
+            document.getElementById('order-detail-page').classList.remove('active');
         }
-        
+
+        function showOrderDetail(orderId) {
+            const detail = orderDetails[orderId];
+            if (!detail) return;
+
+            // 更新物流信息
+            document.getElementById('detail-logistics-status').textContent = detail.logisticsStatus;
+            document.getElementById('detail-logistics-desc').textContent = detail.logisticsDesc;
+
+            // 更新商品列表
+            const productsHtml = detail.products.map(p => `
+                <div class="detail-product-item">
+                    <div class="product-img">商品图</div>
+                    <div class="detail-product-info">
+                        <div class="detail-product-name">${p.name}</div>
+                        <div class="detail-product-spec">${p.spec}${!p.canApply ? ' <span class="expired-tag">已超期</span>' : ''}</div>
+                        <div class="detail-product-price-row">
+                            <div class="detail-product-price">¥${p.price.toFixed(2)}</div>
+                            <div class="detail-product-qty">x${p.qty}</div>
+                        </div>
+                        <div class="detail-product-action">
+                            ${p.canApply
+                                ? `<button class="btn btn-primary" onclick="showTypeModal('${orderId}', '${p.name}')">申请售后</button>`
+                                : `<button class="btn btn-gray" onclick="showExpiredModal()">申请售后</button>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('detail-products').innerHTML = productsHtml;
+
+            // 更新价格信息
+            const pricesHtml = `
+                <div class="price-summary">
+                    <span class="label">商品总价</span>
+                    <span class="value">¥${detail.prices.subtotal.toFixed(2)}</span>
+                </div>
+                <div class="price-summary">
+                    <span class="label">运费</span>
+                    <span class="value">${detail.prices.shipping === 0 ? '免运费' : '¥' + detail.prices.shipping.toFixed(2)}</span>
+                </div>
+                ${detail.prices.discount > 0 ? `
+                <div class="price-summary">
+                    <span class="label">优惠</span>
+                    <span class="value" style="color:#ff4d4f;">-¥${detail.prices.discount.toFixed(2)}</span>
+                </div>` : ''}
+                <div class="price-summary total">
+                    <span class="label">实付款</span>
+                    <span class="value">¥${detail.prices.total.toFixed(2)}</span>
+                </div>
+            `;
+            document.getElementById('detail-prices').innerHTML = pricesHtml;
+
+            // 更新订单信息
+            const infoHtml = `
+                <div class="order-info-row">
+                    <span class="order-info-label">订单编号</span>
+                    <span class="order-info-value">${detail.orderInfo.orderNo}</span>
+                </div>
+                <div class="order-info-row">
+                    <span class="order-info-label">下单时间</span>
+                    <span class="order-info-value">${detail.orderInfo.createTime}</span>
+                </div>
+                <div class="order-info-row">
+                    <span class="order-info-label">付款时间</span>
+                    <span class="order-info-value">${detail.orderInfo.payTime}</span>
+                </div>
+                <div class="order-info-row">
+                    <span class="order-info-label">支付方式</span>
+                    <span class="order-info-value">${detail.orderInfo.payMethod}</span>
+                </div>
+            `;
+            document.getElementById('detail-order-info').innerHTML = infoHtml;
+
+            // 切换页面
+            document.getElementById('aftersales-page').classList.remove('active');
+            document.getElementById('order-detail-page').classList.add('active');
+
+            // 滚动到顶部
+            document.getElementById('detail-content').scrollTop = 0;
+        }
+
         function switchTab(index) {
             document.querySelectorAll('.tab').forEach((tab, i) => {
                 tab.classList.toggle('active', i === index);
@@ -868,11 +1238,11 @@
                 content.style.display = i === index ? 'block' : 'none';
             });
         }
-        
+
         function showExpiredModal() {
             document.getElementById('expiredModal').classList.add('show');
         }
-        
+
         function showTypeModal(orderId, productName) {
             currentOrderId = orderId;
             document.getElementById('selectedProduct').textContent = productName;
@@ -880,32 +1250,32 @@
             selectedType = null;
             document.getElementById('typeModal').classList.add('show');
         }
-        
+
         function selectType(element, type) {
             document.querySelectorAll('.type-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             selectedType = type;
         }
-        
+
         function confirmApply() {
             if (!selectedType) {
                 alert('请选择售后类型');
                 return;
             }
-            
+
             // 从售后申请中移除该订单
             const orderCard = document.querySelector(`[data-order-id="${currentOrderId}"]`);
             if (orderCard) {
                 orderCard.remove();
             }
-            
+
             // 添加到处理中列表
             const processingList = document.getElementById('processing-list');
             const typeNames = {
                 'refund_only': '仅退款',
                 'return_refund': '退货退款'
             };
-            
+
             const newCard = document.createElement('div');
             newCard.className = 'order-card';
             newCard.innerHTML = `
@@ -926,24 +1296,24 @@
                 </div>
             `;
             processingList.insertBefore(newCard, processingList.firstChild);
-            
+
             hideModal();
-            
-            // 自动切换到处理中Tab
+
+            // 返回售后中心并自动切换到处理中Tab
+            showAftersales();
             setTimeout(() => {
                 switchTab(1);
-                alert('售后申请已提交，请在"处理中"查看');
-            }, 300);
+            }, 100);
         }
-        
+
         function hideModal() {
             document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
         }
-        
+
         function contactService() {
             // 隐藏超期弹窗
             hideModal();
-            
+
             // 显示提示 toast
             const toast = document.createElement('div');
             toast.style.cssText = `
@@ -963,7 +1333,7 @@
             `;
             toast.textContent = '跳转至客服对话并发送订单信息';
             document.body.appendChild(toast);
-            
+
             // 5秒后自动消失
             setTimeout(() => {
                 if (toast.parentNode) {
