@@ -724,117 +724,303 @@
                 <!-- 售后申请 Tab -->
                 <div class="tab-content" id="tab-0">
                     <div id="apply-list">
-                        <!-- 待发货订单 - 可申请售后（点击进入详情） -->
-                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405110001')">
-                            <div class="order-header">
+                        <!-- 待发货订单 - 多个商品，每个可申请售后 -->
+                        <div class="order-card">
+                            <div class="order-header" onclick="showOrderDetail('202405110001')">
                                 <span>订单号：202405110001</span>
                                 <span class="order-status">待发货</span>
                             </div>
-                            <div class="product-item">
+                            <div class="detail-product-item">
                                 <div class="product-img">商品图</div>
-                                <div class="product-info">
-                                    <div class="product-name">智能蓝牙耳机 无线降噪 超长续航</div>
-                                    <div class="product-spec">颜色：白色 | 规格：标准版</div>
-                                    <div class="product-price">¥299.00</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">智能蓝牙耳机 无线降噪 超长续航</div>
+                                    <div class="detail-product-spec">颜色：白色 | 规格：标准版</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥299.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405110001', '智能蓝牙耳机')">申请售后</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="action-bar">
-                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405110001', '智能蓝牙耳机')">退款/售后</button>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">蓝牙音箱 便携式户外防水</div>
+                                    <div class="detail-product-spec">颜色：黑色 | 规格：迷你版</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥159.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405110001', '蓝牙音箱')">申请售后</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">Type-C数据线 快充编织线 1.5m</div>
+                                    <div class="detail-product-spec">颜色：灰色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥29.00</div>
+                                        <div class="detail-product-qty">x2</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405110001', 'Type-C数据线')">申请售后</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 待收货订单 - 可申请售后（点击进入详情） -->
-                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405100002')">
-                            <div class="order-header">
+                        <!-- 待收货订单 - 多个商品，每个可申请售后 -->
+                        <div class="order-card">
+                            <div class="order-header" onclick="showOrderDetail('202405100002')">
                                 <span>订单号：202405100002</span>
                                 <span class="order-status">待收货</span>
                             </div>
-                            <div class="product-item">
+                            <div class="detail-product-item">
                                 <div class="product-img">商品图</div>
-                                <div class="product-info">
-                                    <div class="product-name">便携式充电宝 20000mAh</div>
-                                    <div class="product-spec">颜色：黑色</div>
-                                    <div class="product-price">¥129.00</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">便携式充电宝 20000mAh</div>
+                                    <div class="detail-product-spec">颜色：黑色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥129.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405100002', '便携式充电宝')">申请售后</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="action-bar">
-                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405100002', '便携式充电宝')">退款/售后</button>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">充电线三合1 快充数据线</div>
+                                    <div class="detail-product-spec">颜色：白色 | 长度：1m</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥39.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405100002', '充电线三合1')">申请售后</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">手机保护壳 透明防摔</div>
+                                    <div class="detail-product-spec">适配：iPhone 15</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥19.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405100002', '手机保护壳')">申请售后</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 待评价订单 - 可申请售后（点击进入详情） -->
-                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405090003')">
-                            <div class="order-header">
+                        <!-- 待评价订单 - 多个商品，每个可申请售后 -->
+                        <div class="order-card">
+                            <div class="order-header" onclick="showOrderDetail('202405090003')">
                                 <span>订单号：202405090003</span>
                                 <span class="order-status">待评价</span>
                             </div>
-                            <div class="product-item">
+                            <div class="detail-product-item">
                                 <div class="product-img">商品图</div>
-                                <div class="product-info">
-                                    <div class="product-name">机械键盘 青轴 RGB背光</div>
-                                    <div class="product-spec">颜色：白色</div>
-                                    <div class="product-price">¥399.00</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">机械键盘 青轴 RGB背光</div>
+                                    <div class="detail-product-spec">颜色：白色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥399.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405090003', '机械键盘')">申请售后</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="action-bar">
-                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405090003', '机械键盘')">退款/售后</button>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">键帽套装 PBT热升华</div>
+                                    <div class="detail-product-spec">配色：复古色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥89.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405090003', '键帽套装')">申请售后</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">键盘清洁套装</div>
+                                    <div class="detail-product-spec">标准版</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥15.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405090003', '键盘清洁套装')">申请售后</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 待发货订单 - 可申请售后（点击进入详情） -->
-                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405080004')">
-                            <div class="order-header">
+                        <!-- 待发货订单 - 多个商品，每个可申请售后 -->
+                        <div class="order-card">
+                            <div class="order-header" onclick="showOrderDetail('202405080004')">
                                 <span>订单号：202405080004</span>
                                 <span class="order-status">待发货</span>
                             </div>
-                            <div class="product-item">
+                            <div class="detail-product-item">
                                 <div class="product-img">商品图</div>
-                                <div class="product-info">
-                                    <div class="product-name">USB扩展坞 Type-C转多口</div>
-                                    <div class="product-spec">颜色：银色 | 规格：7合1</div>
-                                    <div class="product-price">¥159.00</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">USB扩展坞 Type-C转多口</div>
+                                    <div class="detail-product-spec">颜色：银色 | 规格：7合1</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥159.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405080004', 'USB扩展坞')">申请售后</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="action-bar">
-                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405080004', 'USB扩展坞')">退款/售后</button>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">HDMI高清线 2.0版 2m</div>
+                                    <div class="detail-product-spec">镀金接口</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥35.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405080004', 'HDMI高清线')">申请售后</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">鼠标垫 超大号 桌面垫</div>
+                                    <div class="detail-product-spec">尺寸：900x400mm | 颜色：黑色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥49.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405080004', '鼠标垫')">申请售后</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 待收货订单 - 可申请售后（点击进入详情） -->
-                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405070005')">
-                            <div class="order-header">
+                        <!-- 待收货订单 - 多个商品，每个可申请售后 -->
+                        <div class="order-card">
+                            <div class="order-header" onclick="showOrderDetail('202405070005')">
                                 <span>订单号：202405070005</span>
                                 <span class="order-status">待收货</span>
                             </div>
-                            <div class="product-item">
+                            <div class="detail-product-item">
                                 <div class="product-img">商品图</div>
-                                <div class="product-info">
-                                    <div class="product-name">桌面手机支架 铝合金</div>
-                                    <div class="product-spec">颜色：深空灰</div>
-                                    <div class="product-price">¥89.00</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">桌面手机支架 铝合金</div>
+                                    <div class="detail-product-spec">颜色：深空灰</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥89.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405070005', '桌面手机支架')">申请售后</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="action-bar">
-                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405070005', '桌面手机支架')">退款/售后</button>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">无线鼠标 静音办公</div>
+                                    <div class="detail-product-spec">颜色：白色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥59.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405070005', '无线鼠标')">申请售后</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">鼠标垫 简约办公</div>
+                                    <div class="detail-product-spec">尺寸：300x250mm</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥19.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405070005', '鼠标垫')">申请售后</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 待评价订单 - 可申请售后（点击进入详情） -->
-                        <div class="order-card order-card-clickable" onclick="showOrderDetail('202405060006')">
-                            <div class="order-header">
+                        <!-- 待评价订单 - 多个商品，每个可申请售后 -->
+                        <div class="order-card">
+                            <div class="order-header" onclick="showOrderDetail('202405060006')">
                                 <span>订单号：202405060006</span>
                                 <span class="order-status">待评价</span>
                             </div>
-                            <div class="product-item">
+                            <div class="detail-product-item">
                                 <div class="product-img">商品图</div>
-                                <div class="product-info">
-                                    <div class="product-name">无线充电器 15W快充</div>
-                                    <div class="product-spec">颜色：白色</div>
-                                    <div class="product-price">¥79.00</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">无线充电器 15W快充</div>
+                                    <div class="detail-product-spec">颜色：白色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥79.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405060006', '无线充电器')">申请售后</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="action-bar">
-                                <button class="btn btn-primary" onclick="event.stopPropagation();showTypeModal('202405060006', '无线充电器')">退款/售后</button>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">充电头 20W PD快充</div>
+                                    <div class="detail-product-spec">颜色：白色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥45.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405060006', '充电头')">申请售后</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">手机指环支架 磁吸</div>
+                                    <div class="detail-product-spec">颜色：银色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥12.00</div>
+                                        <div class="detail-product-qty">x2</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-primary" onclick="showTypeModal('202405060006', '手机指环支架')">申请售后</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
