@@ -811,10 +811,9 @@
                                         <div style="font-size:14px;font-weight:500;color:#333;margin-bottom:12px;">
                                             物流信息
                                             <span style="color:#6B46C1;font-size:13px;font-weight:normal;cursor:pointer;margin-left:8px;" onclick="showEditLogisticsModal()">修改物流</span>
-                                            <span style="color:#f5222d;font-size:13px;font-weight:normal;cursor:pointer;margin-left:8px;" onclick="showDeleteModal(2)">删除包裹</span>
                                         </div>
                                         <div style="font-size:13px;color:#666;line-height:2;">
-                                            <div>发货方：泰尔超优会</div>
+                                            <div>发货方：泰尔猫优会</div>
                                             <div>物流公司：顺丰速运</div>
                                             <div>
                                                 物流单号：SF1234567890
@@ -917,10 +916,9 @@
                                         <div style="font-size:14px;font-weight:500;color:#333;margin-bottom:12px;">
                                             物流信息
                                             <span style="color:#6B46C1;font-size:13px;font-weight:normal;cursor:pointer;margin-left:8px;" onclick="showEditLogisticsModal()">修改物流</span>
-                                            <span style="color:#f5222d;font-size:13px;font-weight:normal;cursor:pointer;margin-left:8px;" onclick="showDeleteModal(4)">删除包裹</span>
                                         </div>
                                         <div style="font-size:13px;color:#666;line-height:2;">
-                                            <div>发货方：泰尔超优会</div>
+                                            <div>发货方：泰尔猫优会</div>
                                             <div>物流公司：京东快递</div>
                                             <div>物流单号：JD2026051200001 <span style="color:#6B46C1;cursor:pointer;margin-left:8px;" onclick="copyTrackingNo()">复制</span></div>
                                         </div>
@@ -961,7 +959,6 @@
                                         <div style="font-size:14px;font-weight:500;color:#333;margin-bottom:12px;">
                                             物流信息
                                             <span style="color:#6B46C1;font-size:13px;font-weight:normal;cursor:pointer;margin-left:8px;" onclick="showEditLogisticsModal()">修改物流</span>
-                                            <span style="color:#f5222d;font-size:13px;font-weight:normal;cursor:pointer;margin-left:8px;" onclick="showDeleteModal(5)">删除包裹</span>
                                         </div>
                                         <div style="font-size:13px;color:#666;line-height:2;">
                                             <div>发货方：泰尔超优会</div>
@@ -1050,36 +1047,14 @@
                 <div class="form-section">
                     <div class="form-row">
                         <div class="form-item">
-                            <label>发货方式</label>
+                            <label>发货仓库</label>
                             <div class="radio-group">
                                 <label class="radio-item">
-                                    <input type="radio" name="shipType" value="warehouse">
+                                    <input type="radio" name="shipType" value="warehouse" checked>
                                     <div class="radio-circle"></div>
                                     <span class="radio-text">云仓发货</span>
                                 </label>
-                                <label class="radio-item">
-                                    <input type="radio" name="shipType" value="manual" checked>
-                                    <div class="radio-circle"></div>
-                                    <span class="radio-text">手动发货</span>
-                                </label>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-item">
-                            <label class="required">物流服务</label>
-                            <select>
-                                <option value="">请选择物流服务</option>
-                                <option value="sf">顺丰速运</option>
-                                <option value="jd">京东快递</option>
-                                <option value="ems">EMS</option>
-                                <option value="yto">圆通速递</option>
-                                <option value="zto">中通快递</option>
-                            </select>
-                        </div>
-                        <div class="form-item">
-                            <label class="required">物流单号</label>
-                            <input type="text" placeholder="请输入物流单号">
                         </div>
                     </div>
                 </div>
@@ -1093,24 +1068,6 @@
             <div class="modal-footer">
                 <button class="modal-btn modal-btn-cancel" onclick="hideShipModal()">取消</button>
                 <button class="modal-btn modal-btn-confirm" onclick="confirmResend()">确认</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 删除包裹确认弹窗 -->
-    <div class="modal-overlay" id="deletePackageModal">
-        <div class="modal" style="width:400px;">
-            <div class="modal-header">
-                <div class="modal-title">确认删除</div>
-                <div class="modal-close" onclick="hideDeleteModal()">×</div>
-            </div>
-            <div class="modal-body" style="padding:24px;text-align:center;">
-                <div style="font-size:14px;color:#333;margin-bottom:4px;">确定要删除该包裹吗？</div>
-                <div style="font-size:13px;color:#999;">删除后不可恢复</div>
-            </div>
-            <div class="modal-footer" style="justify-content:center;">
-                <button class="modal-btn modal-btn-cancel" onclick="hideDeleteModal()">取消</button>
-                <button class="modal-btn modal-btn-confirm" style="background:#f5222d;" onclick="confirmDeletePackage()">确认删除</button>
             </div>
         </div>
     </div>
@@ -1266,48 +1223,6 @@
                     panel.style.display = 'none';
                 }
             });
-        }
-        
-        // 删除包裹 - 打开确认弹窗
-        var deleteTargetPackage = null;
-        function showDeleteModal(packageId) {
-            deleteTargetPackage = packageId;
-            document.getElementById('deletePackageModal').classList.add('show');
-        }
-        function hideDeleteModal() {
-            document.getElementById('deletePackageModal').classList.remove('show');
-            deleteTargetPackage = null;
-        }
-        document.getElementById('deletePackageModal').addEventListener('click', function(e) {
-            if (e.target === this) hideDeleteModal();
-        });
-        
-        // 确认删除包裹
-        function confirmDeletePackage() {
-            hideDeleteModal();
-            
-            // 真正删除包裹Tab和内容
-            if (deleteTargetPackage) {
-                // 隐藏对应的Tab
-                const tabs = document.querySelectorAll('.package-tab');
-                tabs.forEach((tab, index) => {
-                    if (index === deleteTargetPackage - 1) {
-                        tab.style.display = 'none';
-                    }
-                });
-                // 隐藏对应的内容面板
-                const panel = document.querySelector('.package-panel[data-package="' + deleteTargetPackage + '"]');
-                if (panel) {
-                    panel.style.display = 'none';
-                }
-                
-                showToastMsg('删除成功');
-                
-                // 切换到包裹1
-                setTimeout(function() { 
-                    switchPackage(1); 
-                }, 300);
-            }
         }
         
         // SKU搜索
