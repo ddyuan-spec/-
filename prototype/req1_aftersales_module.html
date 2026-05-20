@@ -1023,6 +1023,42 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- 已完成超期订单 - 按钮置灰，点击提示已过售后期 -->
+                        <div class="order-card">
+                            <div class="order-header" onclick="showOrderDetail('202405010007')">
+                                <span>订单号：202405010007</span>
+                                <span class="order-status">已完成</span>
+                            </div>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">智能手表 运动健康监测</div>
+                                    <div class="detail-product-spec">颜色：黑色 | 规格：标准版</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥599.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-gray" onclick="showExpiredModalV2('202405010007', '智能手表')">申请售后</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-product-item">
+                                <div class="product-img">商品图</div>
+                                <div class="detail-product-info">
+                                    <div class="detail-product-name">运动手环 心率血氧监测</div>
+                                    <div class="detail-product-spec">颜色：蓝色</div>
+                                    <div class="detail-product-price-row">
+                                        <div class="detail-product-price">¥199.00</div>
+                                        <div class="detail-product-qty">x1</div>
+                                    </div>
+                                    <div class="detail-product-action">
+                                        <button class="btn btn-gray" onclick="showExpiredModalV2('202405010007', '运动手环')">申请售后</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1215,6 +1251,21 @@
             <div class="modal-actions">
                 <button class="modal-btn modal-btn-secondary" onclick="hideModal()">我知道了</button>
                 <button class="modal-btn modal-btn-primary" onclick="contactService()">联系客服</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 超期弹窗V2 - 参考图1样式 -->
+    <div class="modal-overlay" id="expiredModalV2">
+        <div class="modal" style="width:300px;">
+            <div class="modal-content" style="padding:24px 20px;text-align:center;">
+                <div style="font-size:15px;color:#333;line-height:1.6;margin-bottom:24px;">
+                    抱歉，您的商品已于<span id="expiredDate">2026年01月28日</span>超过售后申请时效
+                </div>
+                <div style="display:flex;gap:12px;justify-content:center;">
+                    <button class="modal-btn modal-btn-secondary" style="flex:1;" onclick="hideExpiredModalV2()">我知道了</button>
+                    <button class="modal-btn modal-btn-primary" style="flex:1;background:#ff4d4f;" onclick="contactServiceV2()">联系客服</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1495,6 +1546,53 @@
         function hideModal() {
             document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('show'));
         }
+
+        // 超期弹窗V2 - 显示
+        function showExpiredModalV2(orderId, productName) {
+            document.getElementById('expiredModalV2').classList.add('show');
+        }
+
+        // 超期弹窗V2 - 隐藏
+        function hideExpiredModalV2() {
+            document.getElementById('expiredModalV2').classList.remove('show');
+        }
+
+        // 超期弹窗V2 - 联系客服
+        function contactServiceV2() {
+            hideExpiredModalV2();
+            
+            // 显示提示 toast
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0,0,0,0.8);
+                color: #fff;
+                padding: 16px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                z-index: 2000;
+                text-align: center;
+                max-width: 280px;
+                line-height: 1.5;
+            `;
+            toast.textContent = '跳转至客服对话并发送订单信息';
+            document.body.appendChild(toast);
+
+            // 3秒后自动消失
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 3000);
+        }
+
+        // 点击弹窗外部关闭
+        document.getElementById('expiredModalV2').addEventListener('click', function(e) {
+            if (e.target === this) hideExpiredModalV2();
+        });
 
         function contactService() {
             // 隐藏超期弹窗
