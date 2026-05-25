@@ -341,37 +341,43 @@
             <div class="section-subtitle">5.3 提醒次数与时间</div>
             <table>
                 <tr><th>提醒次数</th><th>触发条件</th><th>提醒时间</th><th>提醒渠道</th></tr>
-                <tr><td>一次提醒</td><td>退货退款申请审核通过</td><td>审核通过后立即发送</td><td>小程序订阅消息 + 短信</td></tr>
-                <tr><td>二次提醒</td><td>一次提醒后用户仍未填写物流</td><td>审核通过后3天发送</td><td>小程序订阅消息 + 短信</td></tr>
+                <tr><td>一次提醒</td><td>退货退款申请审核通过</td><td>审核通过后立即发送</td><td>小程序订阅消息</td></tr>
+                <tr><td>二次提醒</td><td>一次提醒后用户仍未填写物流</td><td>审核通过后3天发送</td><td>小程序订阅消息</td></tr>
                 <tr><td>商家提醒</td><td>二次提醒后用户仍未填写物流</td><td>二次提醒后立即推送</td><td>钉钉消息推送</td></tr>
             </table>
             <div class="section-subtitle">5.4 小程序订阅消息模板</div>
-            <p class="desc-text">一次提醒和二次提醒共用以下模板。</p>
-            <div class="message-template">
-                <h4>模板：物流填写提醒</h4>
-                <div class="template-content">
-                    <p><strong>售后申请审核通过</strong></p>
-                    <p>您的退货退款申请已通过审核，请尽快填写退货物流信息。</p>
-                    <p>售后单号：SH202405110001</p>
-                </div>
+            <p class="desc-text">以下为微信小程序后台已配置的订阅消息模板，以微信后台实际模板为准。</p>
+            <div style="margin:12px 0;">
+                <img src="prd_v1.0_preview_files/wechat_subscribe_template.png" style="max-width:100%;border:1px solid #e8e8e8;border-radius:6px;" alt="微信小程序后台订阅消息模板">
             </div>
-            <div class="section-subtitle">5.5 短信提醒模板</div>
-            <div class="message-template">
-                <h4>短信模板</h4>
-                <div class="template-content">
-                    <p>【泰尔超优会】您的退货退款申请已通过审核，请尽快填写退货物流信息。点击 {短链接} 立即填写。</p>
-                </div>
-                <p class="template-note"><strong>短链接跳转逻辑：</strong>点击短链接后，打开微信小程序并跳转至该售后单详情页的"填写物流"页面</p>
+            <div class="section-subtitle">5.4.1 一次通知模板</div>
+            <table>
+                <tr><th>字段</th><th>内容</th></tr>
+                <tr><td>模板标题</td><td>订单售后状态通知</td></tr>
+                <tr><td>关键词</td><td>订单号、售后原因、售后详情、下单时间</td></tr>
+                <tr><td>类型</td><td>一次性订阅</td></tr>
+            </table>
+            <div class="section-subtitle">5.4.2 二次通知模板</div>
+            <table>
+                <tr><th>字段</th><th>内容</th></tr>
+                <tr><td>模板标题</td><td>售后申请待处理提醒</td></tr>
+                <tr><td>关键词</td><td>申请状态、发起时间、售后类型、关联订单编号、备注</td></tr>
+                <tr><td>类型</td><td>一次性订阅</td></tr>
+                <tr><td>备注字段内容</td><td>请尽快填写售后物流信息以完成售后</td></tr>
+            </table>
+            <div class="note-box">
+                <h4>说明</h4>
+                <p>短信提醒功能本期不做，后续视需求再行评估。</p>
             </div>
-            <div class="section-subtitle">5.6 小程序消息订阅授权</div>
-            <div class="section-subtitle">5.6.1 授权触发节点</div>
+            <div class="section-subtitle">5.5 小程序消息订阅授权</div>
+            <div class="section-subtitle">5.5.1 授权触发节点</div>
             <table>
                 <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
                 <tr><td>触发场景</td><td>用户发起售后申请</td><td>用户在售后申请页面点击"提交"按钮时触发</td></tr>
                 <tr><td>触发节点</td><td>提交按钮点击后、数据提交前</td><td>点击"提交"→ 弹出订阅授权弹窗 → 用户选择允许/拒绝 → 继续提交售后申请数据</td></tr>
                 <tr><td>触发频率</td><td>每次提交售后申请时</td><td>若用户勾选"总是保持以上选择"，则后续不再弹出授权弹窗</td></tr>
             </table>
-            <div class="section-subtitle">5.6.2 授权弹窗内容</div>
+            <div class="section-subtitle">5.5.2 授权弹窗内容</div>
             <table>
                 <tr><th>字段名称</th><th>字段说明</th><th>业务规则</th></tr>
                 <tr><td>弹窗标题</td><td>授权弹窗标题</td><td>固定显示"泰尔超优会商城 申请"</td></tr>
