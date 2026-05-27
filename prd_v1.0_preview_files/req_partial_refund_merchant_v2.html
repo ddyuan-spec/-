@@ -1571,7 +1571,7 @@
                 <!-- 退款金额 -->
                 <div class="form-group">
                     <label class="form-label">退款金额</label>
-                    <input type="number" class="form-input" id="refundAmount" placeholder="请输入退款金额" value="58.00" step="0.01">
+                    <input type="text" class="form-input" id="refundAmount" placeholder="请输入退款金额" value="58.00" inputmode="decimal">
                     <div class="refund-preview" id="refundPreview">
                         <div class="refund-preview-item">
                             <span class="label">退款金额：</span>
@@ -2011,7 +2011,24 @@
 
         // 监听退款金额变化
         document.getElementById('refundAmount').addEventListener('input', function() {
+            // 只允许输入数字和小数点
+            this.value = this.value.replace(/[^\d.]/g, '');
+            // 只保留第一个小数点
+            const parts = this.value.split('.');
+            if (parts.length > 2) {
+                this.value = parts[0] + '.' + parts.slice(1).join('');
+            }
+            // 小数点后最多2位
+            if (parts.length === 2 && parts[1].length > 2) {
+                this.value = parts[0] + '.' + parts[1].substring(0, 2);
+            }
             let amount = parseFloat(this.value) || 0;
+            // 不允许负数
+            if (amount < 0) {
+                this.value = '0.00';
+                amount = 0;
+            }
+            // 超过剩余可退金额自动修正
             if (amount > orderData.remainingRefund) {
                 this.value = orderData.remainingRefund.toFixed(2);
             }
