@@ -358,6 +358,248 @@
             left: 0;
             right: 0;
         }
+
+        /* ========== 订单信息Tab样式 ========== */
+        .order-status-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 16px;
+        }
+
+        .order-status-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .order-status-label {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .order-status-value {
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* 流程节点 */
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .process-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .process-step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .process-step-circle.completed {
+            background: #7c3aed;
+            color: #fff;
+        }
+
+        .process-step-circle.pending {
+            background: #f5f5f5;
+            color: #999;
+            border: 1px solid #e8e8e8;
+        }
+
+        .process-step-text {
+            font-size: 13px;
+            color: #333;
+        }
+
+        .process-step-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .process-arrow {
+            width: 60px;
+            height: 2px;
+            background: #e8e8e8;
+            margin: 0 8px;
+            margin-bottom: 40px;
+        }
+
+        .process-arrow.completed {
+            background: #7c3aed;
+        }
+
+        /* 三栏信息 */
+        .info-three-columns {
+            display: flex;
+            gap: 40px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .info-column {
+            flex: 1;
+        }
+
+        .info-column-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 12px;
+        }
+
+        .info-row-label {
+            color: #666;
+            font-size: 13px;
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .info-row-value {
+            color: #333;
+            font-size: 13px;
+        }
+
+        /* 商品表格 */
+        .order-goods-section {
+            background: #fff;
+            margin-top: 16px;
+            border-radius: 4px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .order-goods-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-goods-table th {
+            background: #fafafa;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 500;
+            color: #666;
+            font-size: 14px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .order-goods-table td {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .order-goods-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .order-total-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .order-total-label {
+            color: #666;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .order-total-value {
+            color: #7c3aed;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* ========== 物流信息Tab样式 ========== */
+        .logistics-info-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 16px;
+        }
+
+        .logistics-info-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .logistics-info-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .logistics-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logistics-info-label {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .logistics-info-value {
+            color: #333;
+            font-size: 13px;
+        }
+
+        .logistics-detail-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 16px;
+        }
+
+        .logistics-detail-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .logistics-no-result {
+            color: #1890ff;
+            font-size: 13px;
+        }
+
+        /* Tab内容区域 */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -674,56 +916,245 @@
         <!-- ==================== 详情页内容 ==================== -->
         <div class="main-content" id="page-detail" style="display: none;">
             <!-- Tab栏 -->
-            <div class="tab-bar">
-                <div class="tab-item active">售后信息</div>
-                <div class="tab-item">订单信息</div>
-                <div class="tab-item">物流信息</div>
+            <div class="tab-bar" id="detail-tab-bar">
+                <div class="tab-item active" data-tab="tab1" onclick="switchTab('tab1')">售后信息</div>
+                <div class="tab-item" data-tab="tab2" onclick="switchTab('tab2')">订单信息</div>
+                <div class="tab-item" data-tab="tab3" onclick="switchTab('tab3')">物流信息</div>
             </div>
 
-            <!-- 状态卡片 -->
-            <div class="status-card">
-                <div class="status-main">
-                    <div>
-                        <span class="status-label">订单状态：</span>
-                        <span class="status-value">退货退款 待买家退货</span>
+            <!-- Tab1: 售后信息 -->
+            <div id="page-detail-tab1" class="tab-content active">
+                <!-- 状态卡片 -->
+                <div class="status-card">
+                    <div class="status-main">
+                        <div>
+                            <span class="status-label">订单状态：</span>
+                            <span class="status-value">退货退款 待买家退货</span>
+                        </div>
+                        <div class="status-subtitle">等待买家退货，如用户逾期未退货，系统会自动关闭售后申请</div>
                     </div>
-                    <div class="status-subtitle">等待买家退货，如用户逾期未退货，系统会自动关闭售后申请</div>
+                    <div class="countdown">剩余5天1时51分27秒</div>
                 </div>
-                <div class="countdown">剩余5天1时51分27秒</div>
-            </div>
 
-            <!-- 买家信息 -->
-            <div class="info-section">
-                <div class="section-header">买家信息</div>
-                <div class="section-body">
-                    <div class="buyer-info">
-                        <div class="info-item">
-                            <span class="info-label">用户昵称：</span>
-                            <span class="info-value">隔夜小红薯</span>
+                <!-- 买家信息 -->
+                <div class="info-section">
+                    <div class="section-header">买家信息</div>
+                    <div class="section-body">
+                        <div class="buyer-info">
+                            <div class="info-item">
+                                <span class="info-label">用户昵称：</span>
+                                <span class="info-value">隔夜小红薯</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">手机号：</span>
+                                <span class="info-value">13177600619</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">订单号：</span>
+                                <span class="info-value">SS2058838962022838272-TH01</span>
+                            </div>
                         </div>
-                        <div class="info-item">
-                            <span class="info-label">手机号：</span>
-                            <span class="info-value">13177600619</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">订单号：</span>
-                            <span class="info-value">SS2058838962022838272-TH01</span>
+                    </div>
+                </div>
+
+                <!-- 售后商品信息 -->
+                <div class="info-section">
+                    <div class="section-header">售后商品信息</div>
+                    <div class="section-body" style="padding: 0;">
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 350px;">商品</th>
+                                    <th style="width: 120px;">单价</th>
+                                    <th style="width: 80px;">数量</th>
+                                    <th style="width: 120px;">小计金额</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="detail-product-cell">
+                                            <div class="detail-product-img">商品图</div>
+                                            <div class="detail-product-name">商品名称</div>
+                                        </div>
+                                    </td>
+                                    <td class="price">¥99</td>
+                                    <td>*1</td>
+                                    <td class="price">¥99</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 售后入库信息 -->
+                <div class="info-section">
+                    <div class="section-header">售后入库信息</div>
+                    <div class="section-body" style="padding: 0;">
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th>商品名称</th>
+                                    <th>SKU规格</th>
+                                    <th>退货单号</th>
+                                    <th>应入数量</th>
+                                    <th>实入数量</th>
+                                    <th>良品数量</th>
+                                    <th>破损数量</th>
+                                    <th>入库状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="8" class="empty-data">暂无数据</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 协商历史 -->
+                <div class="info-section">
+                    <div class="section-header">协商历史</div>
+                    <div class="section-body">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-avatar">泰</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-header">
+                                        <span class="timeline-role">泰尔超优会</span>
+                                        <span class="timeline-action">已同意退货退款申请 待退货</span>
+                                    </div>
+                                    <div class="timeline-detail">
+                                        <div class="timeline-detail-item">审批时间：2026-05-25 17:32:33</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-avatar">泰</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-header">
+                                        <span class="timeline-role">泰尔超优会</span>
+                                        <span class="timeline-action">已同意退货退款申请 待退货</span>
+                                    </div>
+                                    <div class="timeline-detail">
+                                        <div class="timeline-detail-item">审批时间：2026-05-25 17:16:41</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-avatar user">隔</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-header">
+                                        <span class="timeline-role">隔夜小红薯</span>
+                                    </div>
+                                    <div class="timeline-detail">
+                                        <div class="timeline-detail-item">退款类型：退货退款</div>
+                                        <div class="timeline-detail-item">申请时间：2026-05-25 17:16:10</div>
+                                        <div class="timeline-detail-item">补充说明：dfgfgfhfg</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 售后商品信息 -->
-            <div class="info-section">
-                <div class="section-header">售后商品信息</div>
-                <div class="section-body" style="padding: 0;">
-                    <table class="detail-table">
+            <!-- Tab2: 订单信息 -->
+            <div id="page-detail-tab2" class="tab-content">
+                <!-- 订单状态区域 -->
+                <div class="order-status-section">
+                    <div class="order-status-header">
+                        <span class="order-status-label">订单状态：</span>
+                        <span class="order-status-value">已关闭</span>
+                    </div>
+
+                    <!-- 流程节点 -->
+                    <div class="process-flow">
+                        <div class="process-step">
+                            <div class="process-step-circle completed">1</div>
+                            <div class="process-step-text">提交订单</div>
+                            <div class="process-step-time">2026-05-26 19:54:46</div>
+                        </div>
+                        <div class="process-arrow completed"></div>
+                        <div class="process-step">
+                            <div class="process-step-circle completed">2</div>
+                            <div class="process-step-text">买家已付款</div>
+                            <div class="process-step-time">2026-05-26 19:54:53</div>
+                        </div>
+                        <div class="process-arrow"></div>
+                        <div class="process-step">
+                            <div class="process-step-circle pending">3</div>
+                            <div class="process-step-text">商家发货</div>
+                            <div class="process-step-time"></div>
+                        </div>
+                        <div class="process-arrow"></div>
+                        <div class="process-step">
+                            <div class="process-step-circle pending">4</div>
+                            <div class="process-step-text">买家收货</div>
+                            <div class="process-step-time"></div>
+                        </div>
+                    </div>
+
+                    <!-- 三栏信息 -->
+                    <div class="info-three-columns">
+                        <div class="info-column">
+                            <div class="info-column-title">订单信息</div>
+                            <div class="info-row">
+                                <span class="info-row-label">订单号：</span>
+                                <span class="info-row-value">SS2058838962022838272</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-row-label">下单时间：</span>
+                                <span class="info-row-value">2026-05-26 19:54:46</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-row-label">支付时间：</span>
+                                <span class="info-row-value">2026-05-26 19:54:53</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-row-label">支付方式：</span>
+                                <span class="info-row-value">微信支付</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-row-label">配送方式：</span>
+                                <span class="info-row-value">快递配送</span>
+                            </div>
+                        </div>
+                        <div class="info-column">
+                            <div class="info-column-title">收货人信息</div>
+                            <div class="info-row">
+                                <span class="info-row-label">收货人姓名：</span>
+                                <span class="info-row-value">张三</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-row-label">联系人电话：</span>
+                                <span class="info-row-value">13177600619</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-row-label">收货地址：</span>
+                                <span class="info-row-value">北京市朝阳区xxx街道xxx小区</span>
+                            </div>
+                        </div>
+                        <div class="info-column">
+                            <div class="info-column-title">买家信息</div>
+                            <div class="info-row">
+                                <span class="info-row-label">用户昵称：</span>
+                                <span class="info-row-value">隔夜小红薯</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 商品表格 -->
+                <div class="order-goods-section">
+                    <table class="order-goods-table">
                         <thead>
                             <tr>
-                                <th style="width: 350px;">商品</th>
-                                <th style="width: 120px;">单价</th>
-                                <th style="width: 80px;">数量</th>
-                                <th style="width: 120px;">小计金额</th>
+                                <th style="width: 400px;">商品</th>
+                                <th style="width: 150px;">单价&数量</th>
+                                <th style="width: 150px;">优惠</th>
+                                <th style="width: 120px;">总价</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -731,87 +1162,50 @@
                                 <td>
                                     <div class="detail-product-cell">
                                         <div class="detail-product-img">商品图</div>
-                                        <div class="detail-product-name">商品名称</div>
+                                        <div class="detail-product-name">安美来</div>
                                     </div>
                                 </td>
-                                <td class="price">¥99</td>
-                                <td>*1</td>
-                                <td class="price">¥99</td>
+                                <td>
+                                    <div>¥399.00</div>
+                                    <div style="color: #999; font-size: 12px;">x2</div>
+                                </td>
+                                <td>¥0.00</td>
+                                <td class="price">¥798.00</td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="order-total-row">
+                        <span class="order-total-label">实收款：</span>
+                        <span class="order-total-value">798元</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- 售后入库信息 -->
-            <div class="info-section">
-                <div class="section-header">售后入库信息</div>
-                <div class="section-body" style="padding: 0;">
-                    <table class="detail-table">
-                        <thead>
-                            <tr>
-                                <th>商品名称</th>
-                                <th>SKU规格</th>
-                                <th>退货单号</th>
-                                <th>应入数量</th>
-                                <th>实入数量</th>
-                                <th>良品数量</th>
-                                <th>破损数量</th>
-                                <th>入库状态</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="8" class="empty-data">暂无数据</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 协商历史 -->
-            <div class="info-section">
-                <div class="section-header">协商历史</div>
-                <div class="section-body">
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-avatar">泰</div>
-                            <div class="timeline-content">
-                                <div class="timeline-header">
-                                    <span class="timeline-role">泰尔超优会</span>
-                                    <span class="timeline-action">已同意退货退款申请 待退货</span>
-                                </div>
-                                <div class="timeline-detail">
-                                    <div class="timeline-detail-item">审批时间：2026-05-25 17:32:33</div>
-                                </div>
-                            </div>
+            <!-- Tab3: 物流信息 -->
+            <div id="page-detail-tab3" class="tab-content">
+                <!-- 物流信息区域 -->
+                <div class="logistics-info-section">
+                    <div class="logistics-info-title">物流信息</div>
+                    <div class="logistics-info-grid">
+                        <div class="logistics-info-item">
+                            <span class="logistics-info-label">收货地址：</span>
+                            <span class="logistics-info-value">北京市朝阳区xxx街道xxx小区</span>
                         </div>
-                        <div class="timeline-item">
-                            <div class="timeline-avatar">泰</div>
-                            <div class="timeline-content">
-                                <div class="timeline-header">
-                                    <span class="timeline-role">泰尔超优会</span>
-                                    <span class="timeline-action">已同意退货退款申请 待退货</span>
-                                </div>
-                                <div class="timeline-detail">
-                                    <div class="timeline-detail-item">审批时间：2026-05-25 17:16:41</div>
-                                </div>
-                            </div>
+                        <div class="logistics-info-item">
+                            <span class="logistics-info-label">物流公司：</span>
+                            <span class="logistics-info-value">顺丰速运</span>
                         </div>
-                        <div class="timeline-item">
-                            <div class="timeline-avatar user">隔</div>
-                            <div class="timeline-content">
-                                <div class="timeline-header">
-                                    <span class="timeline-role">隔夜小红薯</span>
-                                </div>
-                                <div class="timeline-detail">
-                                    <div class="timeline-detail-item">退款类型：退货退款</div>
-                                    <div class="timeline-detail-item">申请时间：2026-05-25 17:16:10</div>
-                                    <div class="timeline-detail-item">补充说明：dfgfgfhfg</div>
-                                </div>
-                            </div>
+                        <div class="logistics-info-item">
+                            <span class="logistics-info-label">物流单号：</span>
+                            <span class="logistics-info-value">SF1234567890</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- 物流详情区域 -->
+                <div class="logistics-detail-section">
+                    <div class="logistics-detail-title">物流详情</div>
+                    <div class="logistics-no-result">查询无结果，请隔段时间再查</div>
                 </div>
             </div>
         </div>
@@ -836,6 +1230,39 @@
             document.getElementById('page-list').style.display = 'block';
             document.getElementById('breadcrumb-detail').style.display = 'none';
             document.getElementById('breadcrumb-list').style.display = 'flex';
+        }
+
+        /**
+         * Tab切换功能
+         * @param {string} tabId - 要切换到的Tab ID (tab1, tab2, tab3)
+         */
+        function switchTab(tabId) {
+            // 获取所有Tab按钮
+            const tabItems = document.querySelectorAll('#detail-tab-bar .tab-item');
+            // 获取所有Tab内容
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // 移除所有Tab的active状态
+            tabItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 隐藏所有Tab内容
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // 激活当前Tab按钮
+            const activeTab = document.querySelector('#detail-tab-bar .tab-item[data-tab="' + tabId + '"');
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+
+            // 显示当前Tab内容
+            const activeContent = document.getElementById('page-detail-' + tabId);
+            if (activeContent) {
+                activeContent.classList.add('active');
+            }
         }
     </script>
 </body>
