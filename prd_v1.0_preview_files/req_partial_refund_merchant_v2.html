@@ -428,54 +428,125 @@
         /* 列表页样式 */
         .list-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            flex-direction: column;
+            margin-bottom: 0;
         }
 
-        .filter-tabs {
+        /* 筛选栏 */
+        .filter-bar {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 8px 8px 0 0;
             display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
 
-        .filter-tab {
-            padding: 8px 16px;
-            border-radius: 6px;
+        .filter-label {
+            color: #666;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .filter-input {
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 180px;
+            outline: none;
+        }
+
+        .filter-input::placeholder {
+            color: #bfbfbf;
+        }
+
+        .filter-input:focus {
+            border-color: #6B5CE7;
+        }
+
+        .btn-filter {
+            padding: 6px 16px;
+            border-radius: 4px;
             font-size: 14px;
             cursor: pointer;
+            border: none;
+            background: #6B5CE7;
+            color: white;
+        }
+
+        .btn-filter-default {
             background: white;
-            border: 1px solid #E8E8E8;
+            border: 1px solid #d9d9d9;
             color: #666;
+        }
+
+        .btn-filter-link {
+            background: none;
+            border: none;
+            color: #6B5CE7;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0;
+        }
+
+        /* Tab栏 */
+        .filter-tabs {
+            display: flex;
+            gap: 0;
+            background: white;
+            padding: 0 24px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .filter-tab {
+            padding: 12px 24px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #666;
+            border-bottom: 2px solid transparent;
             transition: all 0.2s;
+            position: relative;
         }
 
         .filter-tab:hover {
-            border-color: #6B5CE7;
             color: #6B5CE7;
         }
 
         .filter-tab.active {
-            background: #6B5CE7;
-            border-color: #6B5CE7;
-            color: white;
+            color: #6B5CE7;
+            border-bottom-color: #6B5CE7;
+            font-weight: 500;
+        }
+
+        /* 批量操作栏 */
+        .batch-bar {
+            background: white;
+            padding: 10px 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .batch-btn {
+            padding: 4px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background: white;
+            color: #666;
+            font-size: 13px;
+            cursor: pointer;
         }
 
         .search-box {
-            display: flex;
-            gap: 8px;
+            display: none;
         }
-
-        .search-input {
-            padding: 8px 12px;
-            border: 1px solid #E8E8E8;
-            border-radius: 6px;
-            font-size: 14px;
-            width: 200px;
-            outline: none;
-        }
-
-        .search-input:focus {
-            border-color: #6B5CE7;
         }
 
         /* 列表表格容器 - 支持横向滚动 */
@@ -1178,13 +1249,33 @@
                 <div class="page-title">售后工单</div>
 
                 <div class="list-header">
-                    <div class="filter-tabs">
-                        <div class="filter-tab active" data-tab="pending" onclick="switchListTab('pending')">待确认退款 <span class="badge badge-warning">3</span></div>
-                        <div class="filter-tab" data-tab="completed" onclick="switchListTab('completed')">已退款 <span class="badge badge-success">12</span></div>
+                    <div class="filter-bar">
+                        <div class="filter-item">
+                            <span class="filter-label">商品名称</span>
+                            <input type="text" class="filter-input" placeholder="请输入商品名称">
+                        </div>
+                        <div class="filter-item">
+                            <span class="filter-label">工单号</span>
+                            <input type="text" class="filter-input" placeholder="请输入工单号">
+                        </div>
+                        <div class="filter-item">
+                            <span class="filter-label">退款用户手机号</span>
+                            <input type="text" class="filter-input" placeholder="请输入退款用户手机号">
+                        </div>
+                        <button class="btn-filter">搜索</button>
+                        <button class="btn-filter btn-filter-default">重置</button>
+                        <button class="btn-filter btn-filter-default">导出</button>
+                        <button class="btn-filter-link">展开</button>
                     </div>
-                    <div class="search-box">
-                        <input type="text" class="search-input" placeholder="搜索工单编号/订单号">
-                        <button class="btn-primary">搜索</button>
+                    <div class="filter-tabs">
+                        <div class="filter-tab active" data-tab="pending" onclick="switchListTab('pending')">全部工单</div>
+                        <div class="filter-tab" data-tab="audit" onclick="switchListTab('audit')">待审核</div>
+                        <div class="filter-tab" data-tab="processing" onclick="switchListTab('processing')">处理中</div>
+                        <div class="filter-tab" data-tab="completed" onclick="switchListTab('completed')">已完成</div>
+                        <div class="filter-tab" data-tab="closed" onclick="switchListTab('closed')">已关闭</div>
+                    </div>
+                    <div class="batch-bar">
+                        <button class="batch-btn">批量备注</button>
                     </div>
                 </div>
 
