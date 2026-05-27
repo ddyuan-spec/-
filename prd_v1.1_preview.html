@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>售后流程优化需求文档 - v1.1 退款功能版</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f5f5; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        
+        /* 导航页样式 */
+        .mindmap-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 30px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
+        .mindmap-section h2 { font-size: 20px; margin-bottom: 15px; }
+        .mindmap-link { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 500; transition: all 0.2s; }
+        .mindmap-link:hover { background: rgba(255,255,255,0.3); }
+        
+        .header { background: #fff; padding: 30px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+        .header h1 { font-size: 28px; color: #333; margin-bottom: 10px; }
+        .header p { color: #666; font-size: 14px; }
+        .version-info { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: left; }
+        .version-info h3 { font-size: 16px; margin-bottom: 15px; color: #333; }
+        .version-info ul { list-style: none; padding: 0; }
+        .version-info li { padding: 8px 0; color: #666; font-size: 14px; border-bottom: 1px solid #eee; }
+        .version-info li:last-child { border-bottom: none; }
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 8px; }
+        .tag-new { background: #e6f7ff; color: #1890ff; }
+        .tag-update { background: #fff7e6; color: #fa8c16; }
+        
+        .section { background: #fff; padding: 30px; border-radius: 8px; margin-bottom: 20px; }
+        .section-title { font-size: 22px; color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #6B46C1; }
+        .section-subtitle { font-size: 16px; color: #333; margin: 20px 0 12px; font-weight: 600; }
+        .desc-text { color: #666; font-size: 14px; margin-bottom: 15px; }
+        ul { margin-left: 20px; color: #666; font-size: 14px; }
+        ul li { margin: 8px 0; }
+        
+        /* 表格样式 */
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th { background: #f8f9fa; padding: 12px 15px; text-align: left; font-weight: 600; color: #333; border-bottom: 2px solid #e8e8e8; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; color: #666; vertical-align: top; }
+        tr:hover td { background: #fafafa; }
+        
+        /* 原型链接样式 */
+        .prototype-box { background: #f8f9fa; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; }
+        .prototype-box h4 { font-size: 14px; color: #666; margin-bottom: 10px; }
+        .prototype-links { display: flex; gap: 10px; flex-wrap: wrap; }
+        .prototype-link { display: inline-block; padding: 8px 16px; background: #6B46C1; color: #fff; text-decoration: none; border-radius: 6px; font-size: 14px; transition: all 0.2s; }
+        .prototype-link:hover { background: #553C9A; }
+        
+        /* 影响端口表格 */
+        .impact-table td:first-child { width: 100px; font-weight: 600; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航页 -->
+        <div class="mindmap-section">
+            <h2>售后状态思维导图</h2>
+            <a href="售后状态思维导图_最终版.html" class="mindmap-link" target="_blank">查看售后状态思维导图</a>
+        </div>
+        
+        <!-- 头部 -->
+        <div class="header">
+            <h1>售后流程优化需求文档</h1>
+            <p>v1.1 退款功能版</p>
+            <p style="font-size: 12px; color: #999; margin-top: 5px;">更新日期：2026年5月14日</p>
+            
+            <div class="version-info">
+                <h3>版本包含需求（3个）</h3>
+                <ul>
+                    <li>需求9+12：部分退款功能 <span class="tag tag-new">新功能</span></li>
+                    <li>需求10：商家退款展示 <span class="tag tag-update">现有功能改动</span></li>
+                </ul>
+                <p style="font-size: 12px; color: #999; margin-top: 10px;">注：需求2（申请限制）已移至v1.2（仅换货版）</p>
+            </div>
+        </div>
+        
+        <!-- 一、部分退款功能 -->
+        <div class="section">
+            <div class="section-title">一、部分退款功能</div>
+            <div class="prototype-box">
+                <h4>原型链接</h4>
+                <div class="prototype-links">
+                    <a href="req_partial_refund_merchant.html" class="prototype-link" target="_blank">商家端原型</a>
+                    <a href="req_partial_refund_client.html" class="prototype-link" target="_blank">客户端原型</a>
+                </div>
+            </div>
+            <div class="section-subtitle">1.1 需求背景</div>
+            <p class="desc-text">用户可能需要对订单中的部分商品申请退款。当前系统支持整单退款，不支持部分退款。需要支持按商品维度进行部分退款，并处理组合支付情况下的退款金额分配。同时客户端缺少退款详情页，用户无法查看退款进度和详情。</p>
+            
+            <div class="section-subtitle">1.2 需求目标</div>
+            <ul>
+                <li>商家端：支持按商品维度选择退款商品，输入退款金额，处理组合支付退款</li>
+                <li>客户端：新增退款详情页，展示退款状态、金额、进度等信息</li>
+                <li>退款金额不能超过商品实付金额</li>
+            </ul>
+            
+            <div class="section-subtitle">1.3 商家端功能内容</div>
+
+            <div class="section-subtitle">1.3.1 售后工单详情页</div>
+            <p class="desc-text">本页面包含两个主要场景：<strong>【待确认退款场景】</strong>商家确认收货前，可操作退款或拒绝；<strong>【已退款场景】</strong>退款完成后，展示退款记录，操作按钮置灰。</p>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>数据来源</th><th>业务规则</th></tr>
+                <tr><td>订单状态</td><td>展示当前售后单状态</td><td>售后单表.aftersale_status</td><td>【待确认退款场景】：显示"退货退款 待商家确认收货（退货未入库）"；【已退款场景】：显示"退货退款 已退款（部分退款/全部退款）"</td></tr>
+                <tr><td>状态说明</td><td>状态补充说明</td><td>固定文案（根据状态动态匹配）</td><td>【待确认退款场景】："如您逾期未响应申请，视作同意买家申请，系统会自动退款给买家"；【已退款场景】："售后单已完成，订单状态已更新"</td></tr>
+                <tr><td>超时倒计时</td><td>剩余处理时间</td><td>系统自动计算（售后单表.expire_time - 当前时间）</td><td>【待确认退款场景】显示：剩余X天X时X分X秒；【已退款场景】不显示</td></tr>
+                <tr><td>确认收货并同意退款按钮</td><td>商家确认收货并退款</td><td>-</td><td>【待确认退款场景】可点击，弹出退款确认弹窗；【已退款场景】置灰不可点击</td></tr>
+                <tr><td>拒绝退货退款按钮</td><td>商家拒绝退款申请</td><td>-</td><td>【待确认退款场景】可点击，进入拒绝流程；【已退款场景】置灰不可点击</td></tr>
+            </table>
+
+            <div class="section-subtitle">1.3.4 退款记录（退款后展示）</div>
+            <p class="desc-text">退款记录以表格形式展示，位于协商历史上方。仅退款成功后展示，可能存在多条退款记录。底部汇总展示订单支付信息和累计退款情况。</p>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>数据来源</th><th>业务规则</th></tr>
+                <tr><td>退款规则提示</td><td>顶部提示退款分配规则</td><td>固定文案</td><td>显示："退款规则：优先退还储值支付部分，储值不足时退还在线支付部分"</td></tr>
+                <tr><td>退款时间</td><td>执行退款操作的时间</td><td>系统自动生成（退款记录表.refund_time）</td><td>格式：YYYY-MM-DD HH:mm:ss；按时间倒序排列（最新在前）</td></tr>
+                <tr><td>退款人</td><td>执行退款操作的商家账号</td><td>系统自动获取当前登录账号（商家账号表.admin_name）</td><td>显示执行退款的管理员名称</td></tr>
+                <tr><td>退款类型</td><td>本次退款的类型</td><td>商家在退款弹窗中选择（退款记录表.refund_type）</td><td>枚举值：部分退款（蓝色标签）/ 全部退款（橙色标签）</td></tr>
+                <tr><td>退款金额</td><td>本次退款的金额</td><td>商家在退款弹窗中输入（退款记录表.refund_amount）</td><td>精确到小数点后两位；单位：¥；红色加粗显示</td></tr>
+                <tr><td>储值退款</td><td>本次从储值支付中退还的金额</td><td>系统自动计算（退款记录表.store_refund_amount）</td><td>计算规则：优先退储值，退款金额 ≤ 剩余储值可退时，储值退款 = 退款金额，在线支付退款 = 0；退款金额 > 剩余储值可退时，储值退款 = 剩余储值可退，在线支付退款 = 退款金额 - 储值退款。精确到小数点后两位</td></tr>
+                <tr><td>在线支付退款</td><td>本次从在线支付中退还的金额</td><td>系统自动计算（退款记录表.online_refund_amount）</td><td>计算规则：退款金额 - 储值退款。精确到小数点后两位</td></tr>
+                <tr><td>退款状态</td><td>退款处理的状态</td><td>系统根据退款处理结果自动更新（退款记录表.refund_status）</td><td>枚举值：退款中（橙色）/ 已退款（绿色）/ 退款失败（红色）</td></tr>
+                <tr><td>订单金额（汇总行）</td><td>订单原始金额</td><td>订单表.order_amount</td><td>精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>订单储值支付（汇总行）</td><td>订单中储值支付的金额</td><td>订单表.store_pay_amount</td><td>精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>订单在线支付（汇总行）</td><td>订单中在线支付的金额</td><td>订单表.online_pay_amount</td><td>精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>累计已退款（汇总行）</td><td>该售后单累计退款金额</td><td>系统统计当前售后单所有退款记录的退款金额之和</td><td>红色显示；精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>剩余可退（汇总行）</td><td>当前还可退款的金额</td><td>系统计算：订单金额 - 累计已退款</td><td>橙色显示；精确到小数点后两位；单位：¥；剩余可退为0时不可再发起退款</td></tr>
+            </table>
+
+            <div class="section-subtitle">1.3.6 退款确认弹窗</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>数据来源</th><th>业务规则</th></tr>
+                <tr><td>弹窗标题</td><td>弹窗标题</td><td>固定文案</td><td>显示："确认退款"</td></tr>
+                <tr><td>关闭按钮</td><td>关闭弹窗</td><td>-</td><td>点击关闭弹窗，不保存任何操作</td></tr>
+                <tr><td>退款规则说明</td><td>弹窗顶部退款规则提示</td><td>固定文案</td><td>显示："退款将优先退还储值支付部分，储值余额不足时，剩余金额退还至在线支付部分。全部退款后订单将关闭；部分退款后订单保持原状态。"</td></tr>
+                <tr><td>订单金额</td><td>展示订单原始金额</td><td>订单表.order_amount</td><td>精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>储值支付</td><td>展示订单储值支付金额</td><td>订单表.store_pay_amount</td><td>精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>在线支付</td><td>展示订单在线支付金额</td><td>订单表.online_pay_amount</td><td>精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>已退款</td><td>展示累计已退款金额</td><td>系统统计：SUM(退款记录表.refund_amount)</td><td>红色显示；精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>剩余储值可退</td><td>储值支付中尚未退还的金额</td><td>系统计算：订单储值支付 - 已退储值退款合计</td><td>橙色显示；精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>剩余在线可退</td><td>在线支付中尚未退还的金额</td><td>系统计算：订单在线支付 - 已退在线支付退款合计</td><td>橙色显示；精确到小数点后两位；单位：¥</td></tr>
+                <tr><td>退款类型</td><td>选择退款类型（单选）</td><td>商家在弹窗中选择</td><td>必选；两个选项卡片：① 部分退款 - 输入自定义退款金额 ② 全部退款 - 退还剩余金额（订单金额 - 已退金额）</td></tr>
+                <tr><td>退款金额输入框</td><td>输入退款金额</td><td>商家在弹窗中输入（退款记录表.refund_amount）</td><td>必填；仅"部分退款"时可编辑；"全部退款"时自动填充剩余可退金额且置灰不可编辑；精度：精确到小数点后两位；范围：0.01 ~ 可退上限</td></tr>
+                <tr><td>可退上限</td><td>显示可退金额上限</td><td>系统计算：订单金额 - 累计已退款</td><td>显示：可退上限：¥XXX.XX；精确到小数点后两位；总退款金额不能超过订单金额</td></tr>
+                <tr><td>备注</td><td>退款备注</td><td>商家在弹窗中输入（退款记录表.remark）</td><td>选填；文本域；最多200字</td></tr>
+                <tr><td>取消按钮</td><td>取消操作</td><td>-</td><td>点击关闭弹窗，不保存</td></tr>
+                <tr><td>确认退款按钮</td><td>确认退款</td><td>-</td><td>点击执行退款操作；退款成功后关闭弹窗，页面刷新展示退款记录</td></tr>
+            </table>
+
+            <div class="section-subtitle">1.3.7 退款后状态变更（参照售后状态思维导图）</div>
+            <table>
+                <tr><th>场景</th><th>售后单状态变更</th><th>订单状态变更</th><th>说明</th></tr>
+                <tr><td>待收货 - 全部退款</td><td>退货退款 → 已退款（全部退款）</td><td>待收货 → 已关闭</td><td>全部退款后订单关闭，不计算收益</td></tr>
+                <tr><td>待收货 - 部分退款</td><td>退货退款 → 已退款（部分退款）</td><td>待收货 → 已完成（计算收益）</td><td>部分退款后订单完成，计算收益</td></tr>
+                <tr><td>已完成 - 全部退款</td><td>退货退款 → 已退款（全部退款）</td><td>已完成 → 已关闭</td><td>全部退款后订单关闭，不计算收益</td></tr>
+                <tr><td>已完成 - 部分退款</td><td>退货退款 → 已退款（部分退款）</td><td>保持已完成</td><td>部分退款后订单保持已完成状态</td></tr>
+                <tr><td>待发货 - 仅退款（全部）</td><td>仅退款 → 已退款</td><td>待发货 → 已关闭</td><td>拦截物流成功后退款，订单关闭</td></tr>
+                <tr><td>待收货 - 仅退款（全部）</td><td>仅退款 → 已退款</td><td>待收货 → 已关闭</td><td>拦截物流成功后退款，订单关闭</td></tr>
+            </table>
+            <p class="desc-text" style="color:#999; font-size:12px; margin-top:8px;">注：已关闭为终态，不可申请任何售后。存在售后单时，系统自动收货计时器暂停，售后完成后恢复计时。</p>
+            
+            <div class="section-subtitle">1.4 客户端功能内容</div>
+            <p class="desc-text">客户端退款详情页包含三个主要场景：<strong>【待退款场景】</strong>等待商家处理退款；<strong>【退款成功场景】</strong>退款已完成到账；<strong>【退款失败场景】</strong>退款处理失败。</p>
+            
+            <div class="section-subtitle">1.4.1 退款状态卡片</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>状态标题</td><td>退款状态标题</td><td>【待退款场景】："请等待商家收货并退款"；【退款成功场景】："退款成功"；【退款失败场景】："退款失败"</td></tr>
+                <tr><td>状态说明</td><td>状态补充说明</td><td>【待退款场景】："如果商家收到货并验货无误，将操作退款给您"；【退款成功场景】："退款已到账，请查收"；【退款失败场景】："退款失败，已恢复订单"</td></tr>
+                <tr><td>背景色</td><td>状态卡片背景色</td><td>【待退款场景】：橙色渐变；【退款成功场景】：绿色渐变；【退款失败场景】：红色渐变</td></tr>
+            </table>
+            
+            <div class="section-subtitle">1.4.2 退款金额展示</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>申请退款金额</td><td>用户申请的退款金额</td><td>大字号显示；红色；单位：¥</td></tr>
+                <tr><td>到账时间</td><td>退款到账时间</td><td>【退款成功场景】显示；格式：YYYY-MM-DD HH:mm:ss</td></tr>
+                <tr><td>失败原因</td><td>退款失败原因</td><td>【退款失败场景】显示；红色高亮</td></tr>
+            </table>
+            
+            <div class="section-subtitle">1.4.3 协商历史入口</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>入口文字</td><td>协商历史入口</td><td>显示："协商历史"</td></tr>
+                <tr><td>箭头图标</td><td>进入标识</td><td>右侧显示箭头图标</td></tr>
+                <tr><td>点击跳转</td><td>跳转协商历史页</td><td>点击跳转至协商历史详情页</td></tr>
+            </table>
+            
+            <div class="section-subtitle">1.4.4 退款商品信息</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>商品图片</td><td>商品主图</td><td>展示商品图片</td></tr>
+                <tr><td>商品名称</td><td>商品名称</td><td>展示商品名称</td></tr>
+                <tr><td>SKU规格</td><td>商品SKU信息</td><td>展示SKU规格</td></tr>
+                <tr><td>商品价格</td><td>商品单价</td><td>红色显示；单位：¥</td></tr>
+                <tr><td>商品数量</td><td>购买数量</td><td>显示：数量*XXX</td></tr>
+            </table>
+            
+            <div class="section-subtitle">1.4.5 退款信息详情</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>退款说明</td><td>用户填写的退款说明</td><td>显示用户填写的说明内容</td></tr>
+                <tr><td>退款金额</td><td>退款金额</td><td>显示退款金额</td></tr>
+                <tr><td>申请时间</td><td>申请退款时间</td><td>格式：YYYY-MM-DD HH:mm:ss</td></tr>
+            </table>
+            
+            <div class="section-subtitle">1.4.6 底部按钮</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>返回首页</td><td>【待退款场景】按钮</td><td>文案："返回首页"；点击返回首页</td></tr>
+                <tr><td>完成</td><td>【退款成功场景】按钮</td><td>文案："完成"；点击返回上一页</td></tr>
+                <tr><td>查看订单</td><td>【退款失败场景】按钮</td><td>文案："查看订单"；点击跳转至订单详情页</td></tr>
+            </table>
+            
+            <div class="section-subtitle">1.5 影响端口</div>
+            <table class="impact-table">
+                <tr><th>端口</th><th>功能范围</th></tr>
+                <tr><td>商家端</td><td>售后工单详情页、退款确认弹窗、退款处理</td></tr>
+                <tr><td>客户端</td><td>退款详情页、退款状态展示</td></tr>
+                <tr><td>系统</td><td>退款金额计算、退款分配、资金退回</td></tr>
+            </table>
+        </div>
+        
+        <!-- 二、商家退款展示 -->
+        <div class="section">
+            <div class="section-title">二、商家退款展示</div>
+            <div class="prototype-box">
+                <h4>原型链接</h4>
+                <div class="prototype-links">
+                    <a href="req10_merchant_refund_display.html" class="prototype-link" target="_blank">商家端原型</a>
+                </div>
+            </div>
+            <div class="section-subtitle">2.1 需求背景</div>
+            <p class="desc-text">商家端订单详情页缺少退款信息展示，运营无法查看退款明细。需要增加退款信息模块，展示退款单号、退款金额、退款方式等详细信息。</p>
+            
+            <div class="section-subtitle">2.2 需求目标</div>
+            <ul>
+                <li>商家端订单详情页展示退款信息模块</li>
+                <li>展示退款单号、退款金额、退款方式、退款时间等</li>
+                <li>支持组合支付的退款明细展示</li>
+            </ul>
+            
+            <div class="section-subtitle">2.3 功能内容</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>退款单号</td><td>退款记录的唯一标识</td><td>格式：TK + 年月日 + 序号</td></tr>
+                <tr><td>退款金额</td><td>本次退款的金额</td><td>显示退款总金额，单位：元</td></tr>
+                <tr><td>退款方式</td><td>退款原路返回的支付方式</td><td>显示：余额退回、现金退回（微信/支付宝/银行卡）</td></tr>
+                <tr><td>退款时间</td><td>退款操作的时间</td><td>格式：YYYY-MM-DD HH:mm:ss</td></tr>
+                <tr><td>退款状态</td><td>退款的状态</td><td>退款中、已退款、退款失败</td></tr>
+                <tr><td>退款类型</td><td>退款的类型</td><td>整单退款、部分退款</td></tr>
+            </table>
+            
+            <div class="section-subtitle">2.3.1 组合支付退款明细</div>
+            <table>
+                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>余额退款</td><td>余额支付的退款金额</td><td>显示余额退款金额；若未使用余额支付则显示"-";</td></tr>
+                <tr><td>现金退款</td><td>现金支付的退款金额</td><td>显示现金退款金额；若未使用现金支付则显示"-";</td></tr>
+                <tr><td>退款明细</td><td>展示退款明细列表</td><td>一条退款记录可能包含多个退款明细（余额+现金）</td></tr>
+            </table>
+            
+            <div class="section-subtitle">2.4 影响端口</div>
+            <table class="impact-table">
+                <tr><th>端口</th><th>功能范围</th></tr>
+                <tr><td>商家端</td><td>订单详情页退款信息展示</td></tr>
+                <tr><td>系统</td><td>退款记录生成、退款状态更新</td></tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
