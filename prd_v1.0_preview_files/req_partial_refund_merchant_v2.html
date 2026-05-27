@@ -1331,7 +1331,14 @@
         }
 
         // 监听退款金额变化
-        document.getElementById('refundAmount').addEventListener('input', updateRefundPreview);
+        document.getElementById('refundAmount').addEventListener('input', function() {
+            let amount = parseFloat(this.value) || 0;
+            // 如果输入超过剩余可退金额，自动修正为剩余可退金额
+            if (amount > orderData.remainingRefund) {
+                this.value = orderData.remainingRefund.toFixed(2);
+            }
+            updateRefundPreview();
+        });
 
         // 初始化
         renderListTable();
