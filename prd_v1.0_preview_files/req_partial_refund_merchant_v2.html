@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>售后工单详情 - 商家端</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #F5F6F8;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* 顶部标题栏 */
+        .header {
+            background: linear-gradient(135deg, #6B5CE7 0%, #8B7CF7 100%);
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #6B5CE7 0%, #8B7CF7 100%);
+            border-radius: 50%;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .merchant-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .merchant-avatar {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* 主容器 */
+        .main-container {
+            display: flex;
+            margin-top: 60px;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* 左侧边栏 */
+        .sidebar {
+            width: 200px;
+            background: white;
+            border-right: 1px solid #E8E8E8;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            padding: 16px 0;
+        }
+
+        .menu-item {
+            padding: 12px 24px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-item:hover {
+            background: #F5F6F8;
+            color: #333;
+        }
+
+        .menu-item.active {
+            background: #E8E4FC;
+            color: #6B5CE7;
+            font-weight: 500;
+        }
+
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #6B5CE7;
+        }
+
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 内容区域 */
+        .content {
+            flex: 1;
+            margin-left: 200px;
+            padding: 24px;
+        }
+
+        /* 面包屑 */
+        .breadcrumb {
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .breadcrumb a:hover {
+            color: #6B5CE7;
+        }
+
+        .breadcrumb span {
+            margin: 0 8px;
+        }
+
+        .breadcrumb-current {
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* 页面标题 */
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Tab栏 */
+        .tab-bar {
+            background: white;
+            border-radius: 8px 8px 0 0;
+            padding: 0 24px;
+            border-bottom: 1px solid #E8E8E8;
+            display: flex;
+            gap: 32px;
+        }
+
+        .tab-item {
+            padding: 16px 0;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-item:hover {
+            color: #6B5CE7;
+        }
+
+        .tab-item.active {
+            color: #6B5CE7;
+            border-bottom-color: #6B5CE7;
+            font-weight: 500;
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: white;
+            border-radius: 0 0 8px 8px;
+            padding: 24px;
+        }
+
+        /* 订单状态卡片 */
+        .status-card {
+            background: #FFF9F0;
+            border: 1px solid #FFE4BA;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .status-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .status-tag {
+            background: #FF4D4F;
+            color: white;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .status-desc {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+
+        .status-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: #6B5CE7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #5A4BD6;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #666;
+            border: 1px solid #D9D9D9;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: #6B5CE7;
+            color: #6B5CE7;
+        }
+
+        /* 退款信息模块 */
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E8E8E8;
+        }
+
+        .refund-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .refund-table th {
+            background: #FAFAFA;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 1px solid #E8E8E8;
+        }
+
+        .refund-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #E8E8E8;
+            color: #333;
+        }
+
+        .refund-table tr:hover {
+            background: #F9F9F9;
+        }
+
+        .status-success {
+            color: #52C41A;
+        }
+
+        .status-pending {
+            color: #FF9C3F;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 20px;
+            background: #FAFAFA;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .summary-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .summary-value.highlight {
+            color: #6B5CE7;
+        }
+
+        .summary-value.warning {
+            color: #FF4D4F;
+        }
+
+        /* 信息区块 */
+        .info-section {
+            margin-bottom: 24px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .info-label {
+            color: #999;
+            flex-shrink: 0;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        /* 列表页样式 */
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+            border: 1px solid #E8E8E8;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .filter-tab:hover {
+            border-color: #6B5CE7;
+            color: #6B5CE7;
+        }
+
+        .filter-tab.active {
+            background: #6B5CE7;
+            border-color: #6B5CE7;
+            color: white;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #E8E8E8;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 200px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #6B5CE7;
+        }
+
+        .list-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .list-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list-table th {
+            background: #FAFAFA;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .list-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #E8E8E8;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .link-primary {
+            color: #6B5CE7;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .link-primary:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .badge-warning {
+            background: #FFF2E8;
+            color: #FF4D4F;
+        }
+
+        .badge-success {
+            background: #F6FFED;
+            color: #52C41A;
+        }
+
+        .badge-info {
+            background: #E8E4FC;
+            color: #6B5CE7;
+        }
+
+        /* 弹窗样式 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 500px;
+            max-width: 90%;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #6B5CE7 0%, #8B7CF7 100%);
+            padding: 16px 20px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-rule {
+            background: #F0F0FF;
+            border: 1px solid #D9D6FE;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .refund-type-options {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .refund-type-option {
+            flex: 1;
+            border: 2px solid #E8E8E8;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .refund-type-option:hover {
+            border-color: #D9D6FE;
+        }
+
+        .refund-type-option.selected {
+            border-color: #6B5CE7;
+            background: #F8F6FF;
+        }
+
+        .refund-type-option .type-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .refund-type-option .type-desc {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .refund-type-option.selected .type-name {
+            color: #6B5CE7;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #E8E8E8;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #6B5CE7;
+        }
+
+        .form-input:disabled {
+            background: #F5F5F5;
+            color: #999;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #E8E8E8;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-textarea:focus {
+            border-color: #6B5CE7;
+        }
+
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #E8E8E8;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #666;
+            border: 1px solid #D9D9D9;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: #6B5CE7;
+            color: #6B5CE7;
+        }
+
+        /* 隐藏状态 */
+        .hidden {
+            display: none !important;
+        }
+
+        /* 退款计算预览 */
+        .refund-preview {
+            background: #FAFAFA;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 12px;
+        }
+
+        .refund-preview-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 4px 0;
+        }
+
+        .refund-preview-item .label {
+            color: #666;
+        }
+
+        .refund-preview-item .value {
+            color: #333;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部标题栏 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon"></div>
+            </div>
+            <span class="logo-text">泰尔超优会</span>
+        </div>
+        <div class="header-right">
+            <div class="merchant-info">
+                <div class="merchant-avatar">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+                        <path d="M8 8c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+                <span>商家中心</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 左侧边栏 -->
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <div class="menu-item">
+                    <span class="menu-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                        </svg>
+                    </span>
+                    工作台
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.5 3H6c-1.1 0-2 .9-2 2v5.71c0 3.83 2.95 7.18 6.78 7.29 3.96.12 7.22-3.06 7.22-7v-1h.5c1.93 0 3.5-1.57 3.5-3.5S20.43 3 18.5 3zM16 5v3H6V5h10zm2.5 3H18V5h.5c.83 0 1.5.67 1.5 1.5S19.33 8 18.5 8z"/>
+                        </svg>
+                    </span>
+                    订单管理
+                </div>
+                <div class="menu-item active">
+                    <span class="menu-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                    </span>
+                    售后工单
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </span>
+                    商品管理
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </span>
+                    会员管理
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3 3v18h18V3H3zm16 16H5V5h14v14z"/>
+                            <path d="M7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/>
+                        </svg>
+                    </span>
+                    数据统计
+                </div>
+            </nav>
+        </aside>
+
+        <!-- 内容区域 -->
+        <main class="content">
+            <!-- 列表页 -->
+            <div id="listPage">
+                <div class="breadcrumb">
+                    <a onclick="location.reload()">订单管理</a><span>/</span><a onclick="location.reload()">售后工单</a><span>/</span><span class="breadcrumb-current">售后工单列表</span>
+                </div>
+                
+                <div class="page-title">售后工单</div>
+                
+                <div class="list-header">
+                    <div class="filter-tabs">
+                        <div class="filter-tab active" data-tab="pending" onclick="switchListTab('pending')">待确认退款 <span class="badge badge-warning">3</span></div>
+                        <div class="filter-tab" data-tab="completed" onclick="switchListTab('completed')">已退款 <span class="badge badge-success">12</span></div>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" class="search-input" placeholder="搜索工单编号/订单号">
+                        <button class="btn-primary">搜索</button>
+                    </div>
+                </div>
+                
+                <div class="list-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>工单编号</th>
+                                <th>订单号</th>
+                                <th>售后类型</th>
+                                <th>退款金额</th>
+                                <th>申请人</th>
+                                <th>申请时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listTableBody">
+                            <!-- 动态渲染 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 详情页 -->
+            <div id="detailPage" class="hidden">
+                <div class="breadcrumb">
+                    <a onclick="location.reload()">订单管理</a><span>/</span><a onclick="showListPage()">售后工单</a><span>/</span><span class="breadcrumb-current">售后工单详情</span>
+                </div>
+                
+                <div class="page-title">售后工单详情</div>
+                
+                <!-- Tab栏 -->
+                <div class="tab-bar">
+                    <div class="tab-item active" data-tab="aftersale" onclick="switchTab('aftersale')">售后信息</div>
+                    <div class="tab-item" data-tab="order" onclick="switchTab('order')">订单信息</div>
+                    <div class="tab-item" data-tab="logistics" onclick="switchTab('logistics')">物流信息</div>
+                </div>
+                
+                <div class="content-card">
+                    <!-- 订单状态卡片 -->
+                    <div class="status-card">
+                        <div class="status-header">
+                            <span class="status-title">订单状态：退货退款 待商家确认收货</span>
+                            <span class="status-tag">退货未入库</span>
+                        </div>
+                        <div class="status-desc">
+                            请确认退货商品入库后再进行退款操作。如有问题可联系用户协商。
+                        </div>
+                        <div class="status-actions">
+                            <button class="btn-primary" onclick="showRefundModal()">确认收货并同意退款</button>
+                            <button class="btn-outline">拒绝退货退款</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 售后信息Tab内容 -->
+                    <div id="aftersaleTab">
+                        <!-- 退款信息模块 -->
+                        <div class="info-section">
+                            <div class="section-title">退款信息</div>
+                            
+                            <!-- 退款记录表格 -->
+                            <table class="refund-table">
+                                <thead>
+                                    <tr>
+                                        <th>退款时间</th>
+                                        <th>退款人</th>
+                                        <th>类型</th>
+                                        <th>退款金额</th>
+                                        <th>储值退款</th>
+                                        <th>在线退款</th>
+                                        <th>状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="refundTableBody">
+                                    <tr>
+                                        <td>2024-01-15 14:32:18</td>
+                                        <td>张三</td>
+                                        <td>部分退款</td>
+                                        <td>¥58.00</td>
+                                        <td>¥30.00</td>
+                                        <td>¥28.00</td>
+                                        <td class="status-success">退款成功</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <!-- 汇总信息 -->
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <span class="summary-label">订单金额</span>
+                                    <span class="summary-value">¥298.00</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">储值支付</span>
+                                    <span class="summary-value">¥150.00</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">在线支付</span>
+                                    <span class="summary-value">¥148.00</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">累计已退款</span>
+                                    <span class="summary-value highlight">¥58.00</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">剩余可退</span>
+                                    <span class="summary-value warning">¥240.00</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">订单状态</span>
+                                    <span class="summary-value">退货退款中</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 售后申请信息 -->
+                        <div class="info-section">
+                            <div class="section-title">售后申请信息</div>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">工单编号：</span>
+                                    <span class="info-value">AS202401150001</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">订单编号：</span>
+                                    <span class="info-value">ORD2024011500001</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">售后类型：</span>
+                                    <span class="info-value">退货退款</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">申请时间：</span>
+                                    <span class="info-value">2024-01-15 10:30:00</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">用户账号：</span>
+                                    <span class="info-value">138****8888</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">用户姓名：</span>
+                                    <span class="info-value">张三</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">申请原因：</span>
+                                    <span class="info-value">商品与描述不符</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">退货数量：</span>
+                                    <span class="info-value">1件</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 订单信息Tab内容 -->
+                    <div id="orderTab" class="hidden">
+                        <div class="info-section">
+                            <div class="section-title">订单基本信息</div>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">订单编号：</span>
+                                    <span class="info-value">ORD2024011500001</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">下单时间：</span>
+                                    <span class="info-value">2024-01-15 09:15:00</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">支付方式：</span>
+                                    <span class="info-value">储值+在线支付</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">订单金额：</span>
+                                    <span class="info-value">¥298.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-section">
+                            <div class="section-title">商品信息</div>
+                            <table class="refund-table">
+                                <thead>
+                                    <tr>
+                                        <th>商品名称</th>
+                                        <th>规格</th>
+                                        <th>单价</th>
+                                        <th>数量</th>
+                                        <th>小计</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>有机红富士苹果 5斤装</td>
+                                        <td>直径85mm</td>
+                                        <td>¥58.00</td>
+                                        <td>1</td>
+                                        <td>¥58.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>有机红富士苹果 5斤装</td>
+                                        <td>直径90mm</td>
+                                        <td>¥68.00</td>
+                                        <td>1</td>
+                                        <td>¥68.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>有机红富士苹果 5斤装</td>
+                                        <td>直径95mm</td>
+                                        <td>¥78.00</td>
+                                        <td>2</td>
+                                        <td>¥156.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- 物流信息Tab内容 -->
+                    <div id="logisticsTab" class="hidden">
+                        <div class="info-section">
+                            <div class="section-title">退货物流信息</div>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">退货快递公司：</span>
+                                    <span class="info-value">顺丰速运</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">退货快递单号：</span>
+                                    <span class="info-value">SF1234567890</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">退货时间：</span>
+                                    <span class="info-value">2024-01-15 16:00:00</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">物流状态：</span>
+                                    <span class="info-value"><span class="badge badge-success">已签收</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-section">
+                            <div class="section-title">物流轨迹</div>
+                            <div style="padding: 16px; background: #FAFAFA; border-radius: 8px; line-height: 2;">
+                                <div style="color: #999; font-size: 13px;">2024-01-16 09:30:00 已签收，签收人：前台</div>
+                                <div style="color: #999; font-size: 13px;">2024-01-16 08:00:00 派送中，收件员：张明</div>
+                                <div style="color: #999; font-size: 13px;">2024-01-15 20:00:00 到达【杭州转运中心】</div>
+                                <div style="color: #999; font-size: 13px;">2024-01-15 16:00:00 已发出，从【杭州上城区一部】</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 退款弹窗 -->
+    <div class="modal-overlay" id="refundModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span>确认退款</span>
+                <button class="modal-close" onclick="closeRefundModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 退款规则说明 -->
+                <div class="modal-rule">
+                    <strong>退款规则：</strong>退款将优先退还储值支付部分，储值余额不足时，剩余金额退还至在线支付部分。全部退款后订单将关闭；部分退款后订单保持原状态。
+                </div>
+                
+                <!-- 退款类型选择 -->
+                <div class="form-group">
+                    <label class="form-label">退款类型</label>
+                    <div class="refund-type-options">
+                        <div class="refund-type-option selected" data-type="partial" onclick="selectRefundType('partial')">
+                            <div class="type-name">部分退款</div>
+                            <div class="type-desc">退还部分金额</div>
+                        </div>
+                        <div class="refund-type-option" data-type="full" onclick="selectRefundType('full')">
+                            <div class="type-name">全部退款</div>
+                            <div class="type-desc">退还全部金额</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 退款金额 -->
+                <div class="form-group">
+                    <label class="form-label">退款金额</label>
+                    <input type="number" class="form-input" id="refundAmount" placeholder="请输入退款金额" value="58.00" step="0.01">
+                    <div class="refund-preview" id="refundPreview">
+                        <div class="refund-preview-item">
+                            <span class="label">退款金额：</span>
+                            <span class="value" id="previewTotal">¥58.00</span>
+                        </div>
+                        <div class="refund-preview-item">
+                            <span class="label">其中储值退款：</span>
+                            <span class="value" id="previewStorage">¥30.00</span>
+                        </div>
+                        <div class="refund-preview-item">
+                            <span class="label">其中在线退款：</span>
+                            <span class="value" id="previewOnline">¥28.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 备注 -->
+                <div class="form-group">
+                    <label class="form-label">备注</label>
+                    <textarea class="form-textarea" id="refundRemark" placeholder="请输入退款备注（选填）"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeRefundModal()">取消</button>
+                <button class="btn-primary" onclick="confirmRefund()">确认退款</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 订单数据
+        const orderData = {
+            orderAmount: 298.00,
+            storagePayment: 150.00,
+            onlinePayment: 148.00,
+            totalRefunded: 58.00,
+            remainingRefund: 240.00
+        };
+
+        // 列表页数据
+        const listData = {
+            pending: [
+                { id: 'AS202401150001', orderId: 'ORD2024011500001', type: '退货退款', amount: '¥240.00', user: '张三', time: '2024-01-15 10:30', status: '待确认' },
+                { id: 'AS202401140002', orderId: 'ORD2024011400002', type: '仅退款', amount: '¥58.00', user: '李四', time: '2024-01-14 15:20', status: '待确认' },
+                { id: 'AS202401130003', orderId: 'ORD2024011300003', type: '退货退款', amount: '¥128.00', user: '王五', time: '2024-01-13 09:45', status: '待确认' }
+            ],
+            completed: [
+                { id: 'AS202401120001', orderId: 'ORD2024011200001', type: '退货退款', amount: '¥298.00', user: '赵六', time: '2024-01-12 14:00', status: '已退款' },
+                { id: 'AS202401110002', orderId: 'ORD2024011100002', type: '仅退款', amount: '¥28.00', user: '钱七', time: '2024-01-11 11:30', status: '已退款' },
+                { id: 'AS202401100003', orderId: 'ORD2024011000003', type: '退货退款', amount: '¥158.00', user: '孙八', time: '2024-01-10 16:45', status: '已退款' }
+            ]
+        };
+
+        let currentListTab = 'pending';
+        let currentRefundType = 'partial';
+
+        // 切换列表Tab
+        function switchListTab(tab) {
+            currentListTab = tab;
+            document.querySelectorAll('.filter-tab').forEach(el => {
+                el.classList.toggle('active', el.dataset.tab === tab);
+            });
+            renderListTable();
+        }
+
+        // 渲染列表
+        function renderListTable() {
+            const tbody = document.getElementById('listTableBody');
+            const data = listData[currentListTab];
+            
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.orderId}</td>
+                    <td>${item.type}</td>
+                    <td>${item.amount}</td>
+                    <td>${item.user}</td>
+                    <td>${item.time}</td>
+                    <td>
+                        <span class="badge ${item.status === '待确认' ? 'badge-warning' : 'badge-success'}">
+                            ${item.status}
+                        </span>
+                    </td>
+                    <td>
+                        <a class="link-primary" onclick="showDetailPage('${item.id}')">查看详情</a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 显示详情页
+        function showDetailPage(id) {
+            document.getElementById('listPage').classList.add('hidden');
+            document.getElementById('detailPage').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // 显示列表页
+        function showListPage() {
+            document.getElementById('detailPage').classList.add('hidden');
+            document.getElementById('listPage').classList.remove('hidden');
+        }
+
+        // 切换Tab
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.tab === tab);
+            });
+            
+            document.getElementById('aftersaleTab').classList.toggle('hidden', tab !== 'aftersale');
+            document.getElementById('orderTab').classList.toggle('hidden', tab !== 'order');
+            document.getElementById('logisticsTab').classList.toggle('hidden', tab !== 'logistics');
+        }
+
+        // 显示退款弹窗
+        function showRefundModal() {
+            document.getElementById('refundModal').classList.add('show');
+            updateRefundPreview();
+        }
+
+        // 关闭退款弹窗
+        function closeRefundModal() {
+            document.getElementById('refundModal').classList.remove('show');
+        }
+
+        // 选择退款类型
+        function selectRefundType(type) {
+            currentRefundType = type;
+            document.querySelectorAll('.refund-type-option').forEach(el => {
+                el.classList.toggle('selected', el.dataset.type === type);
+            });
+            
+            const amountInput = document.getElementById('refundAmount');
+            if (type === 'full') {
+                amountInput.value = orderData.remainingRefund.toFixed(2);
+                amountInput.disabled = true;
+            } else {
+                amountInput.disabled = false;
+            }
+            
+            updateRefundPreview();
+        }
+
+        // 更新退款预览
+        function updateRefundPreview() {
+            const amount = parseFloat(document.getElementById('refundAmount').value) || 0;
+            const storageAmount = Math.min(amount, orderData.storagePayment - (orderData.totalRefunded * orderData.storagePayment / (orderData.totalRefunded + orderData.remainingRefund)));
+            const onlineAmount = amount - storageAmount;
+            
+            document.getElementById('previewTotal').textContent = '¥' + amount.toFixed(2);
+            document.getElementById('previewStorage').textContent = '¥' + Math.max(0, storageAmount).toFixed(2);
+            document.getElementById('previewOnline').textContent = '¥' + Math.max(0, onlineAmount).toFixed(2);
+        }
+
+        // 确认退款
+        function confirmRefund() {
+            const amount = parseFloat(document.getElementById('refundAmount').value);
+            const remark = document.getElementById('refundRemark').value;
+            
+            if (amount <= 0) {
+                alert('请输入有效的退款金额');
+                return;
+            }
+            
+            if (amount > orderData.remainingRefund) {
+                alert('退款金额不能超过剩余可退金额');
+                return;
+            }
+            
+            // 添加新的退款记录
+            const newRow = document.createElement('tr');
+            const now = new Date();
+            const timeStr = now.getFullYear() + '-' + 
+                String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                String(now.getDate()).padStart(2, '0') + ' ' + 
+                String(now.getHours()).padStart(2, '0') + ':' + 
+                String(now.getMinutes()).padStart(2, '0') + ':' + 
+                String(now.getSeconds()).padStart(2, '0');
+            
+            newRow.innerHTML = `
+                <td>${timeStr}</td>
+                <td>管理员</td>
+                <td>${currentRefundType === 'full' ? '全部退款' : '部分退款'}</td>
+                <td>¥${amount.toFixed(2)}</td>
+                <td>¥${Math.min(amount, orderData.storagePayment).toFixed(2)}</td>
+                <td>¥${Math.max(0, amount - orderData.storagePayment).toFixed(2)}</td>
+                <td class="status-success">退款成功</td>
+            `;
+            
+            document.getElementById('refundTableBody').insertBefore(newRow, document.getElementById('refundTableBody').firstChild);
+            
+            // 更新汇总数据
+            orderData.totalRefunded += amount;
+            orderData.remainingRefund -= amount;
+            
+            document.querySelector('.summary-grid').innerHTML = `
+                <div class="summary-item">
+                    <span class="summary-label">订单金额</span>
+                    <span class="summary-value">¥${orderData.orderAmount.toFixed(2)}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">储值支付</span>
+                    <span class="summary-value">¥${orderData.storagePayment.toFixed(2)}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">在线支付</span>
+                    <span class="summary-value">¥${orderData.onlinePayment.toFixed(2)}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">累计已退款</span>
+                    <span class="summary-value highlight">¥${orderData.totalRefunded.toFixed(2)}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">剩余可退</span>
+                    <span class="summary-value warning">¥${Math.max(0, orderData.remainingRefund).toFixed(2)}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">订单状态</span>
+                    <span class="summary-value">${orderData.remainingRefund <= 0 ? '已退款' : '退货退款中'}</span>
+                </div>
+            `;
+            
+            closeRefundModal();
+            alert('退款成功！');
+        }
+
+        // 监听退款金额变化
+        document.getElementById('refundAmount').addEventListener('input', updateRefundPreview);
+
+        // 初始化
+        renderListTable();
+    </script>
+</body>
+</html>
