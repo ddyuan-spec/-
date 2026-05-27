@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部分退款功能 - 商家端原型</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f5f5; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 30px; border-radius: 12px; margin-bottom: 20px; }
+        .header h1 { font-size: 24px; margin-bottom: 8px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        
+        .scene-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; }
+        .scene-tab { padding: 8px 20px; border-radius: 6px; cursor: pointer; border: 1px solid #ddd; background: #fff; font-size: 14px; }
+        .scene-tab.active { background: #667eea; color: #fff; border-color: #667eea; }
+        
+        .scene-content { display: none; }
+        .scene-content.active { display: block; }
+        
+        .page-box { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .page-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea; }
+        
+        /* 状态卡片 */
+        .status-card { background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 15px; }
+        .status-card.green { background: linear-gradient(135deg, #52c41a 0%, #237804 100%); }
+        .status-title { font-size: 18px; font-weight: 600; margin-bottom: 5px; }
+        .status-desc { font-size: 14px; opacity: 0.9; }
+        .status-countdown { font-size: 24px; font-weight: 700; margin-top: 10px; }
+        
+        /* 订单信息 */
+        .order-info { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .order-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .order-row:last-child { border-bottom: none; }
+        .order-label { color: #666; }
+        .order-value { color: #333; font-weight: 500; }
+        
+        /* 商品列表 */
+        .product-item { display: flex; gap: 15px; padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
+        .product-img { width: 80px; height: 80px; background: #e8e8e8; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 12px; }
+        .product-info { flex: 1; }
+        .product-name { font-size: 14px; color: #333; margin-bottom: 5px; }
+        .product-spec { font-size: 12px; color: #999; margin-bottom: 5px; }
+        .product-price { display: flex; justify-content: space-between; color: #333; }
+        .price-red { color: #ff4d4f; font-weight: 600; }
+        
+        /* 按钮组 */
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn { padding: 10px 24px; border-radius: 6px; border: none; font-size: 14px; cursor: pointer; }
+        .btn-primary { background: #667eea; color: #fff; }
+        .btn-danger { background: #ff4d4f; color: #fff; }
+        .btn-gray { background: #d9d9d9; color: #999; cursor: not-allowed; }
+        
+        /* 退款记录 */
+        .refund-rule { background: #fff7e6; border: 1px solid #ffd591; padding: 12px 15px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; color: #d46b00; }
+        .refund-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .refund-table th { background: #f8f9fa; padding: 12px; text-align: left; font-size: 13px; color: #333; border-bottom: 2px solid #e8e8e8; }
+        .refund-table td { padding: 12px; font-size: 13px; color: #666; border-bottom: 1px solid #f0f0f0; }
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .tag-blue { background: #e6f7ff; color: #1890ff; }
+        .tag-orange { background: #fff7e6; color: #fa8c16; }
+        .tag-green { background: #f6ffed; color: #52c41a; }
+        .tag-red { background: #fff1f0; color: #ff4d4f; }
+        .price-value { color: #ff4d4f; font-weight: 600; }
+        
+        /* 汇总信息 */
+        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
+        .summary-item { background: #f8f9fa; padding: 12px; border-radius: 6px; text-align: center; }
+        .summary-label { font-size: 12px; color: #999; margin-bottom: 5px; }
+        .summary-value { font-size: 16px; font-weight: 600; color: #333; }
+        .summary-value.red { color: #ff4d4f; }
+        .summary-value.orange { color: #fa8c16; }
+        
+        /* 退款弹窗 */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: #fff; border-radius: 12px; width: 90%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .modal-title { font-size: 16px; font-weight: 600; color: #333; }
+        .modal-close { font-size: 24px; color: #999; cursor: pointer; }
+        .modal-body { padding: 20px; }
+        .modal-footer { padding: 16px 20px; border-top: 1px solid #eee; display: flex; gap: 10px; justify-content: flex-end; }
+        
+        .modal-rule { background: #fff7e6; border: 1px solid #ffd591; padding: 12px; border-radius: 6px; font-size: 13px; color: #d46b00; margin-bottom: 15px; }
+        
+        .form-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        .form-label { color: #666; }
+        .form-value { color: #333; font-weight: 500; }
+        .form-value.red { color: #ff4d4f; font-weight: 600; }
+        .form-value.orange { color: #fa8c16; }
+        
+        .refund-type-group { display: flex; gap: 10px; margin: 15px 0; }
+        .refund-type-card { flex: 1; padding: 12px; border: 2px solid #e8e8e8; border-radius: 8px; cursor: pointer; text-align: center; }
+        .refund-type-card.selected { border-color: #667eea; background: #f0f5ff; }
+        .refund-type-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 4px; }
+        .refund-type-desc { font-size: 12px; color: #999; }
+        
+        .input-group { margin: 15px 0; }
+        .input-label { font-size: 14px; color: #666; margin-bottom: 8px; }
+        .input-field { display: flex; align-items: center; border: 1px solid #d9d9d9; border-radius: 6px; padding: 8px 12px; }
+        .input-field input { flex: 1; border: none; outline: none; font-size: 14px; }
+        .input-field.disabled { background: #f5f5f5; }
+        .input-limit { font-size: 12px; color: #999; margin-top: 6px; }
+        
+        textarea { width: 100%; border: 1px solid #d9d9d9; border-radius: 6px; padding: 10px; font-size: 14px; resize: none; outline: none; }
+        .char-count { text-align: right; font-size: 12px; color: #999; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>部分退款功能 - 商家端原型</h1>
+            <p>需求9+12：部分退款功能 | 端口：商家端</p>
+        </div>
+        
+        <div class="scene-tabs">
+            <div class="scene-tab active" onclick="switchScene('confirm')">待确认退款场景</div>
+            <div class="scene-tab" onclick="switchScene('refunded')">已退款场景</div>
+        </div>
+        
+        <!-- 待确认退款场景 -->
+        <div class="scene-content active" id="scene-confirm">
+            <div class="page-box">
+                <div class="page-title">售后工单详情页 - 待确认退款</div>
+                
+                <div class="status-card">
+                    <div class="status-title">退货退款 · 待商家确认收货（退货未入库）</div>
+                    <div class="status-desc">如您逾期未响应申请，视作同意买家申请，系统会自动退款给买家</div>
+                    <div class="status-countdown">剩余 2天 14时 32分 15秒</div>
+                </div>
+                
+                <div class="order-info">
+                    <div class="order-row">
+                        <span class="order-label">售后单号</span>
+                        <span class="order-value">SH202405120001</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-label">关联订单</span>
+                        <span class="order-value">202405120001</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-label">售后类型</span>
+                        <span class="order-value">退货退款</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-label">申请时间</span>
+                        <span class="order-value">2024-05-12 14:30:22</span>
+                    </div>
+                </div>
+                
+                <div class="product-item">
+                    <div class="product-img">商品图</div>
+                    <div class="product-info">
+                        <div class="product-name">智能手表 运动健康监测</div>
+                        <div class="product-spec">颜色：黑色 | 规格：标准版</div>
+                        <div class="product-price">
+                            <span class="price-red">¥599.00</span>
+                            <span>x1</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-info">
+                    <div class="order-row">
+                        <span class="order-label">退款原因</span>
+                        <span class="order-value">商品与描述不符</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-label">退款说明</span>
+                        <span class="order-value">收到的手表表带有划痕，外观与描述不符</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-label">退款金额</span>
+                        <span class="order-value price-red">¥599.00</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-label">用户退货物流</span>
+                        <span class="order-value">顺丰速运 SF1234567890</span>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="showRefundModal()">确认收货并同意退款</button>
+                    <button class="btn btn-danger">拒绝退货退款</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 已退款场景 -->
+        <div class="scene-content" id="scene-refunded">
+            <div class="page-box">
+                <div class="page-title">售后工单详情页 - 已退款</div>
+                
+                <div class="status-card green">
+                    <div class="status-title">退货退款 · 已退款（部分退款）</div>
+                    <div class="status-desc">售后单已完成，订单状态已更新</div>
+                </div>
+                
+                <div class="order-info">
+                    <div class="order-row">
+                        <span class="order-label">售后单号</span>
+                        <span class="order-value">SH202405120001</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="order-label">关联订单</span>
+                        <span class="order-value">202405120001</span>
+                    </div>
+                </div>
+                
+                <!-- 退款记录 -->
+                <div class="refund-rule">
+                    💡 退款规则：优先退还储值支付部分，储值不足时退还在线支付部分
+                </div>
+                
+                <table class="refund-table">
+                    <thead>
+                        <tr>
+                            <th>退款时间</th>
+                            <th>退款人</th>
+                            <th>类型</th>
+                            <th>退款金额</th>
+                            <th>储值退款</th>
+                            <th>在线退款</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-05-13 09:30:22</td>
+                            <td>管理员张三</td>
+                            <td><span class="tag tag-blue">部分退款</span></td>
+                            <td class="price-value">¥299.00</td>
+                            <td>¥200.00</td>
+                            <td>¥99.00</td>
+                            <td><span class="tag tag-green">已退款</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">订单金额</div>
+                        <div class="summary-value">¥599.00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">订单储值支付</div>
+                        <div class="summary-value">¥300.00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">订单在线支付</div>
+                        <div class="summary-value">¥299.00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">累计已退款</div>
+                        <div class="summary-value red">¥299.00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">剩余可退</div>
+                        <div class="summary-value orange">¥300.00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">订单状态</div>
+                        <div class="summary-value">已完成</div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-gray">确认收货并同意退款</button>
+                    <button class="btn btn-gray">拒绝退货退款</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 退款确认弹窗 -->
+        <div class="modal-overlay" id="refundModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <span class="modal-title">确认退款</span>
+                    <span class="modal-close" onclick="hideRefundModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-rule">
+                        💡 退款将优先退还储值支付部分，储值余额不足时，剩余金额退还至在线支付部分。全部退款后订单将关闭；部分退款后订单保持原状态。
+                    </div>
+                    
+                    <div class="form-row">
+                        <span class="form-label">订单金额</span>
+                        <span class="form-value">¥599.00</span>
+                    </div>
+                    <div class="form-row">
+                        <span class="form-label">储值支付</span>
+                        <span class="form-value">¥300.00</span>
+                    </div>
+                    <div class="form-row">
+                        <span class="form-label">在线支付</span>
+                        <span class="form-value">¥299.00</span>
+                    </div>
+                    <div class="form-row">
+                        <span class="form-label">已退款</span>
+                        <span class="form-value red">¥0.00</span>
+                    </div>
+                    <div class="form-row">
+                        <span class="form-label">剩余储值可退</span>
+                        <span class="form-value orange">¥300.00</span>
+                    </div>
+                    <div class="form-row">
+                        <span class="form-label">剩余在线可退</span>
+                        <span class="form-value orange">¥299.00</span>
+                    </div>
+                    
+                    <div class="refund-type-group">
+                        <div class="refund-type-card selected" onclick="selectRefundType('partial', this)">
+                            <div class="refund-type-title">部分退款</div>
+                            <div class="refund-type-desc">输入自定义退款金额</div>
+                        </div>
+                        <div class="refund-type-card" onclick="selectRefundType('all', this)">
+                            <div class="refund-type-title">全部退款</div>
+                            <div class="refund-type-desc">退还剩余金额 ¥599.00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <div class="input-label">退款金额</div>
+                        <div class="input-field">
+                            <span>¥</span>
+                            <input type="text" id="refundAmount" value="299.00" placeholder="请输入退款金额">
+                        </div>
+                        <div class="input-limit">可退上限：¥599.00</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <div class="input-label">备注（选填）</div>
+                        <textarea rows="3" maxlength="200" placeholder="请输入退款备注..."></textarea>
+                        <div class="char-count">0/200</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" style="background:#fff;border:1px solid #d9d9d9;color:#333;" onclick="hideRefundModal()">取消</button>
+                    <button class="btn btn-primary" onclick="confirmRefund()">确认退款</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchScene(scene) {
+            document.querySelectorAll('.scene-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.scene-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById('scene-' + scene).classList.add('active');
+        }
+        
+        function showRefundModal() {
+            document.getElementById('refundModal').classList.add('show');
+        }
+        
+        function hideRefundModal() {
+            document.getElementById('refundModal').classList.remove('show');
+        }
+        
+        function selectRefundType(type, el) {
+            document.querySelectorAll('.refund-type-card').forEach(card => card.classList.remove('selected'));
+            el.classList.add('selected');
+            
+            if (type === 'all') {
+                document.getElementById('refundAmount').value = '599.00';
+                document.getElementById('refundAmount').parentElement.classList.add('disabled');
+                document.getElementById('refundAmount').disabled = true;
+            } else {
+                document.getElementById('refundAmount').value = '299.00';
+                document.getElementById('refundAmount').parentElement.classList.remove('disabled');
+                document.getElementById('refundAmount').disabled = false;
+            }
+        }
+        
+        function confirmRefund() {
+            alert('退款成功！');
+            hideRefundModal();
+        }
+        
+        // 点击弹窗外部关闭
+        document.getElementById('refundModal').addEventListener('click', function(e) {
+            if (e.target === this) hideRefundModal();
+        });
+    </script>
+</body>
+</html>
