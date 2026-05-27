@@ -19,14 +19,14 @@
         .header h1 { font-size: 28px; color: #333; margin-bottom: 10px; }
         .header p { color: #666; font-size: 14px; }
 
-        .version-info { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: left; }
-        .version-info h3 { font-size: 16px; margin-bottom: 15px; color: #333; }
-        .version-info ul { list-style: none; padding: 0; }
-        .version-info li { padding: 8px 0; color: #666; font-size: 14px; border-bottom: 1px solid #eee; }
-        .version-info li:last-child { border-bottom: none; }
-        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 8px; }
-        .tag-new { background: #e6f7ff; color: #1890ff; }
-        .tag-update { background: #fff7e6; color: #fa8c16; }
+        /* 文档目录样式 */
+        .doc-toc { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: left; }
+        .doc-toc h3 { font-size: 16px; margin-bottom: 15px; color: #333; }
+        .toc-list { list-style: none; padding: 0; }
+        .toc-list li { padding: 10px 0; border-bottom: 1px solid #eee; }
+        .toc-list li:last-child { border-bottom: none; }
+        .toc-list a { color: #6B46C1; text-decoration: none; font-size: 14px; }
+        .toc-list a:hover { text-decoration: underline; }
         
         .section { background: #fff; padding: 30px; border-radius: 8px; margin-bottom: 20px; }
         .section-title { font-size: 22px; color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #6B46C1; }
@@ -67,23 +67,23 @@
             <p style="font-size: 12px; color: #999; margin-top: 5px;">更新日期：2026年5月14日</p>
 
             
-            <div class="version-info">
-                <h3>版本包含需求（3个）</h3>
-                <ul>
-                    <li>需求9+12：部分退款功能 <span class="tag tag-new">新功能</span></li>
-                    <li>需求10：商家退款展示 <span class="tag tag-update">现有功能改动</span></li>
+            <div class="doc-toc">
+                <h3>文档目录</h3>
+                <ul class="toc-list">
+                    <li><a href="#req-partial-refund">一、部分退款功能</a></li>
+                    <li><a href="#req-merchant-display">二、商家退款展示</a></li>
+                    <li><a href="#req-exchange">三、仅换货功能</a></li>
                 </ul>
-                <p style="font-size: 12px; color: #999; margin-top: 10px;">注：需求2（申请限制）已移至v1.2（仅换货版）</p>
             </div>
         </div>
         
         <!-- 一、部分退款功能 -->
-        <div class="section">
+        <div class="section" id="req-partial-refund">
             <div class="section-title">一、部分退款功能</div>
             <div class="prototype-box">
                 <h4>原型链接</h4>
                 <div class="prototype-links">
-                    <a href="https://ddyuan-spec.github.io/-/prd_v1.0_preview_files/merchant_aftersales_combined.html" class="prototype-link" target="_blank">商家端原型</a>
+                    <a href="https://ddyuan-spec.github.io/-/prd_v1.0_preview_files/req_partial_refund_merchant_v2.html" class="prototype-link" target="_blank">商家端-部分退款原型</a>
                     <a href="https://ddyuan-spec.github.io/-/prd_v1.0_preview_files/req_partial_refund_client.html" class="prototype-link" target="_blank">客户端原型</a>
                 </div>
             </div>
@@ -224,7 +224,7 @@
         </div>
         
         <!-- 二、商家退款展示 -->
-        <div class="section">
+        <div class="section" id="req-merchant-display">
             <div class="section-title">二、商家退款展示</div>
             <div class="prototype-box">
                 <h4>原型链接</h4>
