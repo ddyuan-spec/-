@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>售后单列表 - 商家端</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f0f2f5; font-size: 14px; color: #333; }
+        
+        /* 顶部导航栏 */
+        .top-header { height: 64px; background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+        .logo { color: #fff; font-size: 18px; font-weight: 600; }
+        .header-icons { display: flex; gap: 16px; color: #fff; font-size: 18px; }
+        
+        /* 主布局 */
+        .main-layout { display: flex; min-height: calc(100vh - 64px); }
+        
+        /* 左侧菜单 */
+        .sidebar { width: 200px; background: #fff; border-right: 1px solid #e8e8e8; }
+        .menu-item { padding: 12px 24px; color: #666; cursor: pointer; font-size: 14px; }
+        .menu-item:hover { background: #f5f5f5; }
+        .menu-item.active { color: #7c3aed; background: #f3f0ff; border-right: 3px solid #7c3aed; }
+        .menu-group { padding: 8px 24px; color: #999; font-size: 12px; margin-top: 8px; }
+        .submenu { padding-left: 40px; }
+        
+        /* 主内容区 */
+        .main-content { flex: 1; padding: 20px; }
+        
+        /* 面包屑 */
+        .breadcrumb { color: #666; font-size: 14px; margin-bottom: 16px; }
+        .breadcrumb span { color: #999; }
+        
+        /* 筛选区 */
+        .filter-bar { background: #fff; padding: 16px 20px; border-radius: 4px; margin-bottom: 16px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+        .filter-item { display: flex; align-items: center; gap: 8px; }
+        .filter-label { color: #666; font-size: 14px; }
+        .filter-input { width: 200px; padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; }
+        .filter-input::placeholder { color: #bfbfbf; }
+        .btn { padding: 6px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; border: none; }
+        .btn-primary { background: #7c3aed; color: #fff; }
+        .btn-default { background: #fff; border: 1px solid #d9d9d9; color: #666; }
+        .btn-link { color: #7c3aed; background: none; padding: 0; }
+        
+        /* Tab栏 */
+        .tab-bar { background: #fff; padding: 0 20px; border-radius: 4px 4px 0 0; border-bottom: 1px solid #e8e8e8; display: flex; }
+        .tab-item { padding: 12px 24px; cursor: pointer; color: #666; font-size: 14px; position: relative; }
+        .tab-item.active { color: #7c3aed; }
+        .tab-item.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: #7c3aed; }
+        
+        /* 批量操作 */
+        .batch-bar { background: #fff; padding: 12px 20px; border-bottom: 1px solid #e8e8e8; }
+        .batch-btn { padding: 4px 12px; border: 1px solid #d9d9d9; border-radius: 4px; background: #fff; color: #666; font-size: 14px; cursor: pointer; }
+        
+        /* 表格 */
+        .table-container { background: #fff; border-radius: 0 0 4px 4px; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th { background: #fafafa; padding: 12px 16px; text-align: left; font-weight: 500; color: #666; font-size: 14px; border-bottom: 1px solid #e8e8e8; }
+        .data-table td { padding: 16px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        .data-table tr:hover { background: #fafafa; }
+        
+        /* 商品单元格 */
+        .product-cell { display: flex; gap: 12px; }
+        .product-img { width: 60px; height: 60px; background: #f5f5f5; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 12px; overflow: hidden; }
+        .product-img img { width: 100%; height: 100%; object-fit: cover; }
+        .product-info { flex: 1; }
+        .product-name { color: #333; font-size: 14px; margin-bottom: 4px; }
+        .product-attr { color: #999; font-size: 12px; }
+        
+        /* 标签 */
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .tag-orange { background: #fff7e6; color: #fa8c16; border: 1px solid #ffd591; }
+        .tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+        .tag-red { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+        
+        /* 用户信息 */
+        .user-info { font-size: 14px; }
+        .user-id { color: #7c3aed; margin-bottom: 4px; }
+        .user-phone { color: #666; margin-bottom: 4px; }
+        .user-level { display: inline-block; padding: 2px 8px; background: #52c41a; color: #fff; border-radius: 4px; font-size: 12px; }
+        
+        /* 操作链接 */
+        .action-link { color: #7c3aed; cursor: pointer; font-size: 14px; }
+        
+        /* 售后单号 */
+        .order-no { color: #333; font-size: 14px; margin-bottom: 4px; }
+        .order-time { color: #999; font-size: 12px; }
+        
+        /* 价格 */
+        .price { color: #ff4d4f; font-weight: 500; }
+        
+        /* 分页 */
+        .pagination { display: flex; justify-content: flex-end; align-items: center; padding: 16px 20px; gap: 8px; }
+        .page-info { color: #666; font-size: 14px; margin-right: 16px; }
+        .page-btn { padding: 4px 12px; border: 1px solid #d9d9d9; background: #fff; color: #666; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .page-btn.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+        .page-btn:disabled { color: #bfbfbf; cursor: not-allowed; }
+        .page-input { width: 40px; padding: 4px; border: 1px solid #d9d9d9; border-radius: 4px; text-align: center; }
+        
+        /* 复选框 */
+        .checkbox { width: 16px; height: 16px; border: 1px solid #d9d9d9; border-radius: 2px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="top-header">
+        <div class="logo">泰尔超优会</div>
+        <div class="header-icons">
+            <span>🔔</span>
+            <span>💬</span>
+            <span>⚙️</span>
+        </div>
+    </div>
+    
+    <div class="main-layout">
+        <div class="sidebar">
+            <div class="menu-item">商品中心</div>
+            <div class="menu-item">商品审核</div>
+            <div class="menu-item">代销管理</div>
+            <div class="menu-item">采购管理</div>
+            <div class="menu-item">店铺类目</div>
+            <div class="menu-item">属性参数</div>
+            <div class="menu-item">自有资源</div>
+            
+            <div class="menu-group">营销应用</div>
+            <div class="menu-item">优惠券</div>
+            <div class="menu-item">满减</div>
+            <div class="menu-item">秒杀</div>
+            <div class="menu-item">砍价</div>
+            <div class="menu-item">拼团</div>
+            <div class="menu-item">分销</div>
+            <div class="menu-item">套餐</div>
+            <div class="menu-item">微信直播</div>
+            <div class="menu-item">APP直播</div>
+            
+            <div class="menu-group">订单管理</div>
+            <div class="menu-item submenu">订单中心</div>
+            <div class="menu-item submenu">批量发货</div>
+            <div class="menu-item submenu active">售后工单</div>
+            <div class="menu-item submenu">评价管理</div>
+            <div class="menu-item submenu">合并发货</div>
+            <div class="menu-item submenu">发货记录</div>
+            
+            <div class="menu-group">库存管理</div>
+            <div class="menu-item submenu">库存中心</div>
+            <div class="menu-item submenu">出入库</div>
+            <div class="menu-item submenu">库存盘点</div>
+            <div class="menu-item submenu">库存明细</div>
+            
+            <div class="menu-group">配送管理</div>
+            <div class="menu-item submenu">快递配送</div>
+            <div class="menu-item submenu">同城配送</div>
+            <div class="menu-item submenu">到店自提</div>
+            
+            <div class="menu-group">财务管理</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="breadcrumb">订单管理 / 售后工单</div>
+            
+            <div class="filter-bar">
+                <div class="filter-item">
+                    <span class="filter-label">商品名称</span>
+                    <input type="text" class="filter-input" placeholder="请输入商品名称">
+                </div>
+                <div class="filter-item">
+                    <span class="filter-label">工单号</span>
+                    <input type="text" class="filter-input" placeholder="请输入工单号">
+                </div>
+                <div class="filter-item">
+                    <span class="filter-label">退款用户手机号</span>
+                    <input type="text" class="filter-input" placeholder="请输入退款用户手机号">
+                </div>
+                <button class="btn btn-primary">搜索</button>
+                <button class="btn btn-default">重置</button>
+                <button class="btn btn-default">导出</button>
+                <button class="btn btn-link">展开</button>
+            </div>
+            
+            <div class="tab-bar">
+                <div class="tab-item active">全部订单</div>
+                <div class="tab-item">待审核</div>
+                <div class="tab-item">处理中</div>
+                <div class="tab-item">已完成</div>
+                <div class="tab-item">已关闭</div>
+            </div>
+            
+            <div class="batch-bar">
+                <button class="batch-btn">批量备注</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40px;"><div class="checkbox"></div></th>
+                            <th style="width:200px;">退款商品</th>
+                            <th style="width:100px;">退款金额(元)</th>
+                            <th style="width:100px;">退款实收(元)</th>
+                            <th style="width:100px;">臻享积分退回</th>
+                            <th style="width:150px;">退款用户</th>
+                            <th style="width:80px;">状态</th>
+                            <th style="width:80px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="checkbox"></div></td>
+                            <td>
+                                <div class="order-no">工单号: SS202509241833170116608-TK01</div>
+                                <div class="order-time">申请时间: 2026-05-26 19:55:03</div>
+                                <div class="product-cell" style="margin-top:8px;">
+                                    <div class="product-img"><img src="https://via.placeholder.com/60/4a90d9/fff?text=商品" alt="商品图"></div>
+                                    <div class="product-info">
+                                        <div class="product-name">安美来</div>
+                                        <div class="product-attr">安美来</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="price">¥399.00<br><span style="color:#999;font-size:12px;">x2</span></td>
+                            <td class="price">798.00</td>
+                            <td>798.00</td>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-id">U651200</div>
+                                    <div class="user-phone">手机号: 15333332402</div>
+                                    <span class="user-level">社区服务官</span>
+                                </div>
+                            </td>
+                            <td><span class="tag tag-orange">待审核</span></td>
+                            <td><span class="action-link">查看详情</span></td>
+                        </tr>
+                        <tr>
+                            <td><div class="checkbox"></div></td>
+                            <td>
+                                <div class="order-no">工单号: SS202509189792214335488-TK01</div>
+                                <div class="order-time">申请时间: 2026-05-26 16:28:29</div>
+                                <div class="product-cell" style="margin-top:8px;">
+                                    <div class="product-img"><img src="https://via.placeholder.com/60/4a90d9/fff?text=商品" alt="商品图"></div>
+                                    <div class="product-info">
+                                        <div class="product-name">安美来新</div>
+                                        <div class="product-attr">安美来</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="price">¥399.00<br><span style="color:#999;font-size:12px;">x1</span></td>
+                            <td class="price">399.00</td>
+                            <td>399.00</td>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-id">U954048</div>
+                                    <div class="user-phone">手机号: 15333332404</div>
+                                    <span class="user-level">社区服务官</span>
+                                </div>
+                            </td>
+                            <td><span class="tag tag-orange">待审核</span></td>
+                            <td><span class="action-link">查看详情</span></td>
+                        </tr>
+                        <tr>
+                            <td><div class="checkbox"></div></td>
+                            <td>
+                                <div class="order-no">工单号: SS202508848721899196416-TK01</div>
+                                <div class="order-time">申请时间: 2026-05-26 16:05:42</div>
+                                <div class="product-cell" style="margin-top:8px;">
+                                    <div class="product-img"><img src="https://via.placeholder.com/60/52c41a/fff?text=套餐" alt="商品图"></div>
+                                    <div class="product-info">
+                                        <div class="product-name">组合套餐15泰美畅+15亿力高</div>
+                                        <div class="product-attr">15泰美畅+15亿力高</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="price">¥19950.00<br><span style="color:#999;font-size:12px;">x2</span></td>
+                            <td class="price">39900.00</td>
+                            <td>39900.00</td>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-id">U954048</div>
+                                    <div class="user-phone">手机号: 15333332404</div>
+                                    <span class="user-level">社区服务官</span>
+                                </div>
+                            </td>
+                            <td><span class="tag tag-green">处理中</span></td>
+                            <td><span class="action-link">查看详情</span></td>
+                        </tr>
+                        <tr>
+                            <td><div class="checkbox"></div></td>
+                            <td>
+                                <div class="order-no">工单号: SS202509174518438215680-TH02</div>
+                                <div class="order-time">申请时间: 2026-05-26 15:39:23</div>
+                                <div class="product-cell" style="margin-top:8px;">
+                                    <div class="product-img"><img src="https://via.placeholder.com/60/52c41a/fff?text=套餐" alt="商品图"></div>
+                                    <div class="product-info">
+                                        <div class="product-name">组合套餐15泰美畅+15亿力高</div>
+                                        <div class="product-attr">15泰美畅+15亿力高</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="price">¥19950.00<br><span style="color:#999;font-size:12px;">x1</span></td>
+                            <td class="price">19950.00</td>
+                            <td>19950.00</td>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-id">U339328</div>
+                                    <div class="user-phone">手机号: 15333332403</div>
+                                    <span class="user-level">社区服务官</span>
+                                </div>
+                            </td>
+                            <td><span class="tag tag-green">处理中</span></td>
+                            <td><span class="action-link">查看详情</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="pagination">
+                    <span class="page-info">共 763 条</span>
+                    <select style="padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;">
+                        <option>10条/页</option>
+                    </select>
+                    <button class="page-btn" disabled>&lt;</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <span>...</span>
+                    <button class="page-btn">77</button>
+                    <button class="page-btn">&gt;</button>
+                    <span>前往</span>
+                    <input type="text" class="page-input" value="1">
+                    <span>页</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
