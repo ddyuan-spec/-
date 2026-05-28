@@ -231,9 +231,7 @@
             <p class="desc-text">用户在存在未完成售后单的情况下点击确认收货，可能导致售后流程异常。需要在订单详情页增加售后提示和确认收货阻止逻辑。</p>
             <div class="section-subtitle">3.2 需求目标</div>
             <ul style="margin-left: 20px; color: #666;">
-                <li>订单详情页展示进行中售后单的提示信息</li>
                 <li>用户存在未完成售后单时，阻止确认收货操作</li>
-                <li>引导用户前往售后详情页处理售后</li>
             </ul>
             <div class="section-subtitle">3.3 功能内容</div>
             <table>
@@ -241,34 +239,17 @@
                 <tr><td>阻止条件</td><td>判断是否阻止确认收货</td><td>订单存在售后单，且售后单状态 ≠ 已完成 且 ≠ 已关闭</td></tr>
                 <tr><td>阻止行为</td><td>隐藏确认收货按钮</td><td>满足阻止条件时，隐藏"确认收货"按钮，不弹出提示</td></tr>
             </table>
-            <div class="section-subtitle">3.3.1 订单详情页提示卡片</div>
-            <p class="desc-text">当订单存在进行中的售后单时，在订单详情页展示以下两个提示卡片：</p>
+            <div class="section-subtitle">3.3.1 订单详情页提示</div>
+            <p class="desc-text">当订单存在进行中的售后单时，在订单详情页展示以下提示：</p>
             <div class="card-preview">
-                <div class="card-green">
-                    <div class="card-header">
-                        <span>⚠️</span>
-                        <span>您有正在进行的售后申请</span>
-                    </div>
-                    <div class="card-info">
-                        售后单号：SH202405110001<br>
-                        售后类型：仅退款<br>
-                        当前状态：待商家审核
-                    </div>
-                    <div class="card-btn">查看售后详情</div>
-                </div>
                 <div class="card-red">
                     <div class="card-icon">ℹ️</div>
-                    <div class="card-msg">您有正在进行的售后申请，需先处理售后才能确认收货</div>
+                    <div class="card-msg">您有正在进行的售后申请，需先处理才能进行订单操作</div>
                 </div>
             </div>
             <table>
                 <tr><th>字段名称</th><th>字段说明</th><th>业务规则</th></tr>
-                <tr><td>绿色提示卡片</td><td>展示进行中售后单信息</td><td>背景色#f0fff4，边框#c6f6d5；显示售后单号、售后类型、当前状态三个字段</td></tr>
-                <tr><td>售后单号</td><td>当前进行中的售后单编号</td><td>从售后单表取值，格式：SH+年月日+序号</td></tr>
-                <tr><td>售后类型</td><td>当前售后单的类型</td><td>从售后单表取值，可选值：仅退款、退货退款</td></tr>
-                <tr><td>当前状态</td><td>当前售后单的状态</td><td>从售后单表取值，可选值：待商家审核、待退货、待确认收货等</td></tr>
-                <tr><td>查看售后详情按钮</td><td>跳转至售后详情页</td><td>点击后跳转至该售后单的详情页；按钮背景色#38a169，文字白色</td></tr>
-                <tr><td>红色提示卡片</td><td>提示用户需先处理售后</td><td>背景色#fff5f5，边框#fed7d7；固定文案："您有正在进行的售后申请，需先处理售后才能确认收货"</td></tr>
+                <tr><td>红色提示卡片</td><td>提示用户需先处理售后</td><td>背景色#fff5f5，边框#fed7d7；固定文案："您有正在进行的售后申请，需先处理才能进行订单操作"</td></tr>
             </table>
             <div class="section-subtitle">3.4 影响端口</div>
             <table>
