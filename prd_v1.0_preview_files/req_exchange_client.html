@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>订单详情 - 仅换货功能</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: #f5f5f5;
+            max-width: 375px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 顶部导航栏 */
+        .navbar {
+            background-color: #fff;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .back-btn {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 15px;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+
+        .navbar-title {
+            flex: 1;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* 订单状态卡片 - 橙色背景 */
+        .status-card {
+            background: #FF6B35;
+            padding: 20px 15px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .status-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: #fff;
+        }
+
+        .status-info {
+            flex: 1;
+        }
+
+        .status-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .status-subtitle {
+            font-size: 13px;
+            opacity: 0.95;
+        }
+
+        /* 收货人信息 */
+        .address-section {
+            background-color: #fff;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .address-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .address-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .address-label {
+            color: #999;
+            font-size: 14px;
+            min-width: 70px;
+        }
+
+        .address-value {
+            color: #333;
+            font-size: 14px;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .address-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-icon {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .location-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: #999;
+        }
+
+        /* 配送方式 */
+        .delivery-section {
+            background-color: #fff;
+            padding: 15px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delivery-label {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .delivery-value {
+            color: #333;
+            font-size: 14px;
+        }
+
+        /* 商品信息卡片 */
+        .product-section {
+            background-color: #fff;
+            margin-top: 10px;
+            padding: 15px;
+        }
+
+        .product-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .shop-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+        }
+
+        .shop-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #666;
+        }
+
+        .shop-name {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .product-item {
+            display: flex;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .product-image {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image::after {
+            content: '商品图';
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+        }
+
+        .product-detail {
+            flex: 1;
+            margin-left: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-name {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-spec {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .product-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .product-price {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .product-quantity {
+            font-size: 13px;
+            color: #999;
+        }
+
+        /* 申请售后按钮 */
+        .aftersales-btn {
+            margin-top: 12px;
+            padding: 8px 16px;
+            border: 1px solid #FF6B35;
+            background: #fff;
+            color: #FF6B35;
+            font-size: 13px;
+            border-radius: 15px;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .aftersales-btn:active {
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        /* 店铺优惠 */
+        .discount-section {
+            background-color: #fff;
+            padding: 12px 15px;
+            border-top: 1px solid #f5f5f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .discount-label {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .discount-value {
+            font-size: 13px;
+            color: #FF6B35;
+        }
+
+        /* 价格明细 */
+        .price-section {
+            background-color: #fff;
+            margin-top: 10px;
+            padding: 15px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .price-row:last-child {
+            margin-bottom: 0;
+            padding-top: 10px;
+            border-top: 1px dashed #e0e0e0;
+        }
+
+        .price-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .price-value {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .price-total-label {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .price-total-value {
+            font-size: 18px;
+            color: #FF4D4F;
+            font-weight: 700;
+        }
+
+        /* 底部占位 */
+        .bottom-placeholder {
+            height: 20px;
+        }
+
+        /* 弹窗遮罩层 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1000;
+            max-width: 375px;
+            margin: 0 auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        /* 弹窗内容 */
+        .modal-content {
+            background: #fff;
+            width: 100%;
+            border-radius: 12px 12px 0 0;
+            padding: 20px 0;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* 弹窗头部 */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-close {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .modal-close svg {
+            width: 18px;
+            height: 18px;
+            fill: #999;
+        }
+
+        /* 售后类型选项 */
+        .aftersales-options {
+            padding: 10px 20px;
+        }
+
+        .aftersales-option {
+            display: flex;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+        }
+
+        .aftersales-option:last-child {
+            border-bottom: none;
+        }
+
+        .aftersales-option:active {
+            background: #f9f9f9;
+        }
+
+        .option-icon {
+            width: 40px;
+            height: 40px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .option-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: #FF6B35;
+        }
+
+        .option-info {
+            flex: 1;
+        }
+
+        .option-title {
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .option-desc {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .option-arrow {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-arrow svg {
+            width: 16px;
+            height: 16px;
+            fill: #ccc;
+        }
+
+        /* 新增标签 */
+        .new-tag {
+            display: inline-block;
+            background: #FF6B35;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="navbar">
+        <div class="back-btn">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+            </svg>
+        </div>
+        <div class="navbar-title">订单详情</div>
+    </div>
+
+    <!-- 订单状态卡片 -->
+    <div class="status-card">
+        <div class="status-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 18.5a1.5 1.5 0 1 1-1.5-1.5 1.5 1.5 0 0 1 1.5 1.5M6 18.5a1.5 1.5 0 1 1-1.5-1.5 1.5 1.5 0 0 1 1.5 1.5M20.5 12H5.21l-.45-2H18a1 1 0 0 0 0-2H4.71l-.63-2.79A1 1 0 0 0 3.13 4H2v2h.75l2.29 10.14A3 3 0 0 0 7.9 18.5H18v-2H7.9a1 1 0 0 1-1-.68l-.15-.52 12.66-1.76a1 1 0 0 0 .85-1V6a1 1 0 0 0-1-1h-2V2h-2v3h6.5a1 1 0 0 1 1 1z"/>
+            </svg>
+        </div>
+        <div class="status-info">
+            <div class="status-title">待发货</div>
+            <div class="status-subtitle">商家正在准备发货，请耐心等待</div>
+        </div>
+    </div>
+
+    <!-- 收货人信息 -->
+    <div class="address-section">
+        <div class="address-item">
+            <span class="address-label">收货人：</span>
+            <span class="address-value">张三 138****8888</span>
+        </div>
+        <div class="address-item">
+            <span class="address-label"></span>
+            <div class="address-value">
+                <div class="address-row">
+                    <span class="location-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                    </span>
+                    <span>广东省 深圳市 南山区 科技园南区 高新南一道001号</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 配送方式 -->
+    <div class="delivery-section">
+        <span class="delivery-label">配送方式</span>
+        <span class="delivery-value">快递配送</span>
+    </div>
+
+    <!-- 商品信息 -->
+    <div class="product-section">
+        <div class="product-header">
+            <span class="shop-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+            </span>
+            <span class="shop-name">官方自营店</span>
+        </div>
+        <div class="product-item">
+            <div class="product-image"></div>
+            <div class="product-detail">
+                <div>
+                    <div class="product-name">泰吉眠沙棘茶氨酸压片糖果 待售</div>
+                    <div class="product-spec">规格：标准版 | 颜色：默认</div>
+                </div>
+                <div class="product-price-row">
+                    <span class="product-price">¥36.00</span>
+                    <span class="product-quantity">x5</span>
+                </div>
+                <button class="aftersales-btn" onclick="openModal()">申请售后</button>
+            </div>
+        </div>
+        <div class="discount-section">
+            <span class="discount-label">店铺优惠</span>
+            <span class="discount-value">-¥0.00</span>
+        </div>
+    </div>
+
+    <!-- 价格明细 -->
+    <div class="price-section">
+        <div class="price-row">
+            <span class="price-label">商品总价（共5件）</span>
+            <span class="price-value">¥180.00</span>
+        </div>
+        <div class="price-row">
+            <span class="price-label">运费</span>
+            <span class="price-value">+¥16.00</span>
+        </div>
+        <div class="price-row">
+            <span class="price-label">活动优惠</span>
+            <span class="price-value" style="color: #FF6B35;">-¥54.00</span>
+        </div>
+        <div class="price-row">
+            <span class="price-total-label">实付款</span>
+            <span class="price-total-value">¥142.00</span>
+        </div>
+    </div>
+
+    <div class="bottom-placeholder"></div>
+
+    <!-- 选择售后类型弹窗 -->
+    <div class="modal-overlay" id="aftersalesModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">退款方式</span>
+                <div class="modal-close" onclick="closeModal()">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="aftersales-options">
+                <!-- 仅退款 -->
+                <div class="aftersales-option" onclick="selectOption('refund_only')">
+                    <div class="option-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
+                        </svg>
+                    </div>
+                    <div class="option-info">
+                        <div class="option-title">仅退款</div>
+                        <div class="option-desc">未收到货，或与商家协商后申请</div>
+                    </div>
+                    <div class="option-arrow">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                        </svg>
+                    </div>
+                </div>
+                <!-- 退货退款 -->
+                <div class="aftersales-option" onclick="selectOption('refund_return')">
+                    <div class="option-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 2h2v2h-2V5zm0 4h2v2h-2V9zm0 4h2v2h-2v-2zm-4-8h2v2H8V5zm0 4h2v2H8V9zm0 4h2v2H8v-2zM5 17h14v2H5v-2zm2-12h12v10H7V5z"/>
+                        </svg>
+                    </div>
+                    <div class="option-info">
+                        <div class="option-title">退货退款</div>
+                        <div class="option-desc">已收到货，需要退货并退款</div>
+                    </div>
+                    <div class="option-arrow">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                        </svg>
+                    </div>
+                </div>
+                <!-- 仅换货（新增） -->
+                <div class="aftersales-option" onclick="selectOption('exchange_only')">
+                    <div class="option-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                        </svg>
+                    </div>
+                    <div class="option-info">
+                        <div class="option-title">仅换货<span class="new-tag">新增</span></div>
+                        <div class="option-desc">已收到货，需要更换商品</div>
+                    </div>
+                    <div class="option-arrow">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 打开弹窗
+        function openModal() {
+            document.getElementById('aftersalesModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭弹窗
+        function closeModal(event) {
+            if (!event || event.target.id === 'aftersalesModal') {
+                document.getElementById('aftersalesModal').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // 选择售后类型
+        function selectOption(type) {
+            const typeMap = {
+                'refund_only': '仅退款',
+                'refund_return': '退货退款',
+                'exchange_only': '仅换货'
+            };
+            alert('您选择了：' + typeMap[type] + '\n即将进入' + typeMap[type] + '申请页面');
+            closeModal();
+        }
+    </script>
+</body>
+</html>
