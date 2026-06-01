@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>仅换货客户端交互原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        /* 模拟器容器 */
+        .simulator {
+            width: 375px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 页面容器 */
+        .page {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* 顶部导航 */
+        .nav-header {
+            height: 44px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .nav-back {
+            position: absolute;
+            left: 16px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-back::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            transform: rotate(45deg);
+        }
+        
+        .nav-title {
+            font-size: 17px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        /* 订单状态 */
+        .order-status-section {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8A5C 100%);
+            padding: 20px 16px;
+            color: #fff;
+        }
+        
+        .order-status {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .order-status-desc {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        /* 卡片样式 */
+        .card {
+            background: #fff;
+            margin: 10px 12px;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .card-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        
+        /* 商品信息 */
+        .product-info {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .product-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 6px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+        
+        .product-detail {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .product-name {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .product-spec {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+        
+        .product-price-qty {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+        
+        .product-price {
+            font-size: 14px;
+            color: #FF6B35;
+            font-weight: 500;
+        }
+        
+        .product-qty {
+            font-size: 13px;
+            color: #999;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            height: 44px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: #FF6B35;
+            color: #fff;
+        }
+        
+        .btn-outline {
+            background: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-block {
+            margin: 20px 16px;
+        }
+        
+        /* 底部操作区 */
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 375px;
+            background: #fff;
+            padding: 12px 16px;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid #eee;
+        }
+        
+        .bottom-actions .btn {
+            flex: 1;
+            margin: 0;
+        }
+        
+        /* 弹窗遮罩 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        /* 底部弹窗 */
+        .bottom-modal {
+            background: #fff;
+            width: 100%;
+            max-width: 375px;
+            border-radius: 16px 16px 0 0;
+            padding-bottom: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .bottom-modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid #f5f5f5;
+            position: relative;
+        }
+        
+        .modal-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .modal-close {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close::before,
+        .modal-close::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 2px;
+            background: #999;
+        }
+        
+        .modal-close::before {
+            transform: rotate(45deg);
+        }
+        
+        .modal-close::after {
+            transform: rotate(-45deg);
+        }
+        
+        /* 售后类型选项 */
+        .service-type-list {
+            padding: 8px 0;
+        }
+        
+        .service-type-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+        }
+        
+        .service-type-item:last-child {
+            border-bottom: none;
+        }
+        
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #FFF5F2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .service-icon::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: #FF6B35;
+            border-radius: 50%;
+        }
+        
+        .service-info {
+            flex: 1;
+        }
+        
+        .service-name {
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .service-tag {
+            font-size: 10px;
+            color: #FF6B35;
+            background: #FFF5F2;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .service-desc {
+            font-size: 13px;
+            color: #999;
+            margin-top: 4px;
+        }
+        
+        .service-arrow {
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid #ccc;
+            border-top: 2px solid #ccc;
+            transform: rotate(45deg);
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .form-label .required {
+            color: #FF6B35;
+            margin-right: 4px;
+        }
+        
+        .form-select,
+        .form-input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 14px;
+            background: #fff;
+            outline: none;
+        }
+        
+        .form-textarea {
+            width: 100%;
+            min-height: 100px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            background: #fff;
+            outline: none;
+            resize: none;
+        }
+        
+        /* 图片上传 */
+        .upload-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .upload-item {
+            width: 80px;
+            height: 80px;
+            border: 1px dashed #ddd;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .upload-item::before {
+            content: '+';
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        /* 状态提示 */
+        .status-banner {
+            background: #FFF5F2;
+            padding: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .status-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #FF6B35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .status-icon::before {
+            content: '✓';
+            color: #fff;
+            font-size: 20px;
+        }
+        
+        .status-content {
+            flex: 1;
+        }
+        
+        .status-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .status-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* 地址信息 */
+        .address-section {
+            background: #fff;
+            margin: 10px 12px;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .address-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .address-tag {
+            background: #FF6B35;
+            color: #fff;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        .address-title {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .address-detail {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .address-user {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #999;
+        }
+        
+        /* 信息列表 */
+        .info-list {
+            background: #fff;
+            margin: 10px 12px;
+            border-radius: 8px;
+            padding: 0 16px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .info-value {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        /* 协商历史入口 */
+        .history-entry {
+            background: #fff;
+            margin: 10px 12px;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .history-text {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .history-arrow {
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid #ccc;
+            border-top: 2px solid #ccc;
+            transform: rotate(45deg);
+        }
+        
+        /* 物流信息 */
+        .logistics-section {
+            background: #fff;
+            margin: 10px 12px;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .logistics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .logistics-company {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .logistics-no {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .logistics-timeline {
+            padding-left: 20px;
+            border-left: 2px solid #eee;
+            margin-left: 8px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 16px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+        
+        .timeline-item.active::before {
+            background: #FF6B35;
+        }
+        
+        .timeline-content {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .timeline-time {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+        
+        /* 页面内容底部留白 */
+        .page-content {
+            padding-bottom: 80px;
+        }
+        
+        /* 提示信息 */
+        .tips {
+            font-size: 12px;
+            color: #999;
+            padding: 12px 16px;
+        }
+        
+        /* 禁用状态 */
+        .disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="simulator">
+        <!-- 页面1：订单详情页 -->
+        <div class="page active" id="page-order-detail">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">订单详情</div>
+            </div>
+            
+            <div class="order-status-section">
+                <div class="order-status">已完成</div>
+                <div class="order-status-desc">订单已完成，可申请售后</div>
+            </div>
+            
+            <div class="page-content">
+                <div class="card">
+                    <div class="product-info">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div>
+                                <div class="product-name">智能蓝牙耳机 无线降噪 长续航 高音质运动耳机</div>
+                                <div class="product-spec">黑色 | 标准版</div>
+                            </div>
+                            <div class="product-price-qty">
+                                <span class="product-price">¥199.00</span>
+                                <span class="product-qty">x1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="info-item" style="border-bottom: 1px solid #f5f5f5; padding: 0 0 14px 0;">
+                        <span class="info-label">订单编号</span>
+                        <span class="info-value">2024060112345678</span>
+                    </div>
+                    <div class="info-item" style="padding: 14px 0 0 0; border-bottom: none;">
+                        <span class="info-label">下单时间</span>
+                        <span class="info-value">2024-06-01 10:30:00</span>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="info-item" style="border-bottom: none; padding: 0;">
+                        <span class="info-label">实付金额</span>
+                        <span class="info-value" style="color: #FF6B35; font-weight: 500;">¥199.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="btn btn-outline">联系客服</button>
+                <button class="btn btn-primary" onclick="showServiceModal()">申请售后</button>
+            </div>
+        </div>
+        
+        <!-- 页面2：选择售后类型弹窗 -->
+        <div class="modal-overlay" id="service-modal">
+            <div class="bottom-modal">
+                <div class="modal-header">
+                    <div class="modal-title">选择售后类型</div>
+                    <div class="modal-close" onclick="hideServiceModal()"></div>
+                </div>
+                <div class="service-type-list">
+                    <div class="service-type-item" onclick="goToPage('page-refund-only')">
+                        <div class="service-icon"></div>
+                        <div class="service-info">
+                            <div class="service-name">仅退款</div>
+                            <div class="service-desc">未收到货，或与商家协商一致</div>
+                        </div>
+                        <div class="service-arrow"></div>
+                    </div>
+                    <div class="service-type-item" onclick="goToPage('page-refund-return')">
+                        <div class="service-icon"></div>
+                        <div class="service-info">
+                            <div class="service-name">退货退款</div>
+                            <div class="service-desc">已收到货，需要退货并退款</div>
+                        </div>
+                        <div class="service-arrow"></div>
+                    </div>
+                    <div class="service-type-item" onclick="goToPage('page-exchange-apply')">
+                        <div class="service-icon"></div>
+                        <div class="service-info">
+                            <div class="service-name">
+                                仅换货
+                                <span class="service-tag">新增</span>
+                            </div>
+                            <div class="service-desc">已收到货，需要更换商品</div>
+                        </div>
+                        <div class="service-arrow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 页面3：仅换货申请页 -->
+        <div class="page" id="page-exchange-apply">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">申请仅换货</div>
+            </div>
+            
+            <div class="page-content">
+                <div class="card">
+                    <div class="product-info disabled">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div>
+                                <div class="product-name">智能蓝牙耳机 无线降噪 长续航 高音质运动耳机</div>
+                                <div class="product-spec">黑色 | 标准版</div>
+                            </div>
+                            <div class="product-price-qty">
+                                <span class="product-price">¥199.00</span>
+                                <span class="product-qty">x1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label"><span class="required">*</span>申请原因</label>
+                        <select class="form-select">
+                            <option value="">请选择申请原因</option>
+                            <option value="quality">商品质量问题</option>
+                            <option value="wrong">商品与描述不符</option>
+                            <option value="damage">商品破损/污渍</option>
+                            <option value="spec">规格/尺寸不符</option>
+                            <option value="color">颜色/款式不符</option>
+                            <option value="other">其他原因</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">问题描述</label>
+                        <textarea class="form-textarea" placeholder="请详细描述您遇到的问题，有助于商家更快处理（选填）"></textarea>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label">上传凭证（选填）</label>
+                        <div class="upload-section">
+                            <div class="upload-item">上传图片</div>
+                        </div>
+                    </div>
+                    <div class="tips">最多可上传6张图片，支持JPG、PNG格式</div>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="btn btn-primary" onclick="submitExchangeApply()">提交申请</button>
+            </div>
+        </div>
+        
+        <!-- 页面4：仅换货详情页 -->
+        <div class="page" id="page-exchange-detail">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">仅换货详情</div>
+            </div>
+            
+            <div class="page-content">
+                <div class="status-banner">
+                    <div class="status-icon"></div>
+                    <div class="status-content">
+                        <div class="status-title">已同意仅换货</div>
+                        <div class="status-desc">商家已同意仅换货申请，请尽早退货</div>
+                    </div>
+                </div>
+                
+                <div class="address-section">
+                    <div class="address-header">
+                        <span class="address-tag">退</span>
+                        <span class="address-title">退货地址</span>
+                    </div>
+                    <div class="address-detail">
+                        广东省深圳市南山区科技园南区XX大厦X层XXX室
+                    </div>
+                    <div class="address-user">张三 138****8888</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">换货商品</div>
+                    <div class="product-info">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div>
+                                <div class="product-name">智能蓝牙耳机 无线降噪 长续航 高音质运动耳机</div>
+                                <div class="product-spec">黑色 | 标准版</div>
+                            </div>
+                            <div class="product-price-qty">
+                                <span class="product-price">¥199.00</span>
+                                <span class="product-qty">x1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">售后类型</span>
+                        <span class="info-value">仅换货</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请原因</span>
+                        <span class="info-value">商品质量问题</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请时间</span>
+                        <span class="info-value">2024-06-05 14:30:00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">售后单号</span>
+                        <span class="info-value">SH202406050001</span>
+                    </div>
+                </div>
+                
+                <div class="history-entry" onclick="goToPage('page-negotiation-history')">
+                    <span class="history-text">协商历史</span>
+                    <div class="history-arrow"></div>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="btn btn-outline" onclick="cancelApply()">撤销申请</button>
+                <button class="btn btn-primary" onclick="goToPage('page-return-logistics')">快递退货</button>
+            </div>
+        </div>
+        
+        <!-- 页面5：填写退货物流页 -->
+        <div class="page" id="page-return-logistics">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">填写退货物流</div>
+            </div>
+            
+            <div class="page-content">
+                <div class="card">
+                    <div class="form-group">
+                        <label class="form-label"><span class="required">*</span>物流公司</label>
+                        <select class="form-select">
+                            <option value="">请选择物流公司</option>
+                            <option value="sf">顺丰速运</option>
+                            <option value="jd">京东物流</option>
+                            <option value="ems">EMS</option>
+                            <option value="yt">圆通速递</option>
+                            <option value="zt">中通快递</option>
+                            <option value="st">申通快递</option>
+                            <option value="yd">韵达速递</option>
+                            <option value="db">德邦快递</option>
+                            <option value="other">其他物流</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label"><span class="required">*</span>物流单号</label>
+                        <input type="text" class="form-input" placeholder="请输入物流单号">
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">退货地址</div>
+                    <div class="address-detail" style="font-size: 14px; color: #666; line-height: 1.6;">
+                        广东省深圳市南山区科技园南区XX大厦X层XXX室
+                    </div>
+                    <div class="address-user" style="margin-top: 8px; font-size: 13px; color: #999;">
+                        张三 138****8888
+                    </div>
+                </div>
+                
+                <div class="tips">温馨提示：请保留好快递底单，以便查询物流信息</div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="btn btn-primary" onclick="submitLogistics()">提交</button>
+            </div>
+        </div>
+        
+        <!-- 页面6：商家发货后状态 -->
+        <div class="page" id="page-merchant-shipped">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">仅换货详情</div>
+            </div>
+            
+            <div class="page-content">
+                <div class="status-banner">
+                    <div class="status-icon"></div>
+                    <div class="status-content">
+                        <div class="status-title">待确认收货</div>
+                        <div class="status-desc">商家已发货，请留意物流信息并及时确认收货</div>
+                    </div>
+                </div>
+                
+                <div class="logistics-section">
+                    <div class="logistics-header">
+                        <span class="logistics-company">顺丰速运</span>
+                        <span class="logistics-no">SF1234567890</span>
+                    </div>
+                    <div class="logistics-timeline">
+                        <div class="timeline-item active">
+                            <div class="timeline-content">商家已发货，等待快递揽收</div>
+                            <div class="timeline-time">2024-06-06 10:30:00</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">商家已确认，准备发货</div>
+                            <div class="timeline-time">2024-06-06 09:00:00</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">商家已同意换货申请</div>
+                            <div class="timeline-time">2024-06-05 16:00:00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">换货商品</div>
+                    <div class="product-info">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div>
+                                <div class="product-name">智能蓝牙耳机 无线降噪 长续航 高音质运动耳机</div>
+                                <div class="product-spec">黑色 | 标准版（换货）</div>
+                            </div>
+                            <div class="product-price-qty">
+                                <span class="product-price">¥199.00</span>
+                                <span class="product-qty">x1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">售后类型</span>
+                        <span class="info-value">仅换货</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请原因</span>
+                        <span class="info-value">商品质量问题</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请时间</span>
+                        <span class="info-value">2024-06-05 14:30:00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">售后单号</span>
+                        <span class="info-value">SH202406050001</span>
+                    </div>
+                </div>
+                
+                <div class="history-entry" onclick="goToPage('page-negotiation-history')">
+                    <span class="history-text">协商历史</span>
+                    <div class="history-arrow"></div>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="btn btn-outline">查看物流</button>
+                <button class="btn btn-primary" onclick="confirmReceipt()">确认收货</button>
+            </div>
+        </div>
+        
+        <!-- 协商历史页 -->
+        <div class="page" id="page-negotiation-history">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">协商历史</div>
+            </div>
+            
+            <div class="page-content">
+                <div class="card">
+                    <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #666;">用户</div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; color: #333; font-weight: 500;">买家</div>
+                            <div style="font-size: 13px; color: #666; margin-top: 4px; line-height: 1.5;">申请仅换货，原因：商品质量问题</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 8px;">2024-06-05 14:30:00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div style="display: flex; gap: 12px;">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: #FFF5F2; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #FF6B35;">商家</div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; color: #333; font-weight: 500;">商家</div>
+                            <div style="font-size: 13px; color: #666; margin-top: 4px; line-height: 1.5;">同意仅换货申请，请按退货地址寄回商品</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 8px;">2024-06-05 16:00:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 页面历史记录
+        let pageHistory = ['page-order-detail'];
+        
+        // 显示售后类型弹窗
+        function showServiceModal() {
+            document.getElementById('service-modal').classList.add('active');
+        }
+        
+        // 隐藏售后类型弹窗
+        function hideServiceModal() {
+            document.getElementById('service-modal').classList.remove('active');
+        }
+        
+        // 页面跳转
+        function goToPage(pageId) {
+            // 隐藏当前页面
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 隐藏弹窗
+            hideServiceModal();
+            
+            // 显示目标页面
+            document.getElementById(pageId).classList.add('active');
+            
+            // 添加到历史记录
+            if (pageHistory[pageHistory.length - 1] !== pageId) {
+                pageHistory.push(pageId);
+            }
+        }
+        
+        // 返回上一页
+        function goBack() {
+            if (pageHistory.length > 1) {
+                pageHistory.pop();
+                const prevPage = pageHistory[pageHistory.length - 1];
+                
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(prevPage).classList.add('active');
+            }
+        }
+        
+        // 提交换货申请
+        function submitExchangeApply() {
+            alert('申请提交成功！');
+            goToPage('page-exchange-detail');
+        }
+        
+        // 提交物流信息
+        function submitLogistics() {
+            alert('物流信息提交成功！');
+            goToPage('page-merchant-shipped');
+        }
+        
+        // 撤销申请
+        function cancelApply() {
+            if (confirm('确定要撤销申请吗？')) {
+                alert('申请已撤销');
+                goToPage('page-order-detail');
+            }
+        }
+        
+        // 确认收货
+        function confirmReceipt() {
+            if (confirm('确认已收到换货商品？')) {
+                alert('确认收货成功，售后完成！');
+                goToPage('page-order-detail');
+            }
+        }
+        
+        // 点击遮罩关闭弹窗
+        document.getElementById('service-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideServiceModal();
+            }
+        });
+    </script>
+</body>
+</html>
