@@ -360,6 +360,20 @@
             color: #52C41A;
         }
 
+        /* 备注单元格样式：一行显示，超出省略 */
+        .remark-cell {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .remark-cell:hover {
+            color: #6B5CE7;
+        }
+
         .status-pending {
             color: #FF9C3F;
         }
@@ -1588,10 +1602,7 @@
                                         <th>退款人</th>
                                         <th>类型</th>
                                         <th>退款金额</th>
-                                        <th>臻享积分退款</th>
-                                        <th>储值退款</th>
-                                        <th>在线退款</th>
-                                        <th>状态</th>
+                                        <th>备注</th>
                                     </tr>
                                 </thead>
                                 <tbody id="refundTableBody">
@@ -1600,10 +1611,9 @@
                                         <td>张三</td>
                                         <td>部分退款</td>
                                         <td>¥58.00</td>
-                                        <td>¥0.00</td>
-                                        <td>¥30.00</td>
-                                        <td>¥28.00</td>
-                                        <td class="status-success">退款成功</td>
+                                        <td>
+                                            <div class="remark-cell" title="用户要求部分退款，商品质量问题">用户要求部分退款，商品质量问题...</div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
