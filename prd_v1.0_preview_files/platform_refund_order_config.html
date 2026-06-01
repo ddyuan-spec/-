@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>退款顺序配置 - 平台端</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f0f2f5; font-size: 14px; color: #333; }
+        
+        /* 主布局 */
+        .main-layout { display: flex; min-height: 100vh; }
+        
+        /* 左侧深紫色侧边栏 */
+        .sidebar { width: 200px; background: linear-gradient(180deg, #1a1a2e 0%, #2d1b69 100%); flex-shrink: 0; }
+        .sidebar-header { height: 64px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-logo { color: #fff; font-size: 18px; font-weight: 600; }
+        .sidebar-menu { padding: 8px 0; }
+        .menu-item { padding: 12px 20px; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
+        .menu-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        .menu-item.active { color: #fff; background: rgba(107, 92, 231, 0.3); border-left: 3px solid #6B5CE7; }
+        .menu-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
+        .menu-group { padding: 16px 20px 8px; color: rgba(255,255,255,0.4); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* 右侧内容区 */
+        .right-content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        
+        /* 顶部白色标题栏 */
+        .top-header { height: 64px; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #666; }
+        .breadcrumb span { color: #999; }
+        .breadcrumb .current { color: #333; font-weight: 500; }
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .header-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #666; border-radius: 4px; }
+        .header-icon:hover { background: #f5f5f5; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #6B5CE7 0%, #a855f7 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; cursor: pointer; }
+        
+        /* 主内容区 */
+        .main-content { flex: 1; padding: 20px; overflow: auto; }
+        
+        /* 页面标题区 */
+        .page-header { margin-bottom: 20px; }
+        .page-title { font-size: 20px; font-weight: 600; color: #333; margin-bottom: 8px; }
+        
+        /* 提示条 */
+        .info-bar { background: #e6f7ff; border: 1px solid #91d5ff; border-radius: 4px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; color: #096dd9; font-size: 14px; }
+        .info-icon { width: 16px; height: 16px; border-radius: 50%; background: #1890ff; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+        
+        /* 操作栏 */
+        .action-bar { margin-bottom: 16px; }
+        .btn { padding: 8px 20px; border-radius: 4px; font-size: 14px; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: #6B5CE7; color: #fff; }
+        .btn-primary:hover { background: #5a4bd4; }
+        .btn-default { background: #fff; border: 1px solid #d9d9d9; color: #666; }
+        .btn-default:hover { border-color: #6B5CE7; color: #6B5CE7; }
+        .btn-danger { color: #ff4d4f; background: none; padding: 4px 8px; }
+        .btn-danger:hover { color: #ff7875; }
+        .btn-link { color: #6B5CE7; background: none; padding: 4px 8px; }
+        .btn-link:hover { color: #5a4bd4; }
+        
+        /* 表格容器 */
+        .table-wrapper { background: #fff; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .table-scroll { overflow-x: auto; }
+        .data-table { width: 100%; min-width: 600px; border-collapse: collapse; }
+        .data-table th { background: #fafafa; padding: 14px 16px; text-align: left; font-weight: 500; color: #666; font-size: 14px; border-bottom: 1px solid #e8e8e8; white-space: nowrap; }
+        .data-table td { padding: 16px; border-bottom: 1px solid #f0f0f0; font-size: 14px; color: #333; }
+        .data-table tr:hover { background: #fafafa; }
+        .data-table tr:last-child td { border-bottom: none; }
+        
+        /* 序号 */
+        .seq-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: #f0f0f0; border-radius: 4px; font-size: 12px; color: #666; font-weight: 500; }
+        
+        /* 排序值 */
+        .sort-value { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; padding: 4px 12px; background: #f6ffed; border: 1px solid #b7eb8f; border-radius: 4px; color: #52c41a; font-weight: 500; }
+        
+        /* 操作列 */
+        .action-cell { display: flex; gap: 8px; }
+        
+        /* 空状态 */
+        .empty-state { padding: 60px 20px; text-align: center; color: #999; }
+        
+        /* 分页 */
+        .pagination-wrapper { padding: 16px 20px; border-top: 1px solid #f0f0f0; display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+        .page-info { color: #666; font-size: 14px; margin-right: 8px; }
+        .page-btn { padding: 5px 12px; border: 1px solid #d9d9d9; background: #fff; color: #666; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
+        .page-btn:hover { border-color: #6B5CE7; color: #6B5CE7; }
+        .page-btn.active { background: #6B5CE7; color: #fff; border-color: #6B5CE7; }
+        .page-btn:disabled { color: #bfbfbf; cursor: not-allowed; border-color: #d9d9d9; }
+        .page-btn:disabled:hover { color: #bfbfbf; border-color: #d9d9d9; }
+        .page-input { width: 48px; padding: 5px; border: 1px solid #d9d9d9; border-radius: 4px; text-align: center; font-size: 14px; }
+        .page-size-select { padding: 5px 8px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; color: #666; }
+        
+        /* 弹窗遮罩 */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-overlay.active { display: flex; }
+        
+        /* 弹窗 */
+        .modal { background: #fff; border-radius: 8px; width: 480px; max-width: 90%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: modalSlideIn 0.3s ease; }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header { padding: 16px 24px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
+        .modal-title { font-size: 16px; font-weight: 600; color: #333; }
+        .modal-close { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #999; font-size: 18px; border-radius: 4px; }
+        .modal-close:hover { color: #666; background: #f5f5f5; }
+        .modal-body { padding: 24px; }
+        .form-item { margin-bottom: 20px; }
+        .form-item:last-child { margin-bottom: 0; }
+        .form-label { display: block; font-size: 14px; color: #333; margin-bottom: 8px; font-weight: 500; }
+        .form-label .required { color: #ff4d4f; margin-right: 4px; }
+        .form-input { width: 100%; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; transition: all 0.3s; }
+        .form-input:focus { outline: none; border-color: #6B5CE7; box-shadow: 0 0 0 2px rgba(107, 92, 231, 0.2); }
+        .form-input::placeholder { color: #bfbfbf; }
+        .form-hint { font-size: 12px; color: #999; margin-top: 6px; }
+        .modal-footer { padding: 12px 24px; border-top: 1px solid #f0f0f0; display: flex; justify-content: flex-end; gap: 12px; }
+        
+        /* 确认弹窗 */
+        .confirm-modal { width: 400px; }
+        .confirm-content { display: flex; gap: 16px; align-items: flex-start; }
+        .confirm-icon { width: 24px; height: 24px; border-radius: 50%; background: #ff4d4f; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+        .confirm-text { flex: 1; }
+        .confirm-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 8px; }
+        .confirm-desc { font-size: 14px; color: #666; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="main-layout">
+        <!-- 左侧深紫色侧边栏 -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">泰尔超优会</div>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-group">平台管理</div>
+                <div class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    <span>数据概览</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">🏪</span>
+                    <span>商家管理</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">👤</span>
+                    <span>用户管理</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">📦</span>
+                    <span>商品管理</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">📝</span>
+                    <span>订单管理</span>
+                </div>
+                
+                <div class="menu-group">系统配置</div>
+                <div class="menu-item active">
+                    <span class="menu-icon">⚙️</span>
+                    <span>字典管理</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">🔐</span>
+                    <span>权限管理</span>
+                </div>
+                <div class="menu-item">
+                    <span class="menu-icon">📋</span>
+                    <span>日志管理</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧内容区 -->
+        <div class="right-content">
+            <!-- 顶部白色标题栏 -->
+            <div class="top-header">
+                <div class="breadcrumb">
+                    <span>系统配置</span>
+                    <span>/</span>
+                    <span>字典管理</span>
+                    <span>/</span>
+                    <span class="current">退款顺序配置</span>
+                </div>
+                <div class="header-right">
+                    <div class="header-icon">🔔</div>
+                    <div class="header-icon">⚙️</div>
+                    <div class="user-avatar">管</div>
+                </div>
+            </div>
+            
+            <!-- 主内容区 -->
+            <div class="main-content">
+                <div class="page-header">
+                    <h1 class="page-title">退款顺序配置</h1>
+                </div>
+                
+                <!-- 提示条 -->
+                <div class="info-bar">
+                    <span class="info-icon">i</span>
+                    <span>数字越小越靠前，退款时按此顺序优先退还</span>
+                </div>
+                
+                <!-- 操作栏 -->
+                <div class="action-bar">
+                    <button class="btn btn-primary" onclick="openModal('add')">+ 新增</button>
+                </div>
+                
+                <!-- 表格 -->
+                <div class="table-wrapper">
+                    <div class="table-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">序号</th>
+                                    <th>退款来源名称</th>
+                                    <th style="width: 120px;">排序值</th>
+                                    <th style="width: 150px;">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <tr data-id="1">
+                                    <td><span class="seq-num">1</span></td>
+                                    <td>臻享积分</td>
+                                    <td><span class="sort-value">1</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="btn btn-link" onclick="openModal('edit', 1)">编辑</button>
+                                            <button class="btn btn-danger" onclick="openDeleteModal(1)">删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-id="2">
+                                    <td><span class="seq-num">2</span></td>
+                                    <td>储值</td>
+                                    <td><span class="sort-value">2</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="btn btn-link" onclick="openModal('edit', 2)">编辑</button>
+                                            <button class="btn btn-danger" onclick="openDeleteModal(2)">删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-id="3">
+                                    <td><span class="seq-num">3</span></td>
+                                    <td>在线支付</td>
+                                    <td><span class="sort-value">3</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <button class="btn btn-link" onclick="openModal('edit', 3)">编辑</button>
+                                            <button class="btn btn-danger" onclick="openDeleteModal(3)">删除</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 分页 -->
+                    <div class="pagination-wrapper">
+                        <span class="page-info">共 3 条</span>
+                        <select class="page-size-select">
+                            <option>10条/页</option>
+                            <option>20条/页</option>
+                            <option>50条/页</option>
+                        </select>
+                        <button class="page-btn" disabled>&lt;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn" disabled>&gt;</button>
+                        <span>前往</span>
+                        <input type="text" class="page-input" value="1">
+                        <span>页</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 新增/编辑弹窗 -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title" id="modalTitle">新增退款来源</span>
+                <span class="modal-close" onclick="closeModal('editModal')">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-item">
+                    <label class="form-label"><span class="required">*</span>退款来源名称</label>
+                    <input type="text" class="form-input" id="sourceName" placeholder="请输入退款来源名称" maxlength="20">
+                    <div class="form-hint">最多20个字符</div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label"><span class="required">*</span>排序值</label>
+                    <input type="number" class="form-input" id="sortValue" placeholder="请输入排序值" min="1" max="999">
+                    <div class="form-hint">请输入1-999之间的整数，数字越小排序越靠前</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" onclick="closeModal('editModal')">取消</button>
+                <button class="btn btn-primary" onclick="saveData()">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 删除确认弹窗 -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal confirm-modal">
+            <div class="modal-header">
+                <span class="modal-title">确认删除</span>
+                <span class="modal-close" onclick="closeModal('deleteModal')">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-content">
+                    <span class="confirm-icon">!</span>
+                    <div class="confirm-text">
+                        <div class="confirm-title">确定要删除该退款来源吗？</div>
+                        <div class="confirm-desc">删除后将无法恢复，请谨慎操作。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" onclick="closeModal('deleteModal')">取消</button>
+                <button class="btn btn-primary" onclick="confirmDelete()" style="background: #ff4d4f;">确认删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 数据存储
+        let data = [
+            { id: 1, name: '臻享积分', sort: 1 },
+            { id: 2, name: '储值', sort: 2 },
+            { id: 3, name: '在线支付', sort: 3 }
+        ];
+        let currentId = null;
+        let deleteId = null;
+        
+        // 打开弹窗
+        function openModal(type, id) {
+            const modal = document.getElementById('editModal');
+            const title = document.getElementById('modalTitle');
+            const nameInput = document.getElementById('sourceName');
+            const sortInput = document.getElementById('sortValue');
+            
+            if (type === 'add') {
+                title.textContent = '新增退款来源';
+                nameInput.value = '';
+                sortInput.value = '';
+                currentId = null;
+            } else {
+                title.textContent = '编辑退款来源';
+                const item = data.find(d => d.id === id);
+                if (item) {
+                    nameInput.value = item.name;
+                    sortInput.value = item.sort;
+                    currentId = id;
+                }
+            }
+            
+            modal.classList.add('active');
+        }
+        
+        // 关闭弹窗
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // 打开删除确认弹窗
+        function openDeleteModal(id) {
+            deleteId = id;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+        
+        // 确认删除
+        function confirmDelete() {
+            if (deleteId) {
+                data = data.filter(d => d.id !== deleteId);
+                renderTable();
+                closeModal('deleteModal');
+                deleteId = null;
+            }
+        }
+        
+        // 保存数据
+        function saveData() {
+            const name = document.getElementById('sourceName').value.trim();
+            const sort = parseInt(document.getElementById('sortValue').value);
+            
+            if (!name) {
+                alert('请输入退款来源名称');
+                return;
+            }
+            if (!sort || sort < 1 || sort > 999) {
+                alert('请输入1-999之间的整数');
+                return;
+            }
+            
+            if (currentId) {
+                // 编辑
+                const item = data.find(d => d.id === currentId);
+                if (item) {
+                    item.name = name;
+                    item.sort = sort;
+                }
+            } else {
+                // 新增
+                const newId = Math.max(...data.map(d => d.id), 0) + 1;
+                data.push({ id: newId, name: name, sort: sort });
+            }
+            
+            // 按排序值排序
+            data.sort((a, b) => a.sort - b.sort);
+            
+            renderTable();
+            closeModal('editModal');
+        }
+        
+        // 渲染表格
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-id', item.id);
+                row.innerHTML = `
+                    <td><span class="seq-num">${index + 1}</span></td>
+                    <td>${item.name}</td>
+                    <td><span class="sort-value">${item.sort}</span></td>
+                    <td>
+                        <div class="action-cell">
+                            <button class="btn btn-link" onclick="openModal('edit', ${item.id})">编辑</button>
+                            <button class="btn btn-danger" onclick="openDeleteModal(${item.id})">删除</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // 更新分页信息
+            document.querySelector('.page-info').textContent = `共 ${data.length} 条`;
+        }
+        
+        // 点击遮罩关闭弹窗
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
