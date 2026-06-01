@@ -343,67 +343,42 @@
             <div class="prototype-box">
                 <h4>原型链接</h4>
                 <div class="prototype-links">
+                    <a href="https://ddyuan-spec.github.io/-/prd_v1.0_preview_files/req_exchange_client_v2.html" class="prototype-link" target="_blank">客户端-仅换货完整交互</a>
                     <a href="https://ddyuan-spec.github.io/-/prd_v1.0_preview_files/merchant_aftersales_combined.html" class="prototype-link" target="_blank">商家端原型</a>
                 </div>
             </div>
             
-            <div class="section-subtitle">3.1 需求背景</div>
-            <p class="desc-text">当前售后类型包括退货退款、仅退款，缺少"仅换货"类型。用户收到商品后，商品存在质量问题或规格不符，但用户仍希望保留该商品（更换同款新品），此时需要支持仅换货流程。</p>
+            <div class="section-subtitle">3.1 功能概述</div>
+            <p class="desc-text">新增"仅换货"售后类型，用户可在订单状态为"待售后"或"已完成"时申请，仅支持同款商品（相同SKU）换货，无退款金额。</p>
             
-            <div class="section-subtitle">3.2 需求内容</div>
-            <p class="desc-text"><strong>3.2.1 新增售后类型：仅换货</strong></p>
+            <div class="section-subtitle">3.2 客户端功能</div>
             <table class="field-table">
-                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
-                <tr><td>售后类型</td><td>用户申请售后时选择</td><td>新增"仅换货"选项，与"退货退款"、"仅退款"并列</td></tr>
-                <tr><td>适用场景</td><td>商品质量问题/规格不符，用户希望更换同款</td><td>仅支持同款商品换货（相同SKU），不支持换其他商品</td></tr>
-                <tr><td>订单状态要求</td><td>已发货或已收货订单可申请</td><td>待发货订单不支持仅换货（未发货可直接修改订单）</td></tr>
+                <tr><th>功能模块</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>选择售后类型</td><td>申请售后时选择类型</td><td>三个选项：仅退款、退货退款、仅换货（新增）</td></tr>
+                <tr><td>申请页面</td><td>填写仅换货申请</td><td>包含：商品信息（不可修改）、申请原因（必填）、上传凭证（选填）；<strong>无退款金额</strong></td></tr>
+                <tr><td>售后单详情</td><td>查看仅换货进度</td><td>展示状态、退货地址、商品信息、申请信息、协商历史；可操作：撤销申请、快递退货、确认收货</td></tr>
+                <tr><td>填写退货物流</td><td>商家同意后退货</td><td>选择物流公司、填写物流单号</td></tr>
             </table>
             
-            <p class="desc-text"><strong>3.2.2 仅换货流程</strong></p>
+            <div class="section-subtitle">3.3 商家端功能</div>
             <table class="field-table">
-                <tr><th>流程节点</th><th>用户端</th><th>商家端</th><th>系统</th></tr>
-                <tr><td>1. 用户申请</td><td>选择"仅换货"，填写原因，提交申请</td><td>-</td><td>生成售后单，状态：待商家审核</td></tr>
-                <tr><td>2. 商家审核</td><td>-</td><td>审核换货申请，同意/拒绝</td><td>同意→状态变为"待用户退货"；拒绝→售后单关闭</td></tr>
-                <tr><td>3. 用户退货</td><td>填写退货物流单号，寄回商品</td><td>-</td><td>状态变为"待商家确认收货"</td></tr>
-                <tr><td>4. 商家收货</td><td>-</td><td>确认收货并验货，生成换货订单</td><td>自动生成新订单（换货订单），原订单保持已完成</td></tr>
-                <tr><td>5. 换货发货</td><td>查看换货订单物流信息</td><td>对换货订单进行发货操作</td><td>换货订单走正常订单发货流程</td></tr>
+                <tr><th>功能模块</th><th>功能说明</th><th>业务规则</th></tr>
+                <tr><td>售后审核</td><td>审核仅换货申请</td><td>同意→进入待用户退货；拒绝→售后单关闭</td></tr>
+                <tr><td>确认收货</td><td>收到退货商品后确认</td><td>确认后生成换货订单（金额¥0，同款SKU）</td></tr>
+                <tr><td>换货发货</td><td>对换货订单发货</td><td>走正常订单发货流程</td></tr>
             </table>
             
-            <p class="desc-text"><strong>3.2.3 换货订单规则</strong></p>
+            <div class="section-subtitle">3.4 业务规则</div>
             <table class="field-table">
-                <tr><th>字段名称</th><th>功能说明</th><th>业务规则</th></tr>
-                <tr><td>换货订单生成</td><td>商家确认收货后自动生成</td><td>新订单与原订单关联（记录换货关系）；订单金额：¥0（免支付）；商品信息：与原商品相同SKU</td></tr>
-                <tr><td>换货订单状态</td><td>走正常订单状态流转</td><td>待发货→待收货→已完成</td></tr>
-                <tr><td>换货订单售后</td><td>换货订单是否支持再次售后</td><td>支持，走正常售后流程（有金额限制，见3.2.4）</td></tr>
-                <tr><td>收益计算</td><td>换货订单是否产生收益</td><td>换货订单¥0支付，不产生收益</td></tr>
+                <tr><th>规则类型</th><th>规则说明</th></tr>
+                <tr><td>申请条件</td><td>订单状态=待售后/已完成；同一商品仅能换货一次；换货完成后不可再次申请仅换货</td></tr>
+                <tr><td>商品限制</td><td>仅支持同款换货（相同SKU），不支持跨SKU换货</td></tr>
+                <tr><td>撤销限制</td><td>商家发货后不可撤销售后单</td></tr>
+                <tr><td>换货订单</td><td>金额¥0，不产生收益；支持再次售后（仅限换货）</td></tr>
             </table>
             
-            <p class="desc-text"><strong>3.2.4 仅换货售后限制</strong></p>
-            <table class="field-table">
-                <tr><th>限制类型</th><th>规则说明</th></tr>
-                <tr><td>次数限制</td><td>一个订单仅支持一次仅换货申请；换货后的新订单可再次申请售后（包括退货退款、仅退款、仅换货）</td></tr>
-                <tr><td>金额限制</td><td>换货订单金额为¥0，不支持退款类售后（退货退款、仅退款）；换货订单仅支持再次换货</td></tr>
-                <tr><td>商品限制</td><td>仅支持同款换货（相同SKU）；不支持跨SKU换货</td></tr>
-            </table>
-            
-            <div class="section-subtitle">3.3 端口范围</div>
-            <table class="impact-table">
-                <tr><th>端口</th><th>功能范围</th></tr>
-                <tr><td>用户端</td><td>售后申请页面新增"仅换货"选项；售后详情展示换货进度；查看换货订单</td></tr>
-                <tr><td>商家端</td><td>售后审核支持仅换货类型；确认收货生成换货订单；换货订单管理</td></tr>
-                <tr><td>系统</td><td>售后单类型扩展；换货订单自动生成逻辑；订单关联关系记录</td></tr>
-            </table>
-            
-            <div class="section-subtitle">3.4 状态流转</div>
-            <table class="field-table">
-                <tr><th>售后单状态</th><th>触发条件</th><th>说明</th></tr>
-                <tr><td>待商家审核</td><td>用户提交仅换货申请</td><td>商家需在48小时内处理</td></tr>
-                <tr><td>待用户退货</td><td>商家审核通过</td><td>用户需填写退货物流</td></tr>
-                <tr><td>待商家确认收货</td><td>用户填写退货物流</td><td>商家验货后确认收货</td></tr>
-                <tr><td>换货处理中</td><td>商家确认收货</td><td>系统生成换货订单，商家发货</td></tr>
-                <tr><td>已完成</td><td>换货订单完成</td><td>用户确认收货或自动完成</td></tr>
-                <tr><td>已关闭</td><td>商家拒绝或用户取消</td><td>售后单关闭</td></tr>
-            </table>
+            <div class="section-subtitle">3.5 状态流转</div>
+            <p class="desc-text">用户申请 → 待商家审核 → 待用户退货 → 待商家确认收货 → 换货处理中（商家发货）→ 待用户确认收货 → 已完成</p>
         </div>
     </div>
 </body>
