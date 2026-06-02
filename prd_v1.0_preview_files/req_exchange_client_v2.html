@@ -647,6 +647,212 @@
             opacity: 0.6;
             pointer-events: none;
         }
+        
+        /* 自动收货提示 */
+        .auto-receipt-notice {
+            background: linear-gradient(135deg, #FFF5F2 0%, #FFEDE8 100%);
+            border: 1px solid #FFD4C7;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .auto-receipt-icon {
+            width: 20px;
+            height: 20px;
+            background: #FF6B35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .auto-receipt-icon::before {
+            content: '!';
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .auto-receipt-text {
+            flex: 1;
+            font-size: 13px;
+            color: #FF6B35;
+            line-height: 1.4;
+        }
+        
+        .auto-receipt-countdown {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+        
+        /* 售后完成状态 */
+        .complete-status-banner {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            padding: 24px 16px;
+            text-align: center;
+        }
+        
+        .complete-status-icon {
+            width: 60px;
+            height: 60px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        
+        .complete-status-icon::before {
+            content: '✓';
+            color: #fff;
+            font-size: 32px;
+        }
+        
+        .complete-status-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #2E7D32;
+            margin-bottom: 8px;
+        }
+        
+        .complete-status-desc {
+            font-size: 13px;
+            color: #558B2F;
+            line-height: 1.5;
+        }
+        
+        /* 商家端提示 */
+        .merchant-notice-banner {
+            background: #FFF8E1;
+            border-left: 4px solid #FFC107;
+            padding: 12px 16px;
+            margin: 10px 12px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .merchant-notice-title {
+            font-size: 14px;
+            color: #F57C00;
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .merchant-notice-title::before {
+            content: '!';
+            width: 16px;
+            height: 16px;
+            background: #FFC107;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .merchant-notice-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* 商家端导航标签 */
+        .merchant-nav {
+            background: #fff;
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .merchant-nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 14px 0;
+            font-size: 14px;
+            color: #666;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .merchant-nav-item.active {
+            color: #FF6B35;
+            font-weight: 500;
+        }
+        
+        .merchant-nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background: #FF6B35;
+            border-radius: 2px;
+        }
+        
+        .merchant-badge {
+            position: absolute;
+            top: 8px;
+            right: 20px;
+            background: #FF6B35;
+            color: #fff;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 8px;
+        }
+        
+        /* 售后单列表 */
+        .service-order-item {
+            background: #fff;
+            margin: 10px 12px;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .service-order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .service-order-no {
+            font-size: 13px;
+            color: #999;
+        }
+        
+        .service-order-status {
+            font-size: 13px;
+            color: #FF6B35;
+            font-weight: 500;
+        }
+        
+        .service-order-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            justify-content: flex-end;
+        }
+        
+        .service-order-actions .btn {
+            height: 36px;
+            font-size: 13px;
+            padding: 0 20px;
+            flex: none;
+        }
     </style>
 </head>
 <body>
@@ -944,6 +1150,15 @@
                     </div>
                 </div>
                 
+                <!-- 自动收货提示 -->
+                <div class="auto-receipt-notice">
+                    <div class="auto-receipt-icon"></div>
+                    <div class="auto-receipt-text">
+                        <div>7天内未确认收货，系统将自动确认收货</div>
+                        <div class="auto-receipt-countdown">剩余时间：5天12小时30分</div>
+                    </div>
+                </div>
+                
                 <div class="logistics-section">
                     <div class="logistics-header">
                         <span class="logistics-company">顺丰速运</span>
@@ -1010,6 +1225,162 @@
             <div class="bottom-actions">
                 <button class="btn btn-outline">查看物流</button>
                 <button class="btn btn-primary" onclick="confirmReceipt()">确认收货</button>
+            </div>
+        </div>
+        
+        <!-- 页面7：售后单完成页面 -->
+        <div class="page" id="page-service-complete">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">仅换货详情</div>
+            </div>
+            
+            <div class="page-content">
+                <div class="complete-status-banner">
+                    <div class="complete-status-icon"></div>
+                    <div class="complete-status-title">售后单已完成</div>
+                    <div class="complete-status-desc">您已确认收货，本次售后服务已完成</div>
+                </div>
+                
+                <div class="card" style="margin-top: 10px;">
+                    <div style="font-size: 13px; color: #666; line-height: 1.6; padding: 8px 0;">
+                        <div style="margin-bottom: 8px;"><strong>订单状态说明：</strong></div>
+                        <div>订单状态维持原状态，此商品可申请其他类型售后</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">换货商品</div>
+                    <div class="product-info">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div>
+                                <div class="product-name">智能蓝牙耳机 无线降噪 长续航 高音质运动耳机</div>
+                                <div class="product-spec">黑色 | 标准版（换货）</div>
+                            </div>
+                            <div class="product-price-qty">
+                                <span class="product-price">¥199.00</span>
+                                <span class="product-qty">x1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">售后类型</span>
+                        <span class="info-value">仅换货</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请原因</span>
+                        <span class="info-value">商品质量问题</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请时间</span>
+                        <span class="info-value">2024-06-05 14:30:00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">完成时间</span>
+                        <span class="info-value">2024-06-10 15:20:00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">售后单号</span>
+                        <span class="info-value">SH202406050001</span>
+                    </div>
+                </div>
+                
+                <div class="history-entry" onclick="goToPage('page-negotiation-history')">
+                    <span class="history-text">协商历史</span>
+                    <div class="history-arrow"></div>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="btn btn-outline" onclick="goToPage('page-order-detail')">返回订单</button>
+                <button class="btn btn-primary" onclick="showServiceModal()">再次申请售后</button>
+            </div>
+        </div>
+        
+        <!-- 页面8：商家端待审核页面 -->
+        <div class="page" id="page-merchant-pending">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">售后管理</div>
+            </div>
+            
+            <div class="merchant-nav">
+                <div class="merchant-nav-item active">待审核<span class="merchant-badge">3</span></div>
+                <div class="merchant-nav-item">待退货</div>
+                <div class="merchant-nav-item">待发货</div>
+                <div class="merchant-nav-item">已完成</div>
+            </div>
+            
+            <div class="page-content">
+                <!-- 商家端逾期提示 -->
+                <div class="merchant-notice-banner">
+                    <div class="merchant-notice-title">重要提示</div>
+                    <div class="merchant-notice-text">如您逾期未响应申请，视作同意买家申请，系统会自动发货给买家</div>
+                </div>
+                
+                <div class="service-order-item">
+                    <div class="service-order-header">
+                        <span class="service-order-no">售后单号：SH202406050001</span>
+                        <span class="service-order-status">待审核</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div>
+                                <div class="product-name">智能蓝牙耳机 无线降噪 长续航 高音质运动耳机</div>
+                                <div class="product-spec">黑色 | 标准版</div>
+                            </div>
+                            <div class="product-price-qty">
+                                <span class="product-price">¥199.00</span>
+                                <span class="product-qty">x1</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 12px; font-size: 13px; color: #666;">
+                        售后类型：仅换货 | 原因：商品质量问题
+                    </div>
+                    <div style="margin-top: 8px; font-size: 12px; color: #999;">
+                        申请时间：2024-06-05 14:30:00
+                    </div>
+                    <div class="service-order-actions">
+                        <button class="btn btn-outline">拒绝</button>
+                        <button class="btn btn-primary">同意换货</button>
+                    </div>
+                </div>
+                
+                <div class="service-order-item">
+                    <div class="service-order-header">
+                        <span class="service-order-no">售后单号：SH202406050002</span>
+                        <span class="service-order-status">待审核</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div>
+                                <div class="product-name">无线充电器 快充版 适用于苹果安卓</div>
+                                <div class="product-spec">白色</div>
+                            </div>
+                            <div class="product-price-qty">
+                                <span class="product-price">¥89.00</span>
+                                <span class="product-qty">x2</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 12px; font-size: 13px; color: #666;">
+                        售后类型：仅换货 | 原因：商品破损/污渍
+                    </div>
+                    <div style="margin-top: 8px; font-size: 12px; color: #999;">
+                        申请时间：2024-06-05 12:15:00
+                    </div>
+                    <div class="service-order-actions">
+                        <button class="btn btn-outline">拒绝</button>
+                        <button class="btn btn-primary">同意换货</button>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -1116,7 +1487,7 @@
         function confirmReceipt() {
             if (confirm('确认已收到换货商品？')) {
                 alert('确认收货成功，售后完成！');
-                goToPage('page-order-detail');
+                goToPage('page-service-complete');
             }
         }
         
