@@ -601,6 +601,293 @@
         .tab-content.active {
             display: block;
         }
+
+        /* ========== 弹窗样式 ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-container {
+            background: #fff;
+            border-radius: 8px;
+            width: 520px;
+            max-width: 90vw;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .modal-close {
+            cursor: pointer;
+            color: #999;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #666;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-tip {
+            background: #fff7e6;
+            border: 1px solid #ffd591;
+            border-radius: 4px;
+            padding: 12px 16px;
+            color: #ff6a00;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-tip-icon {
+            font-size: 16px;
+        }
+
+        /* 发货弹窗表单 */
+        .ship-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ship-form-section {
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+        }
+
+        .ship-form-section-title {
+            padding: 12px 16px;
+            background: #fafafa;
+            border-bottom: 1px solid #e8e8e8;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .ship-form-section-body {
+            padding: 16px;
+        }
+
+        .ship-product-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .ship-product-item:last-child {
+            border-bottom: none;
+        }
+
+        .ship-product-checkbox {
+            width: 16px;
+            height: 16px;
+        }
+
+        .ship-product-img {
+            width: 48px;
+            height: 48px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 10px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .ship-product-info {
+            flex: 1;
+        }
+
+        .ship-product-name {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .ship-product-attr {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .ship-product-qty {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .ship-qty-input {
+            width: 80px;
+            padding: 6px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .ship-form-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ship-form-label {
+            width: 80px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .ship-form-select {
+            width: 200px;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        .ship-form-input {
+            width: 200px;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e8e8e8;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-modal-primary {
+            padding: 8px 24px;
+            background: #7c3aed;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-modal-primary:hover {
+            background: #6d28d9;
+        }
+
+        .btn-modal-danger {
+            padding: 8px 24px;
+            background: #ff4d4f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-modal-danger:hover {
+            background: #d9363e;
+        }
+
+        .btn-modal-default {
+            padding: 8px 24px;
+            background: #fff;
+            color: #666;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-modal-default:hover {
+            border-color: #7c3aed;
+            color: #7c3aed;
+        }
+
+        /* 操作按钮样式 */
+        .action-btn {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #7c3aed;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .action-btn:hover {
+            background: #6d28d9;
+        }
+
+        .action-tip {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .action-link-block {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* 物流信息展示 */
+        .logistics-display {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .logistics-display-item {
+            margin-bottom: 4px;
+        }
+
+        .logistics-display-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 完成时间展示 */
+        .complete-time {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #999;
+        }
     </style>
 </head>
 <body>
@@ -745,6 +1032,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- 仅换货-待审核 -->
                         <tr>
                             <td><div class="checkbox"></div></td>
                             <td>
@@ -779,8 +1067,12 @@
                                 </div>
                             </td>
                             <td><span class="tag-refund">待审核</span></td>
-                            <td><span class="action-link" onclick="showDetailPage()">查看详情</span></td>
+                            <td>
+                                <span class="action-btn" onclick="openAuditModal('SS2059241833170116608-TK01')">审核</span>
+                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
+                            </td>
                         </tr>
+                        <!-- 仅换货-待客户退货 -->
                         <tr>
                             <td><div class="checkbox"></div></td>
                             <td>
@@ -814,14 +1106,18 @@
                                     <span class="user-level">社区服务官</span>
                                 </div>
                             </td>
-                            <td><span class="tag-refund">待审核</span></td>
-                            <td><span class="action-link" onclick="showDetailPage()">查看详情</span></td>
+                            <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #e6f7ff; color: #1890ff;">待客户退货</span></td>
+                            <td>
+                                <span class="action-tip">等待客户退货</span>
+                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
+                            </td>
                         </tr>
+                        <!-- 仅换货-客户已退货 -->
                         <tr>
                             <td><div class="checkbox"></div></td>
                             <td>
                                 <div class="order-header">
-                                    <span class="tag-refund">退款单</span>
+                                    <span class="tag-exchange">仅换货</span>
                                     <span class="order-no">SS2058848721899196416-TK01</span>
                                 </div>
                                 <div class="order-time" style="margin-bottom: 12px; padding-left: 0;">申请时间：2026-05-26 16:05:42</div>
@@ -850,9 +1146,13 @@
                                     <span class="user-level">社区服务官</span>
                                 </div>
                             </td>
-                            <td><span class="tag-refund" style="background: #f6ffed; color: #52c41a;">处理中</span></td>
-                            <td><span class="action-link" onclick="showDetailPage()">查看详情</span></td>
+                            <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #fff7e6; color: #ff6a00;">客户已退货</span></td>
+                            <td>
+                                <span class="action-btn" onclick="openShipModal('SS2058848721899196416-TK01')">确认收货并发货</span>
+                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
+                            </td>
                         </tr>
+                        <!-- 仅换货-已发货 -->
                         <tr>
                             <td><div class="checkbox"></div></td>
                             <td>
@@ -886,8 +1186,55 @@
                                     <span class="user-level">社区服务官</span>
                                 </div>
                             </td>
-                            <td><span class="tag-refund" style="background: #f6ffed; color: #52c41a;">处理中</span></td>
-                            <td><span class="action-link" onclick="showDetailPage()">查看详情</span></td>
+                            <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #f6ffed; color: #52c41a;">已发货待客户收货</span></td>
+                            <td>
+                                <span class="action-tip">等待客户收货</span>
+                                <div class="logistics-display">
+                                    <div class="logistics-display-item">物流公司：顺丰速运</div>
+                                    <div class="logistics-display-item">物流单号：SF1234567890</div>
+                                </div>
+                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
+                            </td>
+                        </tr>
+                        <!-- 仅换货-已完成 -->
+                        <tr>
+                            <td><div class="checkbox"></div></td>
+                            <td>
+                                <div class="order-header">
+                                    <span class="tag-exchange">仅换货</span>
+                                    <span class="order-no">SS2059001234567890123-TK01</span>
+                                </div>
+                                <div class="order-time" style="margin-bottom: 12px; padding-left: 0;">申请时间：2026-05-25 10:30:15</div>
+                                <div class="product-cell">
+                                    <div class="product-img" style="background: #7c3aed;">
+                                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="3" y1="9" x2="21" y2="9"></line>
+                                            <line x1="9" y1="21" x2="9" y2="9"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="product-info">
+                                        <div class="product-name">泰美畅健康饮品</div>
+                                        <div class="product-attr">规格：30瓶装</div>
+                                        <div class="product-price">单价：¥599.00 x3</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="price-orange">1797.00</td>
+                            <td class="price-orange">1797.00</td>
+                            <td class="price-normal">0.00</td>
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-id">U789456</div>
+                                    <div class="user-phone">15333332405</div>
+                                    <span class="user-level">社区服务官</span>
+                                </div>
+                            </td>
+                            <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #f6ffed; color: #52c41a;">售后单完成</span></td>
+                            <td>
+                                <div class="complete-time">完成时间：2026-05-28 14:20:30</div>
+                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -1212,6 +1559,88 @@
         </div>
     </div>
 
+    <!-- 审核弹窗 -->
+    <div class="modal-overlay" id="audit-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <span class="modal-title">审核仅换货申请</span>
+                <span class="modal-close" onclick="closeAuditModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-tip">
+                    <span class="modal-tip-icon">&#9888;</span>
+                    <span>同意换货后，需等待买家退货</span>
+                </div>
+                <div style="font-size: 14px; color: #666; margin-bottom: 16px;">
+                    <div style="margin-bottom: 8px;"><span style="color: #999;">工单号：</span><span id="audit-order-no">SS2059241833170116608-TK01</span></div>
+                    <div style="margin-bottom: 8px;"><span style="color: #999;">申请商品：</span>安美来 x2</div>
+                    <div style="margin-bottom: 8px;"><span style="color: #999;">申请原因：</span>商品质量问题</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-default" onclick="closeAuditModal()">取消</button>
+                <button class="btn-modal-danger" onclick="rejectExchange()">拒绝换货</button>
+                <button class="btn-modal-primary" onclick="approveExchange()">同意换货</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 发货弹窗 -->
+    <div class="modal-overlay" id="ship-modal">
+        <div class="modal-container" style="width: 600px;">
+            <div class="modal-header">
+                <span class="modal-title">确认收货并发货</span>
+                <span class="modal-close" onclick="closeShipModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="ship-form">
+                    <!-- 商品选择 -->
+                    <div class="ship-form-section">
+                        <div class="ship-form-section-title">选择发货商品</div>
+                        <div class="ship-form-section-body">
+                            <div class="ship-product-item">
+                                <input type="checkbox" class="ship-product-checkbox" checked>
+                                <div class="ship-product-img">商品图</div>
+                                <div class="ship-product-info">
+                                    <div class="ship-product-name">组合套餐15泰美畅+15亿力高</div>
+                                    <div class="ship-product-attr">规格：15泰美畅+15亿力高</div>
+                                </div>
+                                <div class="ship-product-qty">申请数量：2</div>
+                                <input type="number" class="ship-qty-input" value="2" max="2" min="1">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 物流信息 -->
+                    <div class="ship-form-section">
+                        <div class="ship-form-section-title">物流信息</div>
+                        <div class="ship-form-section-body">
+                            <div class="ship-form-row" style="margin-bottom: 16px;">
+                                <span class="ship-form-label">物流公司：</span>
+                                <select class="ship-form-select">
+                                    <option value="">请选择物流公司</option>
+                                    <option value="sf">顺丰速运</option>
+                                    <option value="jd">京东物流</option>
+                                    <option value="zt">中通快递</option>
+                                    <option value="yt">圆通速递</option>
+                                    <option value="st">申通快递</option>
+                                    <option value="yz">邮政EMS</option>
+                                </select>
+                            </div>
+                            <div class="ship-form-row">
+                                <span class="ship-form-label">物流单号：</span>
+                                <input type="text" class="ship-form-input" placeholder="请输入物流单号">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-default" onclick="closeShipModal()">取消</button>
+                <button class="btn-modal-primary" onclick="confirmShip()">确认发货</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         /**
          * 显示详情页：隐藏列表页，显示详情页，切换面包屑
@@ -1265,6 +1694,74 @@
                 activeContent.classList.add('active');
             }
         }
+
+        /**
+         * 打开审核弹窗
+         * @param {string} orderNo - 工单号
+         */
+        function openAuditModal(orderNo) {
+            document.getElementById('audit-order-no').textContent = orderNo;
+            document.getElementById('audit-modal').classList.add('active');
+        }
+
+        /**
+         * 关闭审核弹窗
+         */
+        function closeAuditModal() {
+            document.getElementById('audit-modal').classList.remove('active');
+        }
+
+        /**
+         * 同意换货
+         */
+        function approveExchange() {
+            alert('已同意换货申请，等待客户退货');
+            closeAuditModal();
+        }
+
+        /**
+         * 拒绝换货
+         */
+        function rejectExchange() {
+            alert('已拒绝换货申请');
+            closeAuditModal();
+        }
+
+        /**
+         * 打开发货弹窗
+         * @param {string} orderNo - 工单号
+         */
+        function openShipModal(orderNo) {
+            document.getElementById('ship-modal').classList.add('active');
+        }
+
+        /**
+         * 关闭发货弹窗
+         */
+        function closeShipModal() {
+            document.getElementById('ship-modal').classList.remove('active');
+        }
+
+        /**
+         * 确认发货
+         */
+        function confirmShip() {
+            alert('已确认收货并发货');
+            closeShipModal();
+        }
+
+        // 点击弹窗外部区域关闭弹窗
+        document.getElementById('audit-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAuditModal();
+            }
+        });
+
+        document.getElementById('ship-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeShipModal();
+            }
+        });
     </script>
 </body>
 </html>
