@@ -64,6 +64,7 @@
         .data-table { width: 100%; border-collapse: collapse; }
         .data-table th { background: #fafafa; padding: 12px 16px; text-align: left; font-weight: 500; color: #666; font-size: 14px; border-bottom: 1px solid #e8e8e8; }
         .data-table td { padding: 16px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+        .data-table tbody tr { cursor: pointer; }
         .data-table tr:hover { background: #fafafa; }
 
         /* 订单信息行 */
@@ -92,9 +93,6 @@
         .user-phone { color: #666; margin-bottom: 4px; }
         .user-level { display: inline-block; padding: 2px 8px; background: #52c41a; color: #fff; border-radius: 4px; font-size: 12px; }
 
-        /* 操作链接 */
-        .action-link { color: #7c3aed; cursor: pointer; font-size: 14px; }
-
         /* 分页 */
         .pagination { display: flex; justify-content: flex-end; align-items: center; padding: 16px 20px; gap: 8px; }
         .page-info { color: #666; font-size: 14px; margin-right: 16px; }
@@ -114,9 +112,6 @@
             background: #fff;
             padding: 20px;
             border-radius: 0 0 4px 4px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
         }
 
         .status-main {
@@ -147,6 +142,62 @@
             color: #ff6a00;
             font-size: 14px;
             font-weight: 500;
+        }
+
+        /* 红色警示标签 */
+        .status-warning-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            background: #fff1f0;
+            color: #ff4d4f;
+            border: 1px solid #ffa39e;
+            margin-top: 4px;
+        }
+
+        /* 操作按钮区 */
+        .action-buttons-area {
+            background: #fff;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-action-primary {
+            padding: 8px 24px;
+            background: #7c3aed;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-action-primary:hover {
+            background: #6d28d9;
+        }
+
+        .btn-action-secondary {
+            padding: 8px 24px;
+            background: #fff;
+            color: #666;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-action-secondary:hover {
+            border-color: #7c3aed;
+            color: #7c3aed;
+        }
+
+        .action-gray-tip {
+            color: #999;
+            font-size: 14px;
         }
 
         /* 信息卡片 */
@@ -602,286 +653,6 @@
             display: block;
         }
 
-        /* ========== 弹窗样式 ========== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-container {
-            background: #fff;
-            border-radius: 8px;
-            width: 520px;
-            max-width: 90vw;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .modal-header {
-            padding: 16px 24px;
-            border-bottom: 1px solid #e8e8e8;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .modal-title {
-            font-size: 16px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .modal-close {
-            cursor: pointer;
-            color: #999;
-            font-size: 20px;
-            line-height: 1;
-        }
-
-        .modal-close:hover {
-            color: #666;
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .modal-tip {
-            background: #fff7e6;
-            border: 1px solid #ffd591;
-            border-radius: 4px;
-            padding: 12px 16px;
-            color: #ff6a00;
-            font-size: 14px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .modal-tip-icon {
-            font-size: 16px;
-        }
-
-        /* 发货弹窗表单 */
-        .ship-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .ship-form-section {
-            border: 1px solid #e8e8e8;
-            border-radius: 4px;
-        }
-
-        .ship-form-section-title {
-            padding: 12px 16px;
-            background: #fafafa;
-            border-bottom: 1px solid #e8e8e8;
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .ship-form-section-body {
-            padding: 16px;
-        }
-
-        .ship-product-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .ship-product-item:last-child {
-            border-bottom: none;
-        }
-
-        .ship-product-checkbox {
-            width: 16px;
-            height: 16px;
-        }
-
-        .ship-product-img {
-            width: 48px;
-            height: 48px;
-            background: #f5f5f5;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 10px;
-            border: 1px solid #e8e8e8;
-        }
-
-        .ship-product-info {
-            flex: 1;
-        }
-
-        .ship-product-name {
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .ship-product-attr {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .ship-product-qty {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .ship-qty-input {
-            width: 80px;
-            padding: 6px 12px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .ship-form-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .ship-form-label {
-            width: 80px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .ship-form-select {
-            width: 200px;
-            padding: 8px 12px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            font-size: 14px;
-            background: #fff;
-        }
-
-        .ship-form-input {
-            width: 200px;
-            padding: 8px 12px;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .modal-footer {
-            padding: 16px 24px;
-            border-top: 1px solid #e8e8e8;
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-
-        .btn-modal-primary {
-            padding: 8px 24px;
-            background: #7c3aed;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .btn-modal-primary:hover {
-            background: #6d28d9;
-        }
-
-        .btn-modal-danger {
-            padding: 8px 24px;
-            background: #ff4d4f;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .btn-modal-danger:hover {
-            background: #d9363e;
-        }
-
-        .btn-modal-default {
-            padding: 8px 24px;
-            background: #fff;
-            color: #666;
-            border: 1px solid #d9d9d9;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .btn-modal-default:hover {
-            border-color: #7c3aed;
-            color: #7c3aed;
-        }
-
-        /* 操作按钮样式 */
-        .action-btn {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #7c3aed;
-            color: #fff;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-bottom: 8px;
-        }
-
-        .action-btn:hover {
-            background: #6d28d9;
-        }
-
-        .action-tip {
-            color: #999;
-            font-size: 13px;
-        }
-
-        .action-link-block {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        /* 物流信息展示 */
-        .logistics-display {
-            margin-top: 8px;
-            padding: 8px 12px;
-            background: #f5f5f5;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .logistics-display-item {
-            margin-bottom: 4px;
-        }
-
-        .logistics-display-item:last-child {
-            margin-bottom: 0;
-        }
-
         /* 完成时间展示 */
         .complete-time {
             margin-top: 8px;
@@ -1027,13 +798,12 @@
                             <th style="width:100px;">退款实收(元)</th>
                             <th style="width:100px;">臻享积分退回</th>
                             <th style="width:150px;">退款用户</th>
-                            <th style="width:80px;">状态</th>
-                            <th style="width:80px;">操作</th>
+                            <th style="width:160px;">状态</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- 仅换货-待审核 -->
-                        <tr>
+                        <tr onclick="showDetailPage('pending_audit')">
                             <td><div class="checkbox"></div></td>
                             <td>
                                 <div class="order-header">
@@ -1067,13 +837,9 @@
                                 </div>
                             </td>
                             <td><span class="tag-refund">待审核</span></td>
-                            <td>
-                                <span class="action-btn" onclick="openAuditModal('SS2059241833170116608-TK01')">审核</span>
-                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
-                            </td>
                         </tr>
                         <!-- 仅换货-待客户退货 -->
-                        <tr>
+                        <tr onclick="showDetailPage('waiting_return')">
                             <td><div class="checkbox"></div></td>
                             <td>
                                 <div class="order-header">
@@ -1107,13 +873,9 @@
                                 </div>
                             </td>
                             <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #e6f7ff; color: #1890ff;">待客户退货</span></td>
-                            <td>
-                                <span class="action-tip">等待客户退货</span>
-                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
-                            </td>
                         </tr>
                         <!-- 仅换货-客户已退货 -->
-                        <tr>
+                        <tr onclick="showDetailPage('returned')">
                             <td><div class="checkbox"></div></td>
                             <td>
                                 <div class="order-header">
@@ -1147,13 +909,9 @@
                                 </div>
                             </td>
                             <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #fff7e6; color: #ff6a00;">客户已退货</span></td>
-                            <td>
-                                <span class="action-btn" onclick="openShipModal('SS2058848721899196416-TK01')">确认收货并发货</span>
-                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
-                            </td>
                         </tr>
                         <!-- 仅换货-已发货 -->
-                        <tr>
+                        <tr onclick="showDetailPage('shipped')">
                             <td><div class="checkbox"></div></td>
                             <td>
                                 <div class="order-header">
@@ -1187,17 +945,9 @@
                                 </div>
                             </td>
                             <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #f6ffed; color: #52c41a;">已发货待客户收货</span></td>
-                            <td>
-                                <span class="action-tip">等待客户收货</span>
-                                <div class="logistics-display">
-                                    <div class="logistics-display-item">物流公司：顺丰速运</div>
-                                    <div class="logistics-display-item">物流单号：SF1234567890</div>
-                                </div>
-                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
-                            </td>
                         </tr>
                         <!-- 仅换货-已完成 -->
-                        <tr>
+                        <tr onclick="showDetailPage('completed')">
                             <td><div class="checkbox"></div></td>
                             <td>
                                 <div class="order-header">
@@ -1231,10 +981,6 @@
                                 </div>
                             </td>
                             <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #f6ffed; color: #52c41a;">售后单完成</span></td>
-                            <td>
-                                <div class="complete-time">完成时间：2026-05-28 14:20:30</div>
-                                <span class="action-link action-link-block" onclick="showDetailPage()">查看详情</span>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -1273,15 +1019,13 @@
             <!-- Tab1: 售后信息 -->
             <div id="page-detail-tab1" class="tab-content active">
                 <!-- 状态卡片 -->
-                <div class="status-card">
-                    <div class="status-main">
-                        <div>
-                            <span class="status-label">订单状态：</span>
-                            <span class="status-value">退货退款 待买家退货</span>
-                        </div>
-                        <div class="status-subtitle">等待买家退货，如用户逾期未退货，系统会自动关闭售后申请</div>
-                    </div>
-                    <div class="countdown">剩余5天1时51分27秒</div>
+                <div class="status-card" id="detail-status-card">
+                    <!-- 由JS动态渲染 -->
+                </div>
+
+                <!-- 操作按钮区 -->
+                <div class="action-buttons-area" id="detail-action-buttons">
+                    <!-- 由JS动态渲染 -->
                 </div>
 
                 <!-- 买家信息 -->
@@ -1291,15 +1035,15 @@
                         <div class="buyer-info">
                             <div class="info-item">
                                 <span class="info-label">用户昵称：</span>
-                                <span class="info-value">隔夜小红薯</span>
+                                <span class="info-value" id="detail-buyer-name">隔夜小红薯</span>
                             </div>
                             <div class="info-item">
                                 <span class="info-label">手机号：</span>
-                                <span class="info-value">13177600619</span>
+                                <span class="info-value" id="detail-buyer-phone">13177600619</span>
                             </div>
                             <div class="info-item">
                                 <span class="info-label">订单号：</span>
-                                <span class="info-value">SS2058838962022838272-TH01</span>
+                                <span class="info-value" id="detail-order-no">SS2058838962022838272-TH01</span>
                             </div>
                         </div>
                     </div>
@@ -1308,7 +1052,7 @@
                 <!-- 售后商品信息 -->
                 <div class="info-section">
                     <div class="section-header">售后商品信息</div>
-                    <div class="section-body" style="padding: 0;">
+                    <div class="section-body" style="padding: 0; overflow-x: auto;">
                         <table class="detail-table">
                             <thead>
                                 <tr>
@@ -1318,18 +1062,8 @@
                                     <th style="width: 120px;">小计金额</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="detail-product-cell">
-                                            <div class="detail-product-img">商品图</div>
-                                            <div class="detail-product-name">商品名称</div>
-                                        </div>
-                                    </td>
-                                    <td class="price">¥99</td>
-                                    <td>*1</td>
-                                    <td class="price">¥99</td>
-                                </tr>
+                            <tbody id="detail-product-tbody">
+                                <!-- 由JS动态渲染 -->
                             </tbody>
                         </table>
                     </div>
@@ -1338,7 +1072,7 @@
                 <!-- 售后入库信息 -->
                 <div class="info-section">
                     <div class="section-header">售后入库信息</div>
-                    <div class="section-body" style="padding: 0;">
+                    <div class="section-body" style="padding: 0; overflow-x: auto;">
                         <table class="detail-table">
                             <thead>
                                 <tr>
@@ -1352,10 +1086,8 @@
                                     <th>入库状态</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="8" class="empty-data">暂无数据</td>
-                                </tr>
+                            <tbody id="detail-warehouse-tbody">
+                                <!-- 由JS动态渲染 -->
                             </tbody>
                         </table>
                     </div>
@@ -1365,44 +1097,8 @@
                 <div class="info-section">
                     <div class="section-header">协商历史</div>
                     <div class="section-body">
-                        <div class="timeline">
-                            <div class="timeline-item">
-                                <div class="timeline-avatar">泰</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-header">
-                                        <span class="timeline-role">泰尔超优会</span>
-                                        <span class="timeline-action">已同意退货退款申请 待退货</span>
-                                    </div>
-                                    <div class="timeline-detail">
-                                        <div class="timeline-detail-item">审批时间：2026-05-25 17:32:33</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-avatar">泰</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-header">
-                                        <span class="timeline-role">泰尔超优会</span>
-                                        <span class="timeline-action">已同意退货退款申请 待退货</span>
-                                    </div>
-                                    <div class="timeline-detail">
-                                        <div class="timeline-detail-item">审批时间：2026-05-25 17:16:41</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-avatar user">隔</div>
-                                <div class="timeline-content">
-                                    <div class="timeline-header">
-                                        <span class="timeline-role">隔夜小红薯</span>
-                                    </div>
-                                    <div class="timeline-detail">
-                                        <div class="timeline-detail-item">退款类型：退货退款</div>
-                                        <div class="timeline-detail-item">申请时间：2026-05-25 17:16:10</div>
-                                        <div class="timeline-detail-item">补充说明：dfgfgfhfg</div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="timeline" id="detail-timeline">
+                            <!-- 由JS动态渲染 -->
                         </div>
                     </div>
                 </div>
@@ -1559,97 +1255,216 @@
         </div>
     </div>
 
-    <!-- 审核弹窗 -->
-    <div class="modal-overlay" id="audit-modal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <span class="modal-title">审核仅换货申请</span>
-                <span class="modal-close" onclick="closeAuditModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="modal-tip">
-                    <span class="modal-tip-icon">&#9888;</span>
-                    <span>同意换货后，需等待买家退货</span>
-                </div>
-                <div style="font-size: 14px; color: #666; margin-bottom: 16px;">
-                    <div style="margin-bottom: 8px;"><span style="color: #999;">工单号：</span><span id="audit-order-no">SS2059241833170116608-TK01</span></div>
-                    <div style="margin-bottom: 8px;"><span style="color: #999;">申请商品：</span>安美来 x2</div>
-                    <div style="margin-bottom: 8px;"><span style="color: #999;">申请原因：</span>商品质量问题</div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-modal-default" onclick="closeAuditModal()">取消</button>
-                <button class="btn-modal-danger" onclick="rejectExchange()">拒绝换货</button>
-                <button class="btn-modal-primary" onclick="approveExchange()">同意换货</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 发货弹窗 -->
-    <div class="modal-overlay" id="ship-modal">
-        <div class="modal-container" style="width: 600px;">
-            <div class="modal-header">
-                <span class="modal-title">确认收货并发货</span>
-                <span class="modal-close" onclick="closeShipModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="ship-form">
-                    <!-- 商品选择 -->
-                    <div class="ship-form-section">
-                        <div class="ship-form-section-title">选择发货商品</div>
-                        <div class="ship-form-section-body">
-                            <div class="ship-product-item">
-                                <input type="checkbox" class="ship-product-checkbox" checked>
-                                <div class="ship-product-img">商品图</div>
-                                <div class="ship-product-info">
-                                    <div class="ship-product-name">组合套餐15泰美畅+15亿力高</div>
-                                    <div class="ship-product-attr">规格：15泰美畅+15亿力高</div>
-                                </div>
-                                <div class="ship-product-qty">申请数量：2</div>
-                                <input type="number" class="ship-qty-input" value="2" max="2" min="1">
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 物流信息 -->
-                    <div class="ship-form-section">
-                        <div class="ship-form-section-title">物流信息</div>
-                        <div class="ship-form-section-body">
-                            <div class="ship-form-row" style="margin-bottom: 16px;">
-                                <span class="ship-form-label">物流公司：</span>
-                                <select class="ship-form-select">
-                                    <option value="">请选择物流公司</option>
-                                    <option value="sf">顺丰速运</option>
-                                    <option value="jd">京东物流</option>
-                                    <option value="zt">中通快递</option>
-                                    <option value="yt">圆通速递</option>
-                                    <option value="st">申通快递</option>
-                                    <option value="yz">邮政EMS</option>
-                                </select>
-                            </div>
-                            <div class="ship-form-row">
-                                <span class="ship-form-label">物流单号：</span>
-                                <input type="text" class="ship-form-input" placeholder="请输入物流单号">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-modal-default" onclick="closeShipModal()">取消</button>
-                <button class="btn-modal-primary" onclick="confirmShip()">确认发货</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         /**
-         * 显示详情页：隐藏列表页，显示详情页，切换面包屑
+         * 各状态对应的详情数据
          */
-        function showDetailPage() {
+        var detailDataMap = {
+            pending_audit: {
+                statusText: '仅换货 待商家审核',
+                warningTag: '【退货未入库】',
+                subtitle: '如您逾期未响应申请，视作同意买家申请，系统会自动发货给买家',
+                countdown: '剩余2天1时51分27秒',
+                buyerName: 'U651200',
+                buyerPhone: '15333332402',
+                orderNo: 'SS2059241833170116608-TK01',
+                products: [
+                    { name: '安美来', attr: '规格：安美来', price: '¥399.00', qty: 2, subtotal: '¥798.00' }
+                ],
+                warehouse: [
+                    { name: '安美来', sku: '安美来', returnNo: '-', shouldIn: '2', actualIn: '-', goodQty: '-', badQty: '-', status: '未入库' }
+                ],
+                timeline: [
+                    { role: '隔夜小红薯', avatar: '隔', isUser: true, action: '', detail: ['退款类型：仅换货', '申请时间：2026-05-26 19:55:03', '补充说明：商品质量问题'] }
+                ]
+            },
+            waiting_return: {
+                statusText: '仅换货 待客户退货',
+                warningTag: '【退货未入库】',
+                subtitle: '等待买家退货，如用户逾期未退货，系统会自动关闭售后申请',
+                countdown: '剩余5天1时51分27秒',
+                buyerName: 'U954048',
+                buyerPhone: '15333332404',
+                orderNo: 'SS2059189792214335488-TK01',
+                products: [
+                    { name: '安美来新', attr: '规格：安美来', price: '¥399.00', qty: 1, subtotal: '¥399.00' }
+                ],
+                warehouse: [
+                    { name: '安美来新', sku: '安美来', returnNo: '-', shouldIn: '1', actualIn: '-', goodQty: '-', badQty: '-', status: '未入库' }
+                ],
+                timeline: [
+                    { role: '泰尔超优会', avatar: '泰', isUser: false, action: '已同意换货申请 待退货', detail: ['审批时间：2026-05-26 16:30:00'] },
+                    { role: '隔夜小红薯', avatar: '隔', isUser: true, action: '', detail: ['退款类型：仅换货', '申请时间：2026-05-26 16:28:29', '补充说明：收到商品有破损'] }
+                ]
+            },
+            returned: {
+                statusText: '仅换货 客户已退货',
+                warningTag: '【退货未入库】',
+                subtitle: '买家已退货，请及时确认收货并发货',
+                countdown: '',
+                buyerName: 'U954048',
+                buyerPhone: '15333332404',
+                orderNo: 'SS2058848721899196416-TK01',
+                products: [
+                    { name: '组合套餐15泰美畅+15亿力高', attr: '规格：15泰美畅+15亿力高', price: '¥19950.00', qty: 2, subtotal: '¥39900.00' }
+                ],
+                warehouse: [
+                    { name: '组合套餐15泰美畅+15亿力高', sku: '15泰美畅+15亿力高', returnNo: 'RT20260526001', shouldIn: '2', actualIn: '2', goodQty: '2', badQty: '0', status: '已入库' }
+                ],
+                timeline: [
+                    { role: '泰尔超优会', avatar: '泰', isUser: false, action: '已同意换货申请 待退货', detail: ['审批时间：2026-05-26 16:10:00'] },
+                    { role: '隔夜小红薯', avatar: '隔', isUser: true, action: '', detail: ['退款类型：仅换货', '申请时间：2026-05-26 16:05:42', '补充说明：商品与描述不符'] }
+                ]
+            },
+            shipped: {
+                statusText: '仅换货 已发货',
+                warningTag: '',
+                subtitle: '等待买家确认收货',
+                countdown: '',
+                buyerName: 'U339328',
+                buyerPhone: '15333332403',
+                orderNo: 'SS2059174518438215680-TK01',
+                products: [
+                    { name: '组合套餐15泰美畅+15亿力高', attr: '规格：15泰美畅+15亿力高', price: '¥19950.00', qty: 1, subtotal: '¥19950.00' }
+                ],
+                warehouse: [
+                    { name: '组合套餐15泰美畅+15亿力高', sku: '15泰美畅+15亿力高', returnNo: 'RT20260526002', shouldIn: '1', actualIn: '1', goodQty: '1', badQty: '0', status: '已入库' }
+                ],
+                timeline: [
+                    { role: '泰尔超优会', avatar: '泰', isUser: false, action: '已确认收货并换货发货', detail: ['发货时间：2026-05-26 18:00:00', '物流公司：顺丰速运', '物流单号：SF1234567890'] },
+                    { role: '泰尔超优会', avatar: '泰', isUser: false, action: '已同意换货申请 待退货', detail: ['审批时间：2026-05-26 15:50:00'] },
+                    { role: '隔夜小红薯', avatar: '隔', isUser: true, action: '', detail: ['退款类型：仅换货', '申请时间：2026-05-26 15:39:23', '补充说明：收到商品包装破损'] }
+                ]
+            },
+            completed: {
+                statusText: '仅换货 已完成',
+                warningTag: '',
+                subtitle: '售后换货已完成',
+                countdown: '',
+                buyerName: 'U789456',
+                buyerPhone: '15333332405',
+                orderNo: 'SS2059001234567890123-TK01',
+                products: [
+                    { name: '泰美畅健康饮品', attr: '规格：30瓶装', price: '¥599.00', qty: 3, subtotal: '¥1797.00' }
+                ],
+                warehouse: [
+                    { name: '泰美畅健康饮品', sku: '30瓶装', returnNo: 'RT20260525001', shouldIn: '3', actualIn: '3', goodQty: '3', badQty: '0', status: '已入库' }
+                ],
+                timeline: [
+                    { role: '泰尔超优会', avatar: '泰', isUser: false, action: '售后换货完成', detail: ['完成时间：2026-05-28 14:20:30'] },
+                    { role: '泰尔超优会', avatar: '泰', isUser: false, action: '已确认收货并换货发货', detail: ['发货时间：2026-05-27 10:00:00', '物流公司：顺丰速运', '物流单号：SF0987654321'] },
+                    { role: '泰尔超优会', avatar: '泰', isUser: false, action: '已同意换货申请 待退货', detail: ['审批时间：2026-05-25 11:00:00'] },
+                    { role: '隔夜小红薯', avatar: '隔', isUser: true, action: '', detail: ['退款类型：仅换货', '申请时间：2026-05-25 10:30:15', '补充说明：商品过期'] }
+                ]
+            }
+        };
+
+        /**
+         * 显示详情页：根据状态渲染不同内容
+         * @param {string} statusKey - 状态标识
+         */
+        function showDetailPage(statusKey) {
+            if (!statusKey) statusKey = 'pending_audit';
+
+            var data = detailDataMap[statusKey];
+            if (!data) return;
+
+            // 切换页面显示
             document.getElementById('page-list').style.display = 'none';
             document.getElementById('page-detail').style.display = 'block';
             document.getElementById('breadcrumb-list').style.display = 'none';
             document.getElementById('breadcrumb-detail').style.display = 'flex';
+
+            // 重置Tab到售后信息
+            switchTab('tab1');
+
+            // 渲染状态卡片
+            var statusCardHtml = '<div class="status-main">';
+            statusCardHtml += '<div><span class="status-label">订单状态：</span><span class="status-value">' + data.statusText + '</span></div>';
+            if (data.warningTag) {
+                statusCardHtml += '<div class="status-warning-tag">' + data.warningTag + '</div>';
+            }
+            statusCardHtml += '<div class="status-subtitle">' + data.subtitle + '</div>';
+            statusCardHtml += '</div>';
+            if (data.countdown) {
+                statusCardHtml += '<div class="countdown">' + data.countdown + '</div>';
+            }
+            document.getElementById('detail-status-card').innerHTML = statusCardHtml;
+
+            // 渲染操作按钮区
+            var actionHtml = '';
+            if (statusKey === 'pending_audit') {
+                actionHtml = '<button class="btn-action-primary" onclick="handleAction(\'approve\')">同意换货</button>';
+                actionHtml += '<button class="btn-action-secondary" onclick="handleAction(\'reject\')">拒绝换货</button>';
+            } else if (statusKey === 'waiting_return') {
+                actionHtml = '<span class="action-gray-tip">等待客户退货</span>';
+            } else if (statusKey === 'returned') {
+                actionHtml = '<button class="btn-action-primary" onclick="handleAction(\'confirm_ship\')">确认收货并换货</button>';
+                actionHtml += '<button class="btn-action-secondary" onclick="handleAction(\'reject\')">拒绝换货</button>';
+            } else if (statusKey === 'shipped') {
+                actionHtml = '<span class="action-gray-tip">等待客户确认收货</span>';
+            } else if (statusKey === 'completed') {
+                actionHtml = '';
+            }
+            document.getElementById('detail-action-buttons').innerHTML = actionHtml;
+
+            // 渲染买家信息
+            document.getElementById('detail-buyer-name').textContent = data.buyerName;
+            document.getElementById('detail-buyer-phone').textContent = data.buyerPhone;
+            document.getElementById('detail-order-no').textContent = data.orderNo;
+
+            // 渲染售后商品信息
+            var productHtml = '';
+            for (var i = 0; i < data.products.length; i++) {
+                var p = data.products[i];
+                productHtml += '<tr>';
+                productHtml += '<td><div class="detail-product-cell"><div class="detail-product-img">商品图</div><div class="detail-product-name">' + p.name + '<br><span style="color:#999;font-size:12px;">' + p.attr + '</span></div></div></td>';
+                productHtml += '<td class="price">' + p.price + '</td>';
+                productHtml += '<td>*' + p.qty + '</td>';
+                productHtml += '<td class="price">' + p.subtotal + '</td>';
+                productHtml += '</tr>';
+            }
+            document.getElementById('detail-product-tbody').innerHTML = productHtml;
+
+            // 渲染售后入库信息
+            var warehouseHtml = '';
+            for (var j = 0; j < data.warehouse.length; j++) {
+                var w = data.warehouse[j];
+                warehouseHtml += '<tr>';
+                warehouseHtml += '<td>' + w.name + '</td>';
+                warehouseHtml += '<td>' + w.sku + '</td>';
+                warehouseHtml += '<td>' + w.returnNo + '</td>';
+                warehouseHtml += '<td>' + w.shouldIn + '</td>';
+                warehouseHtml += '<td>' + w.actualIn + '</td>';
+                warehouseHtml += '<td>' + w.goodQty + '</td>';
+                warehouseHtml += '<td>' + w.badQty + '</td>';
+                warehouseHtml += '<td>' + w.status + '</td>';
+                warehouseHtml += '</tr>';
+            }
+            if (warehouseHtml === '') {
+                warehouseHtml = '<tr><td colspan="8" class="empty-data">暂无数据</td></tr>';
+            }
+            document.getElementById('detail-warehouse-tbody').innerHTML = warehouseHtml;
+
+            // 渲染协商历史
+            var timelineHtml = '';
+            for (var k = 0; k < data.timeline.length; k++) {
+                var t = data.timeline[k];
+                timelineHtml += '<div class="timeline-item">';
+                timelineHtml += '<div class="timeline-avatar' + (t.isUser ? ' user' : '') + '">' + t.avatar + '</div>';
+                timelineHtml += '<div class="timeline-content">';
+                timelineHtml += '<div class="timeline-header">';
+                timelineHtml += '<span class="timeline-role">' + t.role + '</span>';
+                if (t.action) {
+                    timelineHtml += '<span class="timeline-action">' + t.action + '</span>';
+                }
+                timelineHtml += '</div>';
+                for (var d = 0; d < t.detail.length; d++) {
+                    timelineHtml += '<div class="timeline-detail"><div class="timeline-detail-item">' + t.detail[d] + '</div></div>';
+                }
+                timelineHtml += '</div></div>';
+            }
+            document.getElementById('detail-timeline').innerHTML = timelineHtml;
         }
 
         /**
@@ -1667,101 +1482,41 @@
          * @param {string} tabId - 要切换到的Tab ID (tab1, tab2, tab3)
          */
         function switchTab(tabId) {
-            // 获取所有Tab按钮
-            const tabItems = document.querySelectorAll('#detail-tab-bar .tab-item');
-            // 获取所有Tab内容
-            const tabContents = document.querySelectorAll('.tab-content');
+            var tabItems = document.querySelectorAll('#detail-tab-bar .tab-item');
+            var tabContents = document.querySelectorAll('.tab-content');
 
-            // 移除所有Tab的active状态
-            tabItems.forEach(item => {
+            tabItems.forEach(function(item) {
                 item.classList.remove('active');
             });
 
-            // 隐藏所有Tab内容
-            tabContents.forEach(content => {
+            tabContents.forEach(function(content) {
                 content.classList.remove('active');
             });
 
-            // 激活当前Tab按钮
-            const activeTab = document.querySelector('#detail-tab-bar .tab-item[data-tab="' + tabId + '"');
+            var activeTab = document.querySelector('#detail-tab-bar .tab-item[data-tab="' + tabId + '"]');
             if (activeTab) {
                 activeTab.classList.add('active');
             }
 
-            // 显示当前Tab内容
-            const activeContent = document.getElementById('page-detail-' + tabId);
+            var activeContent = document.getElementById('page-detail-' + tabId);
             if (activeContent) {
                 activeContent.classList.add('active');
             }
         }
 
         /**
-         * 打开审核弹窗
-         * @param {string} orderNo - 工单号
+         * 详情页操作按钮处理
+         * @param {string} action - 操作类型
          */
-        function openAuditModal(orderNo) {
-            document.getElementById('audit-order-no').textContent = orderNo;
-            document.getElementById('audit-modal').classList.add('active');
-        }
-
-        /**
-         * 关闭审核弹窗
-         */
-        function closeAuditModal() {
-            document.getElementById('audit-modal').classList.remove('active');
-        }
-
-        /**
-         * 同意换货
-         */
-        function approveExchange() {
-            alert('已同意换货申请，等待客户退货');
-            closeAuditModal();
-        }
-
-        /**
-         * 拒绝换货
-         */
-        function rejectExchange() {
-            alert('已拒绝换货申请');
-            closeAuditModal();
-        }
-
-        /**
-         * 打开发货弹窗
-         * @param {string} orderNo - 工单号
-         */
-        function openShipModal(orderNo) {
-            document.getElementById('ship-modal').classList.add('active');
-        }
-
-        /**
-         * 关闭发货弹窗
-         */
-        function closeShipModal() {
-            document.getElementById('ship-modal').classList.remove('active');
-        }
-
-        /**
-         * 确认发货
-         */
-        function confirmShip() {
-            alert('已确认收货并发货');
-            closeShipModal();
-        }
-
-        // 点击弹窗外部区域关闭弹窗
-        document.getElementById('audit-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAuditModal();
+        function handleAction(action) {
+            if (action === 'approve') {
+                alert('已同意换货申请，等待客户退货');
+            } else if (action === 'reject') {
+                alert('已拒绝换货申请');
+            } else if (action === 'confirm_ship') {
+                alert('已确认收货并换货，请填写物流信息发货');
             }
-        });
-
-        document.getElementById('ship-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeShipModal();
-            }
-        });
+        }
     </script>
 </body>
 </html>
