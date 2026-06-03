@@ -67,6 +67,20 @@
         .data-table tbody tr { cursor: pointer; }
         .data-table tr:hover { background: #fafafa; }
 
+        /* 列表操作按钮（查看详情） */
+        .btn-view-detail {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            background: #fff;
+            border: 1px solid #7c3aed;
+            color: #7c3aed;
+            white-space: nowrap;
+        }
+        .btn-view-detail:hover { background: #f3f0ff; }
+        .action-cell { text-align: right; vertical-align: middle; }
+
         /* 订单信息行 */
         .order-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .tag-refund { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #fff7e6; color: #ff6a00; }
@@ -799,6 +813,7 @@
                             <th style="width:100px;">臻享积分退回</th>
                             <th style="width:150px;">退款用户</th>
                             <th style="width:160px;">状态</th>
+                            <th style="width:110px; text-align:right;">操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -837,6 +852,7 @@
                                 </div>
                             </td>
                             <td><span class="tag-refund">待审核</span></td>
+                            <td class="action-cell"><button class="btn-view-detail" type="button">查看详情</button></td>
                         </tr>
                         <!-- 仅换货-待客户退货 -->
                         <tr onclick="showDetailPage('waiting_return')">
@@ -873,6 +889,7 @@
                                 </div>
                             </td>
                             <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #e6f7ff; color: #1890ff;">待客户退货</span></td>
+                            <td class="action-cell"><button class="btn-view-detail" type="button">查看详情</button></td>
                         </tr>
                         <!-- 仅换货-客户已退货 -->
                         <tr onclick="showDetailPage('returned')">
@@ -909,6 +926,7 @@
                                 </div>
                             </td>
                             <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #fff7e6; color: #ff6a00;">客户已退货</span></td>
+                            <td class="action-cell"><button class="btn-view-detail" type="button">查看详情</button></td>
                         </tr>
                         <!-- 仅换货-已发货 -->
                         <tr onclick="showDetailPage('shipped')">
@@ -945,6 +963,7 @@
                                 </div>
                             </td>
                             <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #f6ffed; color: #52c41a;">已发货待客户收货</span></td>
+                            <td class="action-cell"><button class="btn-view-detail" type="button">查看详情</button></td>
                         </tr>
                         <!-- 仅换货-已完成 -->
                         <tr onclick="showDetailPage('completed')">
@@ -981,6 +1000,7 @@
                                 </div>
                             </td>
                             <td><span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; background: #f6ffed; color: #52c41a;">售后单完成</span></td>
+                            <td class="action-cell"><button class="btn-view-detail" type="button">查看详情</button></td>
                         </tr>
                     </tbody>
                 </table>
