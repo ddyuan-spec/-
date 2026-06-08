@@ -8,21 +8,21 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f5f5; line-height: 1.6; }
         .container { max-width: 414px; margin: 0 auto; background: #fff; min-height: 100vh; }
-        
+
         /* 顶部导航 */
         .nav-bar { display: flex; align-items: center; padding: 12px 15px; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; }
-        .nav-back { font-size: 20px; color: #333; }
+        .nav-back { font-size: 20px; color: #333; cursor: pointer; }
         .nav-title { flex: 1; text-align: center; font-size: 16px; font-weight: 600; color: #333; }
         .nav-placeholder { width: 30px; }
-        
+
         /* 场景切换 */
         .scene-tabs { display: flex; gap: 10px; padding: 15px; background: #f8f9fa; }
         .scene-tab { flex: 1; padding: 8px; text-align: center; border-radius: 6px; cursor: pointer; border: 1px solid #ddd; background: #fff; font-size: 13px; }
         .scene-tab.active { background: #667eea; color: #fff; border-color: #667eea; }
-        
+
         .scene-content { display: none; }
         .scene-content.active { display: block; }
-        
+
         /* 状态卡片 */
         .status-card { padding: 30px 20px; text-align: center; color: #fff; }
         .status-card.orange { background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%); }
@@ -31,19 +31,19 @@
         .status-icon { font-size: 48px; margin-bottom: 10px; }
         .status-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
         .status-desc { font-size: 14px; opacity: 0.9; }
-        
+
         /* 退款金额 */
         .refund-amount-box { padding: 20px; text-align: center; background: #fff; border-bottom: 1px solid #f0f0f0; }
         .refund-amount-label { font-size: 14px; color: #666; margin-bottom: 8px; }
         .refund-amount-value { font-size: 36px; font-weight: 700; color: #ff4d4f; }
         .refund-time { font-size: 13px; color: #999; margin-top: 8px; }
         .refund-reason { font-size: 13px; color: #ff4d4f; margin-top: 8px; }
-        
+
         /* 协商历史入口 */
-        .history-entry { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: #fff; border-bottom: 1px solid #f0f0f0; }
+        .history-entry { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: #fff; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
         .history-label { font-size: 14px; color: #333; }
         .history-arrow { font-size: 14px; color: #999; }
-        
+
         /* 商品信息 */
         .product-section { padding: 15px; background: #fff; border-bottom: 1px solid #f0f0f0; }
         .section-title { font-size: 14px; color: #999; margin-bottom: 12px; }
@@ -55,20 +55,92 @@
         .product-price-row { display: flex; justify-content: space-between; font-size: 14px; }
         .price-red { color: #ff4d4f; }
         .qty { color: #999; }
-        
+
         /* 退款信息 */
         .info-section { padding: 15px; background: #fff; }
         .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
         .info-row:last-child { border-bottom: none; }
         .info-label { color: #666; }
         .info-value { color: #333; }
-        
+
         /* 底部按钮 */
         .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: 15px; background: #fff; border-top: 1px solid #eee; max-width: 414px; margin: 0 auto; }
         .bottom-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 16px; cursor: pointer; }
         .btn-primary { background: #667eea; color: #fff; }
         .btn-secondary { background: #fff; color: #333; border: 1px solid #d9d9d9; }
         .btn-orange { background: #ff6a00; color: #fff; }
+
+        /* ===== 协商历史页面样式 ===== */
+        .history-page { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #f5f5f5; z-index: 100; max-width: 414px; margin: 0 auto; overflow-y: auto; }
+        .history-page.active { display: block; }
+
+        /* 协商历史顶部审批信息 */
+        .history-header { background: #fff; padding: 15px; border-bottom: 1px solid #f0f0f0; }
+        .history-header-row { font-size: 14px; color: #333; line-height: 2; }
+        .history-header-label { color: #666; }
+
+        /* 协商历史时间线 */
+        .history-timeline { padding: 15px; }
+
+        /* 单条记录 */
+        .timeline-item { display: flex; margin-bottom: 20px; }
+        .timeline-item:last-child { margin-bottom: 0; }
+
+        /* 头像 */
+        .timeline-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #666;
+            flex-shrink: 0;
+            margin-right: 12px;
+            overflow: hidden;
+        }
+        .timeline-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .timeline-avatar.merchant { background: #667eea; color: #fff; }
+        .timeline-avatar.system { background: #ff6a00; color: #fff; }
+
+        /* 内容区域 */
+        .timeline-content { flex: 1; }
+        .timeline-header { display: flex; align-items: center; margin-bottom: 8px; }
+        .timeline-username { font-size: 14px; color: #333; font-weight: 500; }
+        .timeline-time { font-size: 12px; color: #999; margin-left: 8px; }
+
+        /* 灰色内容卡片 */
+        .timeline-card {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.8;
+        }
+        .timeline-card-row { display: flex; }
+        .timeline-card-label { color: #666; white-space: nowrap; }
+        .timeline-card-value { color: #333; word-break: break-all; }
+
+        /* 标准文案样式 */
+        .standard-text { color: #333; line-height: 1.8; }
+        .standard-text .amount { color: #ff4d4f; font-weight: 600; }
+
+        /* 图片凭证 */
+        .evidence-images { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .evidence-img {
+            width: 70px;
+            height: 70px;
+            background: #e8e8e8;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -79,14 +151,14 @@
             <div class="nav-title">退款详情</div>
             <div class="nav-placeholder"></div>
         </div>
-        
+
         <!-- 场景切换 -->
         <div class="scene-tabs">
             <div class="scene-tab active" onclick="switchScene('pending')">待退款</div>
             <div class="scene-tab" onclick="switchScene('success')">退款成功</div>
             <div class="scene-tab" onclick="switchScene('failed')">退款失败</div>
         </div>
-        
+
         <!-- 待退款场景 -->
         <div class="scene-content active" id="scene-pending">
             <div class="status-card orange">
@@ -94,17 +166,17 @@
                 <div class="status-title">请等待商家收货并退款</div>
                 <div class="status-desc">如果商家收到货并验货无误，将操作退款给您</div>
             </div>
-            
+
             <div class="refund-amount-box">
                 <div class="refund-amount-label">申请退款金额</div>
                 <div class="refund-amount-value">¥299.00</div>
             </div>
-            
-            <div class="history-entry">
+
+            <div class="history-entry" onclick="showHistory()">
                 <span class="history-label">协商历史</span>
                 <span class="history-arrow">›</span>
             </div>
-            
+
             <div class="product-section">
                 <div class="section-title">退款商品</div>
                 <div class="product-item">
@@ -119,7 +191,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="info-section">
                 <div class="section-title">退款信息</div>
                 <div class="info-row">
@@ -135,13 +207,13 @@
                     <span class="info-value">2024-05-12 14:30:22</span>
                 </div>
             </div>
-            
+
             <div style="height: 80px;"></div>
             <div class="bottom-bar">
                 <button class="bottom-btn btn-secondary">返回首页</button>
             </div>
         </div>
-        
+
         <!-- 退款成功场景 -->
         <div class="scene-content" id="scene-success">
             <div class="status-card green">
@@ -149,18 +221,18 @@
                 <div class="status-title">退款成功</div>
                 <div class="status-desc">退款已到账，请查收</div>
             </div>
-            
+
             <div class="refund-amount-box">
                 <div class="refund-amount-label">退款金额</div>
                 <div class="refund-amount-value">¥299.00</div>
                 <div class="refund-time">到账时间：2024-05-13 09:30:22</div>
             </div>
-            
-            <div class="history-entry">
+
+            <div class="history-entry" onclick="showHistorySuccess()">
                 <span class="history-label">协商历史</span>
                 <span class="history-arrow">›</span>
             </div>
-            
+
             <div class="product-section">
                 <div class="section-title">退款商品</div>
                 <div class="product-item">
@@ -175,7 +247,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="info-section">
                 <div class="section-title">退款信息</div>
                 <div class="info-row">
@@ -191,13 +263,13 @@
                     <span class="info-value">2024-05-12 14:30:22</span>
                 </div>
             </div>
-            
+
             <div style="height: 80px;"></div>
             <div class="bottom-bar">
                 <button class="bottom-btn btn-primary">完成</button>
             </div>
         </div>
-        
+
         <!-- 退款失败场景 -->
         <div class="scene-content" id="scene-failed">
             <div class="status-card red">
@@ -205,18 +277,18 @@
                 <div class="status-title">退款失败</div>
                 <div class="status-desc">退款失败，已恢复订单</div>
             </div>
-            
+
             <div class="refund-amount-box">
                 <div class="refund-amount-label">退款金额</div>
                 <div class="refund-amount-value">¥299.00</div>
                 <div class="refund-reason">失败原因：支付渠道退款失败，请联系客服</div>
             </div>
-            
-            <div class="history-entry">
+
+            <div class="history-entry" onclick="showHistory()">
                 <span class="history-label">协商历史</span>
                 <span class="history-arrow">›</span>
             </div>
-            
+
             <div class="product-section">
                 <div class="section-title">退款商品</div>
                 <div class="product-item">
@@ -231,7 +303,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="info-section">
                 <div class="section-title">退款信息</div>
                 <div class="info-row">
@@ -247,21 +319,254 @@
                     <span class="info-value">2024-05-12 14:30:22</span>
                 </div>
             </div>
-            
+
             <div style="height: 80px;"></div>
             <div class="bottom-bar">
                 <button class="bottom-btn btn-orange">查看订单</button>
             </div>
         </div>
     </div>
-    
+
+    <!-- ===== 协商历史页面 ===== -->
+    <div class="history-page" id="historyPage">
+        <!-- 协商历史顶部导航 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="hideHistory()">‹</div>
+            <div class="nav-title">协商历史</div>
+            <div class="nav-placeholder"></div>
+        </div>
+
+        <!-- 当前审批状态 -->
+        <div class="history-header">
+            <div class="history-header-row">
+                <span class="history-header-label">审批类型：</span>
+                <span>商家已收到退货，等待退款</span>
+            </div>
+            <div class="history-header-row">
+                <span class="history-header-label">审批时间：</span>
+                <span>2026-01-30 14:06:22</span>
+            </div>
+        </div>
+
+        <!-- 协商历史时间线 -->
+        <div class="history-timeline">
+
+            <!-- 记录1：商家审批 - 等待退款 -->
+            <div class="timeline-item">
+                <div class="timeline-avatar merchant">商</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-username">泰尔超优...</span>
+                        <span class="timeline-time">2026-01-30 14:05:22</span>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">物流公司：</span>
+                            <span class="timeline-card-value">中通快递</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">物流单号：</span>
+                            <span class="timeline-card-value">21312313231</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">联系电话：</span>
+                            <span class="timeline-card-value">15118105114</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">发货时间：</span>
+                            <span class="timeline-card-value">2026-01-30 14:05:22</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 记录2：商家审批 - 同意退货退款 -->
+            <div class="timeline-item">
+                <div class="timeline-avatar system">系</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-username">泰尔超优...</span>
+                        <span class="timeline-time">2026-01-30 14:04:00</span>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">审批类型：</span>
+                            <span class="timeline-card-value">已同意退货退款</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">审批时间：</span>
+                            <span class="timeline-card-value">2026-01-30 14:04:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 记录3：用户申请退款 -->
+            <div class="timeline-item">
+                <div class="timeline-avatar">用</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-username">呃呃呃额...</span>
+                        <span class="timeline-time">2026-01-30 14:03:30</span>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">退款说明：</span>
+                            <span class="timeline-card-value">1111</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">退款类型：</span>
+                            <span class="timeline-card-value">退货退款</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">退款金额：</span>
+                            <span class="timeline-card-value">￥198</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">臻享积分退回：</span>
+                            <span class="timeline-card-value">￥0</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">退款原因：</span>
+                            <span class="timeline-card-value">七天无理由退货（商品无损）</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">申请时间：</span>
+                            <span class="timeline-card-value">2026-01-30 14:03:30</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">拍照凭证：</span>
+                        </div>
+                        <div class="evidence-images">
+                            <div class="evidence-img">凭证1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== 退款成功协商历史页面（含标准文案） ===== -->
+    <div class="history-page" id="historyPageSuccess">
+        <!-- 协商历史顶部导航 -->
+        <div class="nav-bar">
+            <div class="nav-back" onclick="hideHistorySuccess()">‹</div>
+            <div class="nav-title">协商历史</div>
+            <div class="nav-placeholder"></div>
+        </div>
+
+        <!-- 当前审批状态 -->
+        <div class="history-header">
+            <div class="history-header-row">
+                <span class="history-header-label">审批类型：</span>
+                <span>退款成功</span>
+            </div>
+            <div class="history-header-row">
+                <span class="history-header-label">审批时间：</span>
+                <span>2024-05-13 09:30:22</span>
+            </div>
+        </div>
+
+        <!-- 协商历史时间线 -->
+        <div class="history-timeline">
+
+            <!-- 记录1：退款成功 - 标准文案 -->
+            <div class="timeline-item">
+                <div class="timeline-avatar system">系</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-username">系统</span>
+                        <span class="timeline-time">2024-05-13 09:30:22</span>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="standard-text">
+                            您的退款已原路退回，共计<span class="amount">￥58.00</span>元，其中储值退款<span class="amount">￥30.00</span>元，在线支付退款<span class="amount">￥28.00</span>元。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 记录2：商家审批 - 同意退款 -->
+            <div class="timeline-item">
+                <div class="timeline-avatar merchant">商</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-username">泰尔超优...</span>
+                        <span class="timeline-time">2024-05-13 09:28:00</span>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">审批类型：</span>
+                            <span class="timeline-card-value">已同意退款</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">审批时间：</span>
+                            <span class="timeline-card-value">2024-05-13 09:28:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 记录3：用户申请退款 -->
+            <div class="timeline-item">
+                <div class="timeline-avatar">用</div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-username">呃呃呃额...</span>
+                        <span class="timeline-time">2024-05-12 14:30:22</span>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">退款说明：</span>
+                            <span class="timeline-card-value">商品与描述不符</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">退款类型：</span>
+                            <span class="timeline-card-value">部分退款</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">退款金额：</span>
+                            <span class="timeline-card-value">￥299.00</span>
+                        </div>
+                        <div class="timeline-card-row">
+                            <span class="timeline-card-label">申请时间：</span>
+                            <span class="timeline-card-value">2024-05-12 14:30:22</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <script>
         function switchScene(scene) {
             document.querySelectorAll('.scene-tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.scene-content').forEach(content => content.classList.remove('active'));
-            
+
             event.target.classList.add('active');
             document.getElementById('scene-' + scene).classList.add('active');
+        }
+
+        // 显示协商历史（待退款/退款失败场景）
+        function showHistory() {
+            document.getElementById('historyPage').classList.add('active');
+        }
+
+        // 隐藏协商历史
+        function hideHistory() {
+            document.getElementById('historyPage').classList.remove('active');
+        }
+
+        // 显示协商历史（退款成功场景 - 含标准文案）
+        function showHistorySuccess() {
+            document.getElementById('historyPageSuccess').classList.add('active');
+        }
+
+        // 隐藏协商历史（退款成功场景）
+        function hideHistorySuccess() {
+            document.getElementById('historyPageSuccess').classList.remove('active');
         }
     </script>
 </body>
