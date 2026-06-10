@@ -1384,6 +1384,162 @@
             </div>
         </div>
         
+        <!-- 新增页面：待商家审核 -->
+        <div class="page" id="page-pending-review">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">仅换货详情</div>
+            </div>
+            
+            <div class="order-status-section" style="background: linear-gradient(135deg, #FFA726 0%, #FFB74D 100%);">
+                <div class="order-status">⏳ 待商家审核</div>
+                <div class="order-status-desc">您的换货申请已提交，请等待商家审核</div>
+            </div>
+            
+            <div class="page-content">
+                <div class="auto-receipt-notice">
+                    <div class="auto-receipt-icon"></div>
+                    <div class="auto-receipt-text">
+                        <div>如商家逾期未审核，系统将自动同意换货申请</div>
+                        <div class="auto-receipt-countdown">剩余时间：2天12小时30分</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">换货商品</div>
+                    <div class="product-info">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div>
+                                <div class="product-name">智能蓝牙耳机 无线降噪 长续航 高音质运动耳机</div>
+                                <div class="product-spec">黑色 | 标准版</div>
+                            </div>
+                            <div class="product-price-qty">
+                                <span class="product-price">¥199.00</span>
+                                <span class="product-qty">x1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">售后类型</span>
+                        <span class="info-value">仅换货</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请原因</span>
+                        <span class="info-value">商品质量问题</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请时间</span>
+                        <span class="info-value">2024-06-05 14:30:00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">售后单号</span>
+                        <span class="info-value">SH202406050001</span>
+                    </div>
+                </div>
+                
+                <div class="history-entry" onclick="goToPage('page-negotiation-history')">
+                    <span class="history-text">协商历史</span>
+                    <div class="history-arrow"></div>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="btn btn-outline" onclick="cancelApply()">撤销申请</button>
+                <button class="btn btn-primary" style="opacity: 0.6; pointer-events: none;">等待商家审核</button>
+            </div>
+        </div>
+
+        <!-- 新增页面：待商家发货 -->
+        <div class="page" id="page-waiting-ship">
+            <div class="nav-header">
+                <div class="nav-back" onclick="goBack()"></div>
+                <div class="nav-title">仅换货详情</div>
+            </div>
+            
+            <div class="order-status-section" style="background: linear-gradient(135deg, #42A5F5 0%, #64B5F6 100%);">
+                <div class="order-status">📦 待商家发货</div>
+                <div class="order-status-desc">商家已收到您的退货商品，正在准备换货发货</div>
+            </div>
+            
+            <div class="page-content">
+                <div class="card">
+                    <div class="card-title">退货物流</div>
+                    <div class="logistics-header" style="margin-bottom: 8px;">
+                        <span class="logistics-company">顺丰速运</span>
+                        <span class="logistics-no">SF9876543210</span>
+                    </div>
+                    <div class="logistics-timeline">
+                        <div class="timeline-item active">
+                            <div class="timeline-content">商家已签收退货包裹</div>
+                            <div class="timeline-time">2024-06-07 11:20:00</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">快递运输中</div>
+                            <div class="timeline-time">2024-06-06 18:00:00</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">已寄出退货包裹</div>
+                            <div class="timeline-time">2024-06-06 15:30:00</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">换货商品</div>
+                    <div class="product-info">
+                        <div class="product-img">商品图</div>
+                        <div class="product-detail">
+                            <div>
+                                <div class="product-name">智能蓝牙耳机 无线降噪 长续航 高音质运动耳机</div>
+                                <div class="product-spec">黑色 | 标准版</div>
+                            </div>
+                            <div class="product-price-qty">
+                                <span class="product-price">¥199.00</span>
+                                <span class="product-qty">x1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">售后类型</span>
+                        <span class="info-value">仅换货</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请原因</span>
+                        <span class="info-value">商品质量问题</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">申请时间</span>
+                        <span class="info-value">2024-06-05 14:30:00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">退货时间</span>
+                        <span class="info-value">2024-06-06 15:30:00</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">售后单号</span>
+                        <span class="info-value">SH202406050001</span>
+                    </div>
+                </div>
+                
+                <div class="history-entry" onclick="goToPage('page-negotiation-history')">
+                    <span class="history-text">协商历史</span>
+                    <div class="history-arrow"></div>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="btn btn-outline" onclick="goToPage('page-negotiation-history')">查看协商历史</button>
+                <button class="btn btn-primary" style="opacity: 0.6; pointer-events: none;">等待商家发货</button>
+            </div>
+        </div>
+
         <!-- 协商历史页 -->
         <div class="page" id="page-negotiation-history">
             <div class="nav-header">
@@ -1466,13 +1622,13 @@
         // 提交换货申请
         function submitExchangeApply() {
             alert('申请提交成功！');
-            goToPage('page-exchange-detail');
+            goToPage('page-pending-review');
         }
         
         // 提交物流信息
         function submitLogistics() {
             alert('物流信息提交成功！');
-            goToPage('page-merchant-shipped');
+            goToPage('page-waiting-ship');
         }
         
         // 撤销申请
